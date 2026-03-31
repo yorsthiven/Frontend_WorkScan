@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/app/models/trabajador.model"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]
