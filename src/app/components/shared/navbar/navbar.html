@@ -1,0 +1,18 @@
+<mat-toolbar color="primary" class="flex justify-between items-center px-8 shadow-lg">
+  <div class="flex items-center gap-2 cursor-pointer" routerLink="/">
+    <mat-icon class="scale-125">health_and_safety</mat-icon>
+    <span class="text-xl font-bold tracking-tight">WORKSCAN</span>
+  </div>
+
+  <div class="flex gap-4">
+    <button mat-button routerLink="/trabajadores" routerLinkActive="bg-blue-700">
+      <mat-icon class="mr-2">people</mat-icon>
+      Trabajadores
+    </button>
+
+    <button mat-button routerLink="/inspecciones" routerLinkActive="bg-blue-700">
+      <mat-icon class="mr-2">assignment_turned_in</mat-icon>
+      Inspecciones
+    </button>
+  </div>
+</mat-toolbar>

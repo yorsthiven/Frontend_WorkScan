@@ -1,1 +1,27 @@
-<p>trabajador-form works!</p>
+<h2 mat-dialog-title class="text-xl font-bold">Agregar Nuevo Trabajador</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 mt-2 min-w-[300px]">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cédula</mat-label>
+      <input matInput formControlName="cedula" type="text">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombres</mat-label>
+      <input matInput formControlName="nombres">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email">
+    </mat-form-field>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="gap-2">
+  <button mat-button (click)="cerrar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid">
+    Guardar
+  </button>
+</mat-dialog-actions>
