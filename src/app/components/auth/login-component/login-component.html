@@ -1,0 +1,77 @@
+<div class="min-h-screen grid grid-cols-1 md:grid-cols-2">
+
+  <div class="hidden md:flex relative h-full w-full items-center justify-center overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?q=80&w=1974&auto=format&fit=crop"
+      alt="SST Image" class="absolute inset-0 h-full w-full object-cover">
+
+    <div class="absolute inset-0 bg-blue-900/60 backdrop-blur-[2px]"></div>
+
+    <div class="relative z-10 p-12 text-center">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-2xl mb-6 backdrop-blur-md">
+        <mat-icon class="text-white scale-[2.5]">health_and_safety</mat-icon>
+      </div>
+      <h1 class="text-5xl font-black text-white tracking-tight mb-4">WorkScan</h1>
+      <p class="text-xl text-blue-100 max-w-md font-light">
+        Sistema integral para la automatización y gestión de la seguridad y salud en el trabajo.
+      </p>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-center bg-slate-50 p-8">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-10 border border-slate-100">
+
+      <div class="text-center mb-10 md:hidden">
+        <mat-icon class="text-blue-600 scale-[2] mb-4">health_and_safety</mat-icon>
+        <h2 class="text-3xl font-bold text-gray-800">WorkScan</h2>
+      </div>
+
+      <div class="text-center mb-8">
+        <mat-icon class="text-blue-600 scale-[2] mb-4">health_and_safety</mat-icon>
+        <h2 class="text-3xl font-bold text-gray-800">WorkScan</h2>
+        <p class="mt-2 text-gray-500">Gestión de Seguridad y Salud en el Trabajo</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="flex flex-col gap-5">
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Correo Electrónico</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="admin@workscan.com">
+          <mat-icon matSuffix class="text-slate-400">email</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Contraseña</mat-label>
+          <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix (click)="togglePassword()" type="button" class="text-slate-400">
+            <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary"
+          class="w-full !h-14 !rounded-xl !text-lg !font-bold shadow-lg shadow-blue-200 transition-transform active:scale-95"
+          [disabled]="loginForm.invalid || isLoading()">
+          @if (!isLoading()) {
+          <span>Iniciar Sesión</span>
+          } @else {
+          <div class="flex justify-center">
+            <mat-spinner diameter="24"></mat-spinner>
+          </div>
+          }
+        </button>
+
+        @if (errorMessage()) {
+        <div class="bg-red-50 border border-red-200 p-3 rounded-lg mt-2">
+          <p class="text-red-600 text-center text-sm font-medium">
+            {{ errorMessage() }}
+          </p>
+        </div>
+        }
+      </form>
+
+      <div class="mt-8 text-center">
+        <p class="text-sm text-slate-400">¿Problemas con el acceso? Contacte a soporte</p>
+      </div>
+    </div>
+  </div>
+
+</div>

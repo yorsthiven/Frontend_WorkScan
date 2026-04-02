@@ -1,15 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MaterialModules } from './shared/material.providers';
-import { Navbar } from "./components/shared/navbar/navbar";
+import { Navbar } from './components/shared/navbar/navbar';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    MaterialModules,
-    Navbar
-],
+  imports: [RouterOutlet, MaterialModules],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
