@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-features-landing',
-  imports: [],
+  imports: [NgIconComponent],
   templateUrl: './features-landing-component.html',
   styleUrl: './features-landing-component.css',
 })
