@@ -1,0 +1,29 @@
+<div class="flex h-screen bg-slate-50 overflow-hidden">
+  <aside class="w-72 h-full border-r border-slate-200 bg-white">
+    <app-side-menu class="h-full flex flex-col"></app-side-menu>
+  </aside>
+
+  <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- <header class="h-16 border-b border-slate-200 bg-blue-200 px-8 flex items-center justify-between">
+      <h1 class="text-lg font-semibold text-slate-800">Panel Principal</h1>
+      <div class="flex items-center gap-4">
+      </div>
+    </header> -->
+    <header class="h-16 border-b border-slate-200 bg-white px-8 flex items-center justify-between">
+      <h1 class="text-xl font-bold text-slate-800">Panel Principal</h1>
+      <div class="flex items-center gap-4">
+        <span class="text-sm text-slate-500">George Medina</span>
+        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs">GM</div>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-8">
+      <!-- <div class="max-w-7xl mx-auto">  -->
+        <router-outlet></router-outlet>
+      <!-- </div> -->
+    </div>
+
+  </main>
+
+</div>

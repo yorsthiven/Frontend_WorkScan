@@ -1,7 +1,8 @@
-import { bootstrapFacebook, bootstrapInstagram, bootstrapLinkedin } from '@ng-icons/bootstrap-icons';
+import { bootstrapFacebook, bootstrapHouse, bootstrapInstagram, bootstrapLinkedin } from '@ng-icons/bootstrap-icons';
 // icons.config.ts
 import { provideIcons } from '@ng-icons/core';
-import { heroClipboardDocumentCheck, heroShieldCheck, heroChartBar } from '@ng-icons/heroicons/outline';
+import { heroClipboardDocumentCheck, heroShieldCheck, heroChartBar, heroHome, heroUser, heroArrowLeftOnRectangle } from '@ng-icons/heroicons/outline';
+import { heroArrowLeftOnRectangleSolid, heroArrowUpSolid, heroClipboardDocumentCheckSolid, heroUsersSolid, heroWrenchScrewdriverSolid } from '@ng-icons/heroicons/solid';
 
 // Exportas una constante con la configuración
 export const appIcons = provideIcons({
@@ -10,5 +11,15 @@ export const appIcons = provideIcons({
   heroChartBar,
   bootstrapFacebook,
   bootstrapInstagram,
-  bootstrapLinkedin
+  bootstrapLinkedin,
+  bootstrapHouse,
+  heroHome,
+  heroWrenchScrewdriverSolid,
+  heroUser,
+  heroUsersSolid,
+  heroArrowUpSolid,
+  heroClipboardDocumentCheckSolid,
+  heroArrowLeftOnRectangle,
+  heroArrowLeftOnRectangleSolid
+
 });

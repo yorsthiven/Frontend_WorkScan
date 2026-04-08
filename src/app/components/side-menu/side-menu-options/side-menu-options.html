@@ -1,0 +1,25 @@
+<nav class="px-4 space-y-1">
+  @for (item of opciones; track item.nombre) {
+    <a
+      [routerLink]="item.route"
+      routerLinkActive="bg-blue-50 text-blue-600 font-semibold"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="group flex items-center gap-3 px-0.5 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200">
+
+      <ng-icon
+        [name]="item.icono"
+        class="text-xl group-hover:scale-110 transition-transform flex-shrink-0 ">
+      </ng-icon>
+
+      <div class="flex flex-col">
+        <span class="text-slate-800 text-sm tracking-wide">{{ item.nombre }}</span>
+        <span class="text-xs text-slate-600">{{ item.parrafo }}</span>
+      </div>
+
+      <div
+        routerLinkActive="opacity-100"
+        class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600 opacity-0 transition-opacity">
+      </div>
+    </a>
+  }
+</nav>

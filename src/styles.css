@@ -4,3 +4,8 @@
 @tailwind utilities; */
 @import "tailwindcss";
 /* Tus otros estilos abajo */
+
+/* styles.css */
+html {
+  scroll-behavior: smooth;
+}

@@ -43,7 +43,7 @@ export class LoginComponent {
         next: (res) => {
           this.isLoading.set(false);
           console.log('Login exitoso, Token guardado');
-          this.router.navigate(['/trabajadores']); // ¡Bienvenido a WorkScan!
+          this.router.navigate(['/dashboard']); // ¡Bienvenido a WorkScan!
         },
         error: (err) => {
           this.isLoading.set(false);

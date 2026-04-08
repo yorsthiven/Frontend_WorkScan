@@ -1,0 +1,104 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+  <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-slate-500">Trabajadores Activos</p>
+        <h3 class="text-2xl font-bold text-slate-800 mt-1">124</h3>
+      </div>
+      <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+        <ng-icon name="heroUsersSolid" class="text-2xl"></ng-icon>
+      </div>
+    </div>
+    <div class="mt-4 flex items-center text-xs font-medium text-emerald-600">
+      <ng-icon name="heroArrowUpSolid" class="mr-1"></ng-icon>
+      <span>12% más que el mes pasado</span>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-slate-500">Inspecciones Programadas</p>
+        <h3 class="text-2xl font-bold text-slate-800 mt-1">8</h3>
+      </div>
+      <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
+        <ng-icon name="heroClipboardDocumentCheckSolid" class="text-2xl"></ng-icon>
+      </div>
+    </div>
+    <p class="mt-4 text-xs text-slate-400">Vencen en los próximos 15 días</p>
+  </div>
+
+  <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-slate-500">Inspecciones Pendientes</p>
+        <h3 class="text-2xl font-bold text-slate-800 mt-1">8</h3>
+      </div>
+      <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
+        <ng-icon name="heroClipboardDocumentCheckSolid" class="text-2xl"></ng-icon>
+      </div>
+    </div>
+    <p class="mt-4 text-xs text-slate-400">Vencen en los próximos 15 días</p>
+  </div>
+
+</div>
+
+<!-- <div class="mt-8 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm min-h-[400px]">
+  <h4 class="text-lg font-bold text-slate-800">Cumplimiento de Plan Anual SST</h4>
+  <div class="flex items-center justify-center h-full text-slate-400 italic">
+    (Aquí iría un gráfico de Chart.js o una tabla de actividades recientes)
+  </div>
+</div> -->
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-10 gap-8">
+
+  <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-bold text-slate-800">Últimas Inspecciones Realizadas</h3>
+      <button class="text-blue-600 text-sm font-semibold hover:underline">Ver todas</button>
+    </div>
+
+    <div class="space-y-4">
+      @for (inspeccion of ultimasInspecciones; track inspeccion.id) {
+      <div class="flex items-center justify-between p-3 border-b border-slate-50">
+        <div>
+          <p class="text-sm font-semibold text-slate-700">{{inspeccion.titulo}}</p>
+          <p class="text-xs text-slate-400">{{inspeccion.fecha | date:'dd/MM/yyyy'}}</p>
+        </div>
+        <span class="px-2 py-1 text-[10px] bg-emerald-100 text-emerald-700 rounded-full uppercase">Completado</span>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="lg:col-span-4 space-y-8">
+
+    <div class="bg-blue-600 rounded-2xl p-6 text-white shadow-lg shadow-blue-200">
+      <h3 class="font-bold mb-4">Acciones Rápidas</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <button class="flex flex-col items-center p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors">
+          <ng-icon name="heroUserPlusSolid" class="text-xl"></ng-icon>
+          <span class="text-[10px] mt-1">Nuevo Trabajador</span>
+        </button>
+        <button class="flex flex-col items-center p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors">
+          <ng-icon name="heroDocumentPlusSolid" class="text-xl"></ng-icon>
+          <span class="text-[10px] mt-1">Buscar informe</span>
+        </button>
+        <button class="flex flex-col items-center p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors">
+          <ng-icon name="heroDocumentPlusSolid" class="text-xl"></ng-icon>
+          <span class="text-[10px] mt-1">Programar inspección</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+      <h3 class="font-bold text-slate-800 mb-4">Próximos Vencimientos</h3>
+      <p class="text-xs text-slate-400 italic">No tienes vencimientos para los próximos 7 días.</p>
+    </div>
+
+  </div>
+</div>
