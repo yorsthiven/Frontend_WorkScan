@@ -1,27 +1,122 @@
-<h2 mat-dialog-title class="text-xl font-bold">Agregar Nuevo Trabajador</h2>
-<mat-dialog-content>
-  <form [formGroup]="form" class="flex flex-col gap-4 mt-2 min-w-[300px]">
+<div class="flex flex-col h-full max-h-[90vh]">
 
-    <mat-form-field appearance="outline">
-      <mat-label>Cédula</mat-label>
-      <input matInput formControlName="cedula" type="text">
-    </mat-form-field>
+  <div class="p-3 md:p-5 pb-2 flex-none">
+    <h2 class="text-3xl font-black text-slate-800 tracking-tight text-center">Registro de Personal</h2>
+    <p class="text-slate-400 font-medium text-center mt-2">Información necesaria para el perfil de salud y trabajo.</p>
+  </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Nombres</mat-label>
-      <input matInput formControlName="nombres">
-    </mat-form-field>
+  <mat-dialog-content class="flex-1 overflow-y-auto px-6 md:px-10 py- custom-scrollbar">
+    <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-8 pb-10">
 
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email">
-    </mat-form-field>
+      <h3 class="col-span-full text-xs font-black uppercase tracking-widest text-blue-600/50 mb-[-10px]">Datos
+        Personales</h3>
+      <div class="col-span-1 md:col-span-2">
+        <app-input-generico label="Cédula" [control]="getControl('cedula')" placeholder="#123456789" icon="fingerprint"></app-input-generico>
+      </div>
+      <div class="col-span-1 md:col-span-2">
+        <app-input-generico label="Nombres" [control]="getControl('nombres')" placeholder="Nombres" icon="person"></app-input-generico>
+      </div>
+      <div class="col-span-1 md:col-span-2">
+        <app-input-generico label="Apellidos" [control]="getControl('apellidos')" placeholder="Apellidos" icon="badge"></app-input-generico>
+      </div>
+      <div class="col-span-1 md:col-span-3">
+        <app-input-generico label="Correo" type="email" [control]="getControl('email')" placeholder="nombre@dominio.com" icon="monitor_weight"></app-input-generico>
+      </div>
+      <div class="col-span-1 md:col-span-3">
+        <app-input-generico label="Número contacto" type="text" [control]="getControl('numeroContacto')" placeholder="#315 456 789" icon="monitor_weight"></app-input-generico>
+      </div>
+
+      <h3 class="col-span-full text-xs font-black uppercase tracking-widest text-blue-600/50 mb-[-10px] mt-4">Perfil
+        Físico</h3>
+      <div class="col-span-1 md:col-span-3">
+        <app-input-generico label="Estatura (cm)" type="number" [control]="getControl('estaturaCm')"
+          icon="height"></app-input-generico>
+      </div>
+      <div class="col-span-1 md:col-span-3">
+        <app-input-generico label="Peso (Kg)" type="number" [control]="getControl('pesoKg')"
+        icon="monitor_weight"></app-input-generico>
+      </div>
+
+      <h3 class="col-span-full text-xs font-black uppercase tracking-widest text-blue-600/50 mb-[-10px] mt-4">
+        Contratación</h3>
+      <div class="col-span-1 md:col-span-3">
+        <app-input-generico label="Ingreso Empresa" type="date" [control]="getControl('fechaIngresoEmpresa')"
+          icon="calendar_today"></app-input-generico>
+      </div>
+      <div class="col-span-1 md:col-span-3">
+        <app-input-generico label="Ingreso al Cargo" type="date" [control]="getControl('fechaIngresoCargo')"
+          icon="event_available"></app-input-generico>
+      </div>
+
+      <h3 class="col-span-full text-xs font-black uppercase tracking-widest text-blue-600/50 mt-4">Asignación</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-full">
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-bold text-slate-700 ml-1">Cargo</label>
+          <mat-form-field appearance="outline" class="custom-select">
+            <mat-select [formControl]="getControl('idCargo')" placeholder="Selecciona cargo">
+              @for (cargo of cargos(); track cargo.id) {
+              <mat-option [value]="cargo.id">{{ cargo.nombre }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-bold text-slate-700 ml-1">Jornada</label>
+          <mat-form-field appearance="outline" class="custom-select">
+            <mat-select [formControl]="getControl('idJornada')" placeholder="Selecciona jornada">
+              @for (j of jornadas(); track j.id) {
+              <mat-option [value]="j.id">{{ j.nombre }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-bold text-slate-700 ml-1">Rol de Usuario</label>
+          <mat-form-field appearance="outline" class="custom-select">
+            <mat-select [formControl]="getControl('idRol')" placeholder="Selecciona rol">
+              @for (rol of roles(); track rol.id) {
+              <mat-option [value]="rol.id">{{ rol.nombre }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+
+      </div>
+
+      <!-- <div class="col-span-1 md:col-span-2">
+        <app-input-generico label="ID Cargo" type="number" [control]="getControl('idCargo')"></app-input-generico>
+      </div>
+      <div class="col-span-1 md:col-span-2">
+        <app-input-generico label="ID Jornada" type="number" [control]="getControl('idJornada')"></app-input-generico>
+      </div>
+      <div class="col-span-1 md:col-span-2">
+        <app-input-generico label="ID Rol" type="number" [control]="getControl('idRol')"></app-input-generico>
+      </div> -->
+
+
+      <!-- <div class="text-red-500 text-[10px] mt-4 p-2 bg-red-50 rounded-lg">
+        <p>Estado: {{ form.status }}</p>
+        <pre>{{ form.value | json }}</pre>
+      </div> -->
 
     </form>
-</mat-dialog-content>
-<mat-dialog-actions align="end" class="gap-2">
-  <button mat-button (click)="cerrar()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid">
-    Guardar
-  </button>
-</mat-dialog-actions>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="p-6 md:p-10 pt-2 flex-none gap-4 border-t border-slate-50 bg-white">
+    <button (click)="cerrar()" class="px-8 py-4 font-bold text-slate-400 hover:text-slate-600 transition-all">
+      Cancelar
+    </button>
+    <button (click)="guardar()" [disabled]="form.invalid"
+      class="px-10 py-4 bg-blue-600 disabled:bg-slate-200 text-white rounded-[1.8rem] font-black shadow-xl shadow-blue-500/20 active:scale-95 transition-all">
+      Guardar Registro
+    </button>
+  </mat-dialog-actions>
+</div>
+
+@if (isLoading()) {
+  <app-spinner-generico></app-spinner-generico>
+}

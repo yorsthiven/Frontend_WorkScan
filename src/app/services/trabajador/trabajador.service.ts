@@ -22,7 +22,19 @@ export class TrabajadorService {
   }
 
   // En trabajador.service.ts
-  crearTrabajador(trabajador: any) {
-    return this.http.post(`${this.apiUrl}/Trabajador`, trabajador);
+  crearTrabajador(trabajador: Trabajador) : Observable<RespuestaApi>{
+    return this.http.post<RespuestaApi>(`${this.apiUrl}`, trabajador);
+  }
+
+  getCargos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/cargos`);
+  }
+
+  getJornadas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/jornadas`);
+  }
+
+  getRoles(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/roles`);
   }
 }

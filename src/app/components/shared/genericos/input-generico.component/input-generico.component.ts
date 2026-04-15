@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-input-generico.component',
+  selector: 'app-input-generico',
   imports: [ReactiveFormsModule],
   templateUrl: './input-generico.component.html',
 })
@@ -11,6 +11,7 @@ export class InputGenericoComponent {
   placeholder = input<string>('');
   type = input<string>('text'); // Aquí puedes pasar 'password', 'number', etc.
   control = input.required<FormControl>(); // El control de validación de Angular
+  icon = input<string>('');
 
   // Para mostrar errores amigables
   get errorMessage(): string {

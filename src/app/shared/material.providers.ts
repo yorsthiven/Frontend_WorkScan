@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
+import { MatOptionModule } from "@angular/material/core";
 import { MatDialogActions, MatDialogContent } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -16,5 +17,7 @@ export const MaterialModules = [
   MatDialogActions,
   MatDialogContent,
   MatSpinner,
-  CommonModule
+  CommonModule,
+  MatOptionModule,
+  MatOptionModule
 ];

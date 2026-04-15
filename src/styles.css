@@ -9,3 +9,84 @@
 html {
   scroll-behavior: smooth;
 }
+
+.custom-modal-container {
+  /* Añade un margen de seguridad para que el modal no toque los bordes de la pantalla */
+  margin: 16px !important;
+}
+
+.custom-modal-container .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 2.5rem !important;
+  /* Esto asegura que nada de adentro se salga de las esquinas redondeadas */
+  overflow: hidden !important;
+}
+
+/* Custom Scrollbar para el Formulario */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0; /* slate-200 */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1; /* slate-300 */
+}
+
+/* Forzar que el mat-dialog no limite el scroll */
+.mat-mdc-dialog-content {
+  max-height: none !important;
+}
+
+/* Personalización de los Selects de Material */
+.custom-select .mat-mdc-text-field-wrapper {
+  background-color: #f8fafc !important; /* slate-50 */
+  border-radius: 1.5rem !important; /* Redondeado como tus otros inputs */
+  border: 2px solid #f1f5f9 !important; /* slate-100 */
+}
+
+.custom-select .mat-mdc-form-field-flex {
+  padding-top: 4px !important;
+}
+
+/* Quitar la línea de abajo y los bordes por defecto */
+.custom-select .mdc-notched-outline {
+  display: none !important;
+}
+
+/* El panel que se abre (las opciones) también debe ser redondeado */
+.mat-mdc-select-panel {
+  border-radius: 1.5rem !important;
+  padding: 8px !important;
+  margin-top: 8px !important;
+}
+
+/* Mensaje de Éxito (Verde) */
+.snack-success {
+  background-color: #10b981 !important; /* emerald-500 */
+  color: white !important;
+}
+
+/* Mensaje de Error (Rojo) */
+.snack-error {
+  background-color: #ef4444 !important; /* red-500 */
+  color: white !important;
+}
+
+/* Mensaje de Advertencia (Amarillo/Naranja) */
+.snack-warning {
+  background-color: #f59e0b !important; /* amber-500 */
+  color: white !important;
+}
+
+.mdc-snackbar__surface {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
