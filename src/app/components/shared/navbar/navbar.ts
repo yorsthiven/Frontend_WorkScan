@@ -5,8 +5,5 @@ import { MaterialModules } from '../../../shared/material.providers';
   selector: 'app-navbar',
   imports: [MaterialModules],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css',
 })
-export class Navbar {
-
-}
+export class Navbar {}

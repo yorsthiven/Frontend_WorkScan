@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Trabajador } from '../../models/trabajador.model';
 
@@ -7,15 +7,18 @@ import { Trabajador } from '../../models/trabajador.model';
   providedIn: 'root',
 })
 export class TrabajadorService {
+  private http = inject(HttpClient);
   private apiUrl = 'https://localhost:7064/api/Trabajador';
 
   /**
    *
    */
-  constructor(private http: HttpClient) {}
+  // constructor() {}
 
-  getTrabajadores(): Observable<Trabajador[]> {
-    return this.http.get<Trabajador[]>(this.apiUrl);
+  getTrabajadores(filtro:string): Observable<Trabajador[]> {
+    const params = new HttpParams().set('buscar', filtro);
+
+    return this.http.get<Trabajador[]>(this.apiUrl,{params});
   }
 
   // En trabajador.service.ts

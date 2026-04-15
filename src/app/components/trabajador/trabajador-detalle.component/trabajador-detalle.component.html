@@ -1,0 +1,95 @@
+<div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 h-full flex flex-col">
+
+  @if (trabajadorDetallado()) {
+  <div class="flex flex-col gap-6">
+    <div class="flex items-center gap-4">
+      <div
+        class="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-blue-100">
+        {{ trabajadorDetallado()?.nombres?.charAt(0) }}{{ trabajadorDetallado()?.apellidos?.charAt(0) }}
+      </div>
+      <div>
+        <h3 class="text-2xl font-black text-slate-800 leading-tight">
+          {{ trabajadorDetallado()?.nombres }} <br> {{ trabajadorDetallado()?.apellidos }}
+        </h3>
+        <span class="text-sm font-bold text-blue-500 uppercase tracking-widest">
+          {{ trabajadorDetallado()?.idCargo }}
+        </span>
+      </div>
+    </div>
+
+    <hr class="border-slate-50">
+
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-slate-50 p-4 rounded-2xl">
+        <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Cédula de Ciudadanía</p>
+        <p class="text-base font-bold text-slate-700">{{ trabajadorDetallado()?.cedula }}</p>
+      </div>
+      <div class="bg-slate-50 p-4 rounded-2xl">
+        <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Jornada Laboral</p>
+        <p class="text-base font-bold text-slate-700">{{ trabajadorDetallado()?.idJornada }}</p>
+      </div>
+    </div>
+
+    <div class="bg-blue-50 p-6 rounded-3xl border border-blue-100">
+      <h4 class="text-blue-800 text-xs font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+        <span>📊</span> Perfil Antropométrico
+      </h4>
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div>
+          <p class="text-[10px] text-blue-400 font-bold uppercase">Peso</p>
+          <p class="text-lg font-black text-blue-900">{{ trabajadorDetallado()?.pesoKg }} <small>kg</small></p>
+        </div>
+        <div>
+          <p class="text-[10px] text-blue-400 font-bold uppercase">Talla</p>
+          <p class="text-lg font-black text-blue-900">{{ trabajadorDetallado()?.estaturaCm }} <small>cm</small></p>
+        </div>
+        <div>
+          <p class="text-[10px] text-blue-400 font-bold uppercase">IMC</p>
+          <p class="text-lg font-black text-blue-900">{{ trabajadorDetallado()?.imcValor }}</p>
+        </div>
+      </div>
+      <div class="mt-4 py-3 px-4 bg-white rounded-2xl text-center shadow-sm border border-blue-50">
+        <span class="text-xs font-bold text-slate-500 uppercase">Clasificación: </span>
+        <span class="text-sm font-black text-blue-600 uppercase">{{ trabajadorDetallado()?.imcDescripcion }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-grow"></div>
+
+  <!-- <div class="mt-6">
+      <button class="w-full py-5 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-800 transition-all active:scale-95 shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
+        <span>📄</span> Generar Reporte Completo SST
+      </button>
+    </div> -->
+
+  } @else {
+  <div
+    class="flex flex-col items-center justify-center h-full text-center p-10 bg-slate-50/50 rounded-3xl border-2 border-dashed border-slate-200/60">
+
+    <div class="relative mb-6">
+      <div class="absolute inset-0 bg-blue-100 rounded-full animate-ping opacity-25"></div>
+      <div
+        class="relative w-24 h-24 bg-white rounded-full shadow-sm flex items-center justify-center border border-slate-100">
+        <span class="text-4xl">🔍</span>
+      </div>
+    </div>
+
+    <div class="max-w-[280px]">
+      <h3 class="text-slate-800 font-black text-xl mb-3 tracking-tight">
+        Ficha Técnica SST
+      </h3>
+      <p class="text-slate-500 text-sm leading-relaxed mb-6">
+        Selecciona un trabajador de la lista de la izquierda para visualizar su <span
+          class="text-blue-600 font-semibold">perfil antropométrico</span> y reportes.
+      </p>
+    </div>
+
+    <div
+      class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+      <span class="w-2 h-2 bg-slate-300 rounded-full animate-pulse"></span>
+      Esperando Selección
+    </div>
+  </div>
+  }
+</div>

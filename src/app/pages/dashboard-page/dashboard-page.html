@@ -1,29 +1,44 @@
-<div class="flex h-screen bg-slate-50 overflow-hidden">
-  <aside class="w-72 h-full border-r border-slate-200 bg-white">
+<div class="flex h-screen bg-slate-50 overflow-hidden relative">
+
+  <aside
+    [class.translate-x-0]="menuOpen"
+    [class.-translate-x-full]="!menuOpen"
+    class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 transition-transform duration-300 ease-in-out
+           lg:relative lg:translate-x-0 lg:block">
+
     <app-side-menu class="h-full flex flex-col"></app-side-menu>
   </aside>
 
-  <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+  <!-- <div
+    *ngIf="menuOpen"
+    (click)="menuOpen = false"
+    class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden">
+  </div> -->
 
-    <!-- <header class="h-16 border-b border-slate-200 bg-blue-200 px-8 flex items-center justify-between">
-      <h1 class="text-lg font-semibold text-slate-800">Panel Principal</h1>
+  @if (menuOpen) {
+  <div
+    (click)="menuOpen = false"
+    class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden transition-opacity">
+  </div>
+}
+
+  <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <header class="h-16 border-b border-slate-200 bg-white px-4 flex items-center justify-between">
       <div class="flex items-center gap-4">
+        <button (click)="menuOpen = !menuOpen" class="lg:hidden  text-slate-600">
+           <mat-icon>menu</mat-icon>
+        </button>
+        <h1 class="text-xl font-bold text-slate-800">Panel Principal</h1>
       </div>
-    </header> -->
-    <header class="h-16 border-b border-slate-200 bg-white px-8 flex items-center justify-between">
-      <h1 class="text-xl font-bold text-slate-800">Panel Principal</h1>
+
       <div class="flex items-center gap-4">
         <span class="text-sm text-slate-500">George Medina</span>
         <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs">GM</div>
       </div>
     </header>
 
-    <div class="flex-1 overflow-y-auto p-8">
-      <!-- <div class="max-w-7xl mx-auto">  -->
-        <router-outlet></router-outlet>
-      <!-- </div> -->
+    <div class="flex-1 overflow-y-auto p-4 lg:p-8">
+      <router-outlet></router-outlet>
     </div>
-
   </main>
-
 </div>

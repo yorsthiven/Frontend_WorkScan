@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, input, OnInit, output } from '@angular/core';
 import { TrabajadorService } from '../../../services/trabajador/trabajador.service';
 import { MaterialModules } from '../../../shared/material.providers';
 import { MatDialog } from '@angular/material/dialog';
 import { TrabajadorForm } from '../trabajador-form/trabajador-form';
+import { Trabajador } from '../../../models/trabajador.model';
 
 @Component({
   selector: 'app-trabajador-lista',
@@ -10,40 +11,17 @@ import { TrabajadorForm } from '../trabajador-form/trabajador-form';
   templateUrl: './trabajador-lista.html',
   styleUrl: './trabajador-lista.css',
 })
-export class TrabajadorLista implements OnInit {
-  trabajadores: any[] = [];
-  columnasVisibles: string[] = ['cedula', 'nombres'];
+export class TrabajadorLista {
+  trabajadores = input<Trabajador[]>([]);
 
-  constructor(
-    private trabajadorService: TrabajadorService,
-    private cd: ChangeDetectorRef,
-    private dialog: MatDialog,
-  ) {}
+  // Evento para avisar al padre quién fue seleccionado
+  onSeleccionar = output<Trabajador>();
 
-  ngOnInit() {
-    this.trabajadorService.getTrabajadores().subscribe({
-      next: (data) => {
-        this.trabajadores = data;
-        this.cd.detectChanges();
-        console.log('Trabajadores:', data);
-      },
-      error: (error) => {
-        console.error('Error al obtener trabajadores:', error);
-      },
-    });
+  // Definimos las columnas que coinciden con tu DTO de C#
+  displayedColumns: string[] = ['Cedula', 'Nombres', 'Apellidos', 'IdCargo'];
+
+  seleccionar(trabajador: Trabajador) {
+    this.onSeleccionar.emit(trabajador);
   }
 
-  abrirFormulario() {
-    const dialogRef = this.dialog.open(TrabajadorForm, {
-      width: '400px',
-      disableClose: true,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('Datos para guardar en SQL:', result);
-        // Aquí llamaremos al servicio para hacer el POST
-      }
-    });
-  }
 }

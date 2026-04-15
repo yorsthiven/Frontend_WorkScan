@@ -1,0 +1,25 @@
+<div class="flex flex-col gap-2 w-full">
+  <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+    {{ label() }}
+  </label>
+
+  <div class="relative">
+    <input
+      [type]="type()"
+      [formControl]="control()"
+      [placeholder]="placeholder()"
+      [class.border-red-300]="errorMessage"
+      class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50 focus:bg-white focus:border-blue-200 transition-all shadow-sm"
+    />
+
+    @if (type() === 'password') {
+      <span class="absolute right-5 top-4 text-slate-300">🔒</span>
+    }
+  </div>
+
+  @if (errorMessage) {
+    <span class="text-[10px] font-bold text-red-500 ml-2 animate-in fade-in slide-in-from-top-1">
+      ⚠️ {{ errorMessage }}
+    </span>
+  }
+</div>

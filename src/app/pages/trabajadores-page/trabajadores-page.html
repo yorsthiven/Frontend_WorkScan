@@ -1,3 +1,65 @@
-<section>
-  <app-trabajador-lista></app-trabajador-lista>
-</section>
+<div class="grid grid-cols-1 lg:grid-cols-[minmax(300px,65%)_1fr] gap-8 h-auto lg:h-[calc(100vh-160px)]">
+
+  <div class="flex flex-col gap-6 h-[500px] lg:h-full min-h-0">
+
+    <div class="grid grid-cols-12 items-center gap-4 mb-10">
+
+      <div class="col-span-12 md:col-span-3">
+        <h2 class="text-2xl font-black text-slate-800 tracking-tight text-center md:text-left">
+          Gestión del personal
+        </h2>
+      </div>
+
+      <div class="col-span-9 md:col-span-7">
+        <app-search-generico placeholder="Buscar..." (onSearch)="filtrarTrabajadores($event)">
+        </app-search-generico>
+      </div>
+
+      <div class="col-span-3 md:col-span-2 flex justify-center">
+        <button (click)="abrirFormulario()"
+          class="flex-none w-14 h-14 bg-blue-600 rounded-[1.5rem] flex items-center justify-center text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all active:scale-95 group">
+          <mat-icon class="!flex !items-center !justify-center !text-[28px] !h-full !w-full font-black">
+            person_add
+          </mat-icon>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="flex-1 min-h-0">
+      <!-- <app-trabajador-lista class="h-full" [trabajadores]="trabajadores()" (onSeleccionar)="seleccionarTrabajador($event)"></app-trabajador-lista> -->
+      <app-lista-generica [data]="trabajadores()" [columnas]="columnasTrabajador"
+        (filaSeleccionada)="seleccionarTrabajador($event)">
+        <ng-template #celdaPersonalizada let-item let-col="columna">
+
+          @if (col.key === 'idCargo') {
+          <span
+            class="inline-flex items-center px-4 py-1.5 rounded-full text-white bg-blue-600/70 text-xs font-medium shadow-inner shadow-blue-100/50">
+            {{ item[col.key] }}
+          </span>
+          } @else if (col.key === 'cedula') {
+          <span class="font-black text-sm text-slate-700 group-hover:text-blue-600 transition-colors">
+            {{ item[col.key] }}
+          </span>
+          } @else {
+          <span class="font-medium text-sm text-slate-500 group-hover:text-slate-700 transition-colors">
+            {{ item[col.key] }}
+          </span>
+          }
+
+        </ng-template>
+      </app-lista-generica>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-6 h-auto lg:h-full min-h-0">
+    <div class="flex-none lg:flex-[7] min-h-0">
+      <app-trabajador-detalle class="h-full" [trabajadorDetallado]="trabajadorSeleccionado()"></app-trabajador-detalle>
+    </div>
+
+    <div class="flex-none lg:flex-[3] min-h-0">
+      <app-trabajador-tarjetas class="h-full"></app-trabajador-tarjetas>
+    </div>
+  </div>
+
+</div>
