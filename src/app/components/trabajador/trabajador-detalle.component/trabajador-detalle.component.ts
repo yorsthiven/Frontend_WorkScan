@@ -4,7 +4,7 @@ import { Trabajador } from '../../../models/trabajador.model';
 
 @Component({
   selector: 'app-trabajador-detalle',
-  imports: [MatIcon],
+  imports: [],
   templateUrl: './trabajador-detalle.component.html',
 })
 export class TrabajadorDetalleComponent {

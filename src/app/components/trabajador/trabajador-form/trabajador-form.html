@@ -8,22 +8,28 @@
   <mat-dialog-content class="flex-1 overflow-y-auto px-6 md:px-10 py- custom-scrollbar">
     <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-8 pb-10">
 
+
       <h3 class="col-span-full text-xs font-black uppercase tracking-widest text-blue-600/50 mb-[-10px]">Datos
         Personales</h3>
       <div class="col-span-1 md:col-span-2">
-        <app-input-generico label="Cédula" [control]="getControl('cedula')" placeholder="#123456789" icon="fingerprint"></app-input-generico>
+        <app-input-generico label="Cédula" [control]="getControl('cedula')" placeholder="#123456789"
+          icon="fingerprint"></app-input-generico>
       </div>
       <div class="col-span-1 md:col-span-2">
-        <app-input-generico label="Nombres" [control]="getControl('nombres')" placeholder="Nombres" icon="person"></app-input-generico>
+        <app-input-generico label="Nombres" [control]="getControl('nombres')" placeholder="Nombres"
+          icon="person"></app-input-generico>
       </div>
       <div class="col-span-1 md:col-span-2">
-        <app-input-generico label="Apellidos" [control]="getControl('apellidos')" placeholder="Apellidos" icon="badge"></app-input-generico>
+        <app-input-generico label="Apellidos" [control]="getControl('apellidos')" placeholder="Apellidos"
+          icon="badge"></app-input-generico>
       </div>
       <div class="col-span-1 md:col-span-3">
-        <app-input-generico label="Correo" type="email" [control]="getControl('email')" placeholder="nombre@dominio.com" icon="monitor_weight"></app-input-generico>
+        <app-input-generico label="Correo" type="email" [control]="getControl('email')" placeholder="nombre@dominio.com"
+          icon="monitor_weight"></app-input-generico>
       </div>
       <div class="col-span-1 md:col-span-3">
-        <app-input-generico label="Número contacto" type="text" [control]="getControl('numeroContacto')" placeholder="#315 456 789" icon="monitor_weight"></app-input-generico>
+        <app-input-generico label="Número contacto" type="text" [control]="getControl('numeroContacto')"
+          placeholder="#315 456 789" icon="monitor_weight"></app-input-generico>
       </div>
 
       <h3 class="col-span-full text-xs font-black uppercase tracking-widest text-blue-600/50 mb-[-10px] mt-4">Perfil
@@ -34,7 +40,7 @@
       </div>
       <div class="col-span-1 md:col-span-3">
         <app-input-generico label="Peso (Kg)" type="number" [control]="getControl('pesoKg')"
-        icon="monitor_weight"></app-input-generico>
+          icon="monitor_weight"></app-input-generico>
       </div>
 
       <h3 class="col-span-full text-xs font-black uppercase tracking-widest text-blue-600/50 mb-[-10px] mt-4">
@@ -52,6 +58,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-full">
 
+        <!--
         <div class="flex flex-col gap-1.5">
           <label class="text-sm font-bold text-slate-700 ml-1">Cargo</label>
           <mat-form-field appearance="outline" class="custom-select">
@@ -62,6 +69,38 @@
             </mat-select>
           </mat-form-field>
         </div>
+        -->
+
+
+        <!-- <div class="flex flex-col gap-2">
+          <label class="text-[10px] font-black uppercase tracking-widest text-blue-600/50 ml-1">Cargo</label>
+          <div class="relative group">
+            <select formControlName="idCargo"
+              class="w-full h-[56px] px-5 bg-slate-50 border border-slate-100 rounded-[1.2rem] text-sm font-semibold text-slate-700 outline-none transition-all duration-300 appearance-none cursor-pointer focus:bg-white focus:ring-4 focus:ring-blue-600/5 focus:border-blue-500/50">
+              <option [ngValue]="null" disabled>Selecciona el cargo...</option>
+              @for (cargo of cargos(); track cargo.id) {
+              <option [ngValue]="cargo.id">{{ cargo.nombre }}</option>
+              }
+            </select>
+
+            <div
+              class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+              <mat-icon class="text-xl">expand_more</mat-icon>
+            </div>
+          </div>
+        </div> -->
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-bold text-slate-700 ml-1">Cargo</label>
+          <mat-form-field appearance="outline" class="custom-select">
+            <mat-select [formControl]="getControl('idCargo')" placeholder="Selecciona cargo">
+              @for (cargo of cargos(); track cargo.id) {
+              <mat-option [value]="cargo.id">{{ cargo.nombre }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
 
         <div class="flex flex-col gap-1.5">
           <label class="text-sm font-bold text-slate-700 ml-1">Jornada</label>
@@ -74,7 +113,8 @@
           </mat-form-field>
         </div>
 
-        <!-- <div class="flex flex-col gap-1.5">
+        <!--
+        <div class="flex flex-col gap-1.5">
           <label class="text-sm font-bold text-slate-700 ml-1">Rol de Usuario</label>
           <mat-form-field appearance="outline" class="custom-select">
             <mat-select [formControl]="getControl('idRol')" placeholder="Selecciona rol">
@@ -87,24 +127,9 @@
 
       </div>
 
-      <!-- <div class="col-span-1 md:col-span-2">
-        <app-input-generico label="ID Cargo" type="number" [control]="getControl('idCargo')"></app-input-generico>
-      </div>
-      <div class="col-span-1 md:col-span-2">
-        <app-input-generico label="ID Jornada" type="number" [control]="getControl('idJornada')"></app-input-generico>
-      </div>
-      <div class="col-span-1 md:col-span-2">
-        <app-input-generico label="ID Rol" type="number" [control]="getControl('idRol')"></app-input-generico>
-      </div> -->
-
-
-      <!-- <div class="text-red-500 text-[10px] mt-4 p-2 bg-red-50 rounded-lg">
-        <p>Estado: {{ form.status }}</p>
-        <pre>{{ form.value | json }}</pre>
-      </div> -->
-
     </form>
   </mat-dialog-content>
+
 
   <mat-dialog-actions align="end" class="p-6 md:p-10 pt-2 flex-none gap-4 border-t border-slate-50 bg-white">
     <button (click)="cerrar()" class="px-8 py-4 font-bold text-slate-400 hover:text-slate-600 transition-all">
@@ -115,8 +140,9 @@
       Guardar Registro
     </button>
   </mat-dialog-actions>
+
 </div>
 
 @if (isLoading()) {
-  <app-spinner-generico></app-spinner-generico>
+<app-spinner-generico></app-spinner-generico>
 }

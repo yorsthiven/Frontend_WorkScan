@@ -90,3 +90,20 @@ html {
   box-shadow: none !important;
   padding: 0 !important;
 }
+
+/* Esto ayuda a que el select no se vea tan rígido en navegadores modernos */
+select {
+    transition: all 0.3s ease;
+}
+
+/* Evita que el borde azul por defecto de Chrome rompa tu diseño */
+select:focus-visible {
+    outline: none;
+}
+
+/* Suaviza un poco el renderizado de las opciones */
+option {
+    padding: 10px;
+    background-color: white;
+    color: #334155; /* slate-700 */
+}

@@ -7,6 +7,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSpinner } from "@angular/material/progress-spinner";
 import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 export const MaterialModules = [
   MatTableModule,
@@ -19,5 +21,6 @@ export const MaterialModules = [
   MatSpinner,
   CommonModule,
   MatOptionModule,
-  MatOptionModule
+  MatSelectModule,
+  MatFormFieldModule
 ];

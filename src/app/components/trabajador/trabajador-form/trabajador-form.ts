@@ -11,12 +11,7 @@ import { capitalizarFrase } from '../../../shared/formatear';
 
 @Component({
   selector: 'app-trabajador-form',
-  imports: [
-    MaterialModules,
-    FormsModules,
-    InputGenericoComponent,
-    SpinnerGenericoComponent,
-  ],
+  imports: [MaterialModules, FormsModules, InputGenericoComponent, SpinnerGenericoComponent],
   templateUrl: './trabajador-form.html',
   styleUrl: './trabajador-form.css',
 })
@@ -26,17 +21,36 @@ export class TrabajadorForm {
   form: FormGroup;
   isLoading = signal(false);
 
+  // Inyectamos los datos que vienen del padre
+  private modalData = inject(MAT_DIALOG_DATA);
+
+  // Mantenemos los signals para que la UI se actualice sola
+  cargos = signal<any[]>([]);
+  jornadas = signal<any[]>([]);
+  roles = signal<any[]>([]);
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<TrabajadorForm>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+
+    // @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
+    // 2. Llena los datos aquí
+    if (this.modalData) {
+      this.cargos.set(this.modalData.cargos || []);
+      this.jornadas.set(this.modalData.jornadas || []);
+    }
+
     this.form = new FormGroup({
       cedula: new FormControl('', [Validators.required]),
       nombres: new FormControl('', [Validators.required]),
       apellidos: new FormControl('', [Validators.required]),
       // Datos Antropométricos
-      estaturaCm: new FormControl(0, [Validators.required, Validators.min(50)]),
+      estaturaCm: new FormControl(0, [
+        Validators.required,
+        Validators.min(50),
+        Validators.max(999),
+      ]),
       pesoKg: new FormControl(0, [Validators.required, Validators.min(20)]),
       email: new FormControl('', [Validators.required, Validators.email]),
       // Fechas (puedes usar type="date" en el input)
@@ -97,16 +111,26 @@ export class TrabajadorForm {
 
   // A PARTIR DE AQUÍ SE MUESTRAN LOS DATOS DE CARGO Y JORNADAS.
 
-  // Inyectamos los datos que vienen del padre
-  private modalData = inject(MAT_DIALOG_DATA);
-
-  // Mantenemos los signals para que la UI se actualice sola
-  cargos = signal(this.modalData.cargos);
-  jornadas = signal(this.modalData.jornadas);
-  roles = signal<any[]>([]);
-
   ngOnInit() {
     // this.cargarCatalogos();
+
+    // Limitamos Estatura
+    this.form.get('estaturaCm')?.valueChanges.subscribe((valor) => {
+      if (valor && valor.toString().length > 3) {
+        this.form
+          .get('estaturaCm')
+          ?.setValue(parseInt(valor.toString().slice(0, 3)), { emitEvent: false });
+      }
+    });
+
+    // Limitamos Peso
+    this.form.get('pesoKg')?.valueChanges.subscribe((valor) => {
+      if (valor && valor.toString().length > 3) {
+        this.form
+          .get('pesoKg')
+          ?.setValue(parseInt(valor.toString().slice(0, 3)), { emitEvent: false });
+      }
+    });
   }
 
   cargarCatalogos() {
