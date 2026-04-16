@@ -7,33 +7,43 @@
       <thead>
         <tr class="bg-slate-50/50">
           @for (col of columnas(); track col.key) {
-            <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
-              {{ col.label }}
-            </th>
+          <th
+            class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
+            {{ col.label }}
+          </th>
           }
+          <th
+            class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">
+            Acciones
+          </th>
         </tr>
       </thead>
 
       <tbody class="divide-y divide-slate-50">
         @for (item of data(); track item.cedula) {
-          <tr (click)="seleccionar(item)"
-              class="group cursor-pointer hover:bg-blue-50/30 transition-all duration-300">
+        <tr (click)="seleccionar(item)" class="group cursor-pointer hover:bg-blue-50/30 transition-all duration-300">
 
-            @for (col of columnas(); track col.key) {
-              <td class="px-8 py-5 whitespace-nowrap">
+          @for (col of columnas(); track col.key) {
+          <td class="px-8 py-5 whitespace-nowrap">
 
-                @if (plantillaCelda) {
-                  <ng-container *ngTemplateOutlet="plantillaCelda; context: { $implicit: item, columna: col }">
-                  </ng-container>
-                } @else {
-                  <span class="font-medium text-sm text-slate-500 group-hover:text-slate-700 transition-colors">
-                    {{ item[col.key] }}
-                  </span>
-                }
-
-              </td>
+            @if (plantillaCelda) {
+            <ng-container *ngTemplateOutlet="plantillaCelda; context: { $implicit: item, columna: col }">
+            </ng-container>
+            } @else {
+            <span class="font-medium text-sm text-slate-500 group-hover:text-slate-700 transition-colors">
+              {{ item[col.key] }}
+            </span>
             }
-          </tr>
+
+          </td>
+          }
+          <td class="px-8 py-5 text-right">
+            <button (click)="$event.stopPropagation(); editar(item)"
+              class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100/50 rounded-xl transition-all active:scale-90">
+              <mat-icon class="text-lg">edit</mat-icon>
+            </button>
+          </td>
+        </tr>
         }
       </tbody>
     </table>

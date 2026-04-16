@@ -15,15 +15,19 @@ export class TrabajadorService {
    */
   // constructor() {}
 
-  getTrabajadores(filtro:string): Observable<Trabajador[]> {
+  getTrabajadores(filtro: string): Observable<Trabajador[]> {
     const params = new HttpParams().set('buscar', filtro);
 
-    return this.http.get<Trabajador[]>(this.apiUrl,{params});
+    return this.http.get<Trabajador[]>(this.apiUrl, { params });
   }
 
   // En trabajador.service.ts
-  crearTrabajador(trabajador: Trabajador) : Observable<RespuestaApi>{
+  crearTrabajador(trabajador: Trabajador): Observable<RespuestaApi> {
     return this.http.post<RespuestaApi>(`${this.apiUrl}`, trabajador);
+  }
+
+  actualizarTrabajador(id:number, trabajador: Trabajador) {
+    return this.http.put(`${this.apiUrl}/${id}`, trabajador);
   }
 
   getCargos(): Observable<any[]> {

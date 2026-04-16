@@ -10,7 +10,7 @@ import { SearchGenericoComponent } from '../../components/shared/genericos/searc
 import { MatIcon } from '@angular/material/icon';
 import { TrabajadorForm } from '../../components/trabajador/trabajador-form/trabajador-form';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { SpinnerGenericoComponent } from "../../components/shared/genericos/spinner-generico.component/spinner-generico.component";
+import { SpinnerGenericoComponent } from '../../components/shared/genericos/spinner-generico.component/spinner-generico.component';
 import { MaterialModules } from '../../shared/material.providers';
 
 interface ItemSelect {
@@ -26,8 +26,8 @@ interface ItemSelect {
     TrabajadorDetalleComponent,
     ListaGenericaComponent,
     SearchGenericoComponent,
-    SpinnerGenericoComponent
-],
+    SpinnerGenericoComponent,
+  ],
   templateUrl: './trabajadores-page.html',
 })
 export class TrabajadoresPage {
@@ -50,11 +50,13 @@ export class TrabajadoresPage {
   ngOnInit() {
     // Carga inicial (trae todos porque el filtro va vacío)
     this.filtrarTrabajadores('');
+
   }
 
   filtrarTrabajadores(termino: string) {
     this.trabajadorService.getTrabajadores(termino).subscribe({
       next: (data) => {
+        console.log(data);
         this.trabajadores.set(data); // Actualiza la lista automáticamente
       },
       error: (err) => {
@@ -69,7 +71,7 @@ export class TrabajadoresPage {
 
   private readonly dialog = inject(MatDialog);
 
-  abrirFormulario() {
+  abrirFormulario(trabajador?: Trabajador) {
     this.mostrarFormulario.set(true);
 
     const dialogRef = this.dialog.open(TrabajadorForm, {
@@ -79,6 +81,7 @@ export class TrabajadoresPage {
       autoFocus: false, // Evita que el teclado salte de golpe en móvil
       // AQUÍ PASAS LA INFORMACIÓN
       data: {
+        trabajador: trabajador,
         cargos: this.listaCargos(), // tus señales o variables
         jornadas: this.listaJornadas(),
         // roles: this.listaRoles(),

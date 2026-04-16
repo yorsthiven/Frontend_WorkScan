@@ -20,6 +20,7 @@ export class TrabajadorForm {
   private notificacion = inject(NotificacionService);
   form: FormGroup;
   isLoading = signal(false);
+  isEdit = signal(false);
 
   // Inyectamos los datos que vienen del padre
   private modalData = inject(MAT_DIALOG_DATA);
@@ -42,6 +43,7 @@ export class TrabajadorForm {
     }
 
     this.form = new FormGroup({
+      id: new FormControl(0),
       cedula: new FormControl('', [Validators.required]),
       nombres: new FormControl('', [Validators.required]),
       apellidos: new FormControl('', [Validators.required]),
@@ -62,6 +64,8 @@ export class TrabajadorForm {
       idJornada: new FormControl(null, [Validators.required]),
       idEmpresa: new FormControl(1, [Validators.required]),
       idCargo: new FormControl(null, [Validators.required]),
+      numeroCargo: new FormControl(null, [Validators.required]),
+      numeroJornada: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -71,8 +75,12 @@ export class TrabajadorForm {
   }
 
   guardar() {
-    this.isLoading.set(true); // Encendemos el spinner
     if (this.form.valid) {
+      this.isLoading.set(true); // Encendemos el spinner
+
+      // IMPORTANTE: usamos getRawValue() para que incluya la 'cedula' aunque esté deshabilitada
+      const datos = this.form.getRawValue();
+
       // 1. Extraemos los valores del formulario
       const rawValues = this.form.value;
 
@@ -83,33 +91,49 @@ export class TrabajadorForm {
         apellidos: capitalizarFrase(rawValues.apellidos),
       };
 
-      // const trabajadorDto = this.form.value; // Ya tiene el formato de tu DTO de .NET
+      // Elegimos el servicio según el modo
+      const operacion = this.isEdit()
+        ? this.trabajadorService.actualizarTrabajador(datos.id, datos) // actualizarTrabajador iria aqui cuando se cree en el service
+        : this.trabajadorService.crearTrabajador(datos);
 
-      // Llamamos al servicio aquí mismo
-      this.trabajadorService.crearTrabajador(trabajadorDto).subscribe({
-        next: (res) => {
-          // Si el backend responde OK (ej: 201 Created)
-          this.notificacion.show('success', 'Éxito', res.mensaje);
+      operacion.subscribe({
+        next: (res: any) => {
+          // NORMALIZACIÓN: Buscamos el mensaje donde sea que esté
+          const mensajeExito = res.mensaje || res.result?.mensaje || 'Operación exitosa';
+
+          this.notificacion.show('success', 'Completado', mensajeExito);
           this.isLoading.set(false);
-          this.dialogRef.close(res); // Cerramos el modal y enviamos el nuevo trabajador de vuelta
+          this.dialogRef.close(true); // Cerramos indicando éxito
         },
         error: (err) => {
           this.isLoading.set(false);
-          const mensajeError = err.error?.mensaje || 'Error inesperado en el servidor';
-          // Si hay error, el modal se queda abierto y puedes mostrar un mensaje
-          // MENSAJE ROJO (Error)
-          this.notificacion.show('error', 'Error en Registro', mensajeError);
-          // alert('Hubo un error al guardar el trabajador. Revisa los datos.');
+          this.notificacion.show('error', 'Error', err.error?.mensaje || 'Error al procesar');
         },
       });
+
+      // // Llamamos al servicio aquí mismo
+      // this.trabajadorService.crearTrabajador(trabajadorDto).subscribe({
+      //   next: (res) => {
+      //     // Si el backend responde OK (ej: 201 Created)
+      //     this.notificacion.show('success', 'Éxito', res.mensaje);
+      //     this.isLoading.set(false);
+      //     this.dialogRef.close(res); // Cerramos el modal y enviamos el nuevo trabajador de vuelta
+      //   },
+      //   error: (err) => {
+      //     this.isLoading.set(false);
+      //     const mensajeError = err.error?.mensaje || 'Error inesperado en el servidor';
+      //     // Si hay error, el modal se queda abierto y puedes mostrar un mensaje
+      //     // MENSAJE ROJO (Error)
+      //     this.notificacion.show('error', 'Error en Registro', mensajeError);
+      //     // alert('Hubo un error al guardar el trabajador. Revisa los datos.');
+      //   },
+      // });
     }
   }
 
   cerrar() {
     this.dialogRef.close();
   }
-
-  // A PARTIR DE AQUÍ SE MUESTRAN LOS DATOS DE CARGO Y JORNADAS.
 
   ngOnInit() {
     // this.cargarCatalogos();
@@ -131,6 +155,46 @@ export class TrabajadorForm {
           ?.setValue(parseInt(valor.toString().slice(0, 3)), { emitEvent: false });
       }
     });
+
+    // Si en modalData viene un objeto 'trabajador', es porque vamos a editar
+    if (this.modalData?.trabajador) {
+      this.isEdit.set(true);
+
+      setTimeout(() => {
+        // 1. Extraemos los datos
+        const t = this.modalData.trabajador;
+        // 2. Buscamos el ID en nuestras señales de catálogos
+        const cargoEncontrado = this.cargos().find((c) => c.nombre === t.nombreCargo);
+        const jornadaEncontrada = this.jornadas().find((j) => j.nombre === t.nombreJornada);
+
+        // const cargoEncontrado = this.cargos().find((c) => c.nombre === t.nombreCargo);
+
+        if (cargoEncontrado) {
+          // Asignamos el ID directamente al control
+          this.form.get('idCargo')?.setValue(cargoEncontrado.id);
+          // Forzamos la validación
+          this.form.get('idCargo')?.updateValueAndValidity();
+        }
+        if (jornadaEncontrada) {
+          // Asignamos el ID directamente al control
+          this.form.get('idJornada')?.setValue(jornadaEncontrada.id);
+          // Forzamos la validación
+          this.form.get('idJornada')?.updateValueAndValidity();
+        }
+        // 3. Parchamos el formulario con los IDs encontrados
+        this.form.patchValue({
+          ...t,
+          idCargo: cargoEncontrado?.id,
+          idJornada: jornadaEncontrada?.id,
+        });
+      }, 100); // 100ms suelen bastar para que la señal se actualice
+
+      // 1. Llenamos el formulario con los datos existentes
+      // this.form.patchValue(this.modalData.trabajador);
+
+      // 2. Bloqueamos la cédula (llave primaria no se debería editar)
+      this.form.get('cedula')?.disable();
+    }
   }
 
   cargarCatalogos() {

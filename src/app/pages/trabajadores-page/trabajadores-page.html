@@ -29,7 +29,7 @@
     <div class="flex-1 min-h-0">
       <!-- <app-trabajador-lista class="h-full" [trabajadores]="trabajadores()" (onSeleccionar)="seleccionarTrabajador($event)"></app-trabajador-lista> -->
       <app-lista-generica [data]="trabajadores()" [columnas]="columnasTrabajador"
-        (filaSeleccionada)="seleccionarTrabajador($event)">
+        (filaSeleccionada)="seleccionarTrabajador($event)" (onEdit)="abrirFormulario($event)">
         <ng-template #celdaPersonalizada let-item let-col="columna">
 
           @if (col.key === 'idCargo') {
