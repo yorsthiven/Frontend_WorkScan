@@ -61,9 +61,9 @@ export class TrabajadorForm {
       numeroContacto: new FormControl('', [Validators.required]),
       // IDs (Más adelante los cambiaremos por Selects, por ahora números)
       idRol: new FormControl(1, [Validators.required]),
-      idJornada: new FormControl(null, [Validators.required]),
+      idJornada: new FormControl(null),
       idEmpresa: new FormControl(1, [Validators.required]),
-      idCargo: new FormControl(null, [Validators.required]),
+      idCargo: new FormControl(null),
       numeroCargo: new FormControl(null, [Validators.required]),
       numeroJornada: new FormControl(null, [Validators.required]),
     });
@@ -79,22 +79,22 @@ export class TrabajadorForm {
       this.isLoading.set(true); // Encendemos el spinner
 
       // IMPORTANTE: usamos getRawValue() para que incluya la 'cedula' aunque esté deshabilitada
-      const datos = this.form.getRawValue();
+      const datosBase = this.form.getRawValue();
 
       // 1. Extraemos los valores del formulario
-      const rawValues = this.form.value;
+      // const rawValues = this.form.value;
 
       // 2. Aplicamos la mayúscula inicial a Nombres y Apellidos
       const trabajadorDto = {
-        ...rawValues,
-        nombres: capitalizarFrase(rawValues.nombres),
-        apellidos: capitalizarFrase(rawValues.apellidos),
+        ...datosBase,
+        nombres: capitalizarFrase(datosBase.nombres),
+        apellidos: capitalizarFrase(datosBase.apellidos),
       };
 
       // Elegimos el servicio según el modo
       const operacion = this.isEdit()
-        ? this.trabajadorService.actualizarTrabajador(datos.id, datos) // actualizarTrabajador iria aqui cuando se cree en el service
-        : this.trabajadorService.crearTrabajador(datos);
+        ? this.trabajadorService.actualizarTrabajador(trabajadorDto.id, trabajadorDto) // actualizarTrabajador iria aqui cuando se cree en el service
+        : this.trabajadorService.crearTrabajador(trabajadorDto);
 
       operacion.subscribe({
         next: (res: any) => {
@@ -164,8 +164,8 @@ export class TrabajadorForm {
         // 1. Extraemos los datos
         const t = this.modalData.trabajador;
         // 2. Buscamos el ID en nuestras señales de catálogos
-        const cargoEncontrado = this.cargos().find((c) => c.nombre === t.nombreCargo);
-        const jornadaEncontrada = this.jornadas().find((j) => j.nombre === t.nombreJornada);
+        const cargoEncontrado = this.cargos().find((c) => c.nombre === t.idCargo);
+        const jornadaEncontrada = this.jornadas().find((j) => j.nombre === t.idJornada);
 
         // const cargoEncontrado = this.cargos().find((c) => c.nombre === t.nombreCargo);
 

@@ -56,7 +56,6 @@ export class TrabajadoresPage {
   filtrarTrabajadores(termino: string) {
     this.trabajadorService.getTrabajadores(termino).subscribe({
       next: (data) => {
-        console.log(data);
         this.trabajadores.set(data); // Actualiza la lista automáticamente
       },
       error: (err) => {
@@ -90,7 +89,6 @@ export class TrabajadoresPage {
     // Aquí recibimos el "res" que mandamos en el dialogRef.close(res)
     dialogRef.afterClosed().subscribe((resultado) => {
       if (resultado) {
-        console.log('Recibido desde el modal:', resultado);
         // El trabajador se guardó, ahora actualizamos la lista principal
         this.filtrarTrabajadores('');
         // O puedes agregarlo manualmente al array para no recargar todo:
