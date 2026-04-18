@@ -1,17 +1,14 @@
-import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
-import { TrabajadorLista } from '../../components/trabajador/trabajador-lista/trabajador-lista';
-import { TrabajadorSearchComponent } from '../../components/trabajador/trabajador-search.component/trabajador-search.component';
-import { TrabajadorTarjetasComponent } from '../../components/trabajador/trabajador-tarjetas.component/trabajador-tarjetas.component';
-import { TrabajadorDetalleComponent } from '../../components/trabajador/trabajador-detalle.component/trabajador-detalle.component';
-import { TrabajadorService } from '../../services/trabajador/trabajador.service';
-import { Trabajador } from '../../models/trabajador.model';
-import { ListaGenericaComponent } from '../../components/shared/genericos/lista-generica.component/lista-generica.component';
-import { SearchGenericoComponent } from '../../components/shared/genericos/search-generico.component/search-generico.component';
-import { MatIcon } from '@angular/material/icon';
-import { TrabajadorForm } from '../../components/trabajador/trabajador-form/trabajador-form';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { SpinnerGenericoComponent } from '../../components/shared/genericos/spinner-generico.component/spinner-generico.component';
-import { MaterialModules } from '../../shared/material.providers';
+import { MaterialModules } from './../../../shared/material.providers';
+import { Component, inject, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { TrabajadorTarjetasComponent } from '../../../components/trabajador/trabajador-tarjetas.component/trabajador-tarjetas.component';
+import { TrabajadorDetalleComponent } from '../../../components/trabajador/trabajador-detalle.component/trabajador-detalle.component';
+import { ListaGenericaComponent } from '../../../components/shared/genericos/lista-generica.component/lista-generica.component';
+import { SearchGenericoComponent } from '../../../components/shared/genericos/search-generico.component/search-generico.component';
+import { SpinnerGenericoComponent } from '../../../components/shared/genericos/spinner-generico.component/spinner-generico.component';
+import { TrabajadorService } from '../../../services/trabajador/trabajador.service';
+import { Trabajador } from '../../../models/trabajador.model';
+import { TrabajadorForm } from '../../../components/trabajador/trabajador-form/trabajador-form';
 
 interface ItemSelect {
   id: number;

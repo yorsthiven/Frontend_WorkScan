@@ -1,46 +1,21 @@
 import { Routes } from '@angular/router';
 import { TrabajadorLista } from './components/trabajador/trabajador-lista/trabajador-lista';
-import { LoginComponent } from './components/auth/login-component/login-component';
-import { LandingComponent } from './components/landing/landing-component';
-import { ConfiguracionComponent } from './pages/configuracion-page/configuracion-page';
+// import { LandingComponent } from './components/landing/landing-component';
+import { ConfiguracionComponent } from './dashboard/pages/configuracion-page/configuracion-page';
 
 export const routes: Routes = [
   {
-    path: 'landing',
-    component: LandingComponent,
+    path: 'home',
+    // component: LandingComponent,
+    loadChildren: () => import('./landing/landing.routes').then((m) => m.landingRoutes), //ejemplo cuando no es exporta por defecto un modulo de routes
   },
   {
-    path: 'login',
-    component: LoginComponent,
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.routes'), // asi es cuando el archivo de roues exopport por defecto, no hay que agregarle nada mas
   },
   {
     path: 'dashboard',
-    loadComponent: () =>
-      import('./pages/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
-    children: [
-      {
-        path: 'home',
-        loadComponent: () => import('./pages/home-page/home-page').then((m) => m.HomePage),
-      },
-      {
-        path: 'trabajadores',
-        loadComponent: () =>
-          import('./pages/trabajadores-page/trabajadores-page').then((m) => m.TrabajadoresPage),
-      },
-      {
-        path: 'usuarios',
-        loadComponent: () =>
-          import('./pages/usuarios-page/usuarios-page').then((m) => m.UsuariosPage),
-      },
-      {
-        path: 'configuracion',
-        component: ConfiguracionComponent,
-      },
-      {
-        path: '**',
-        redirectTo: 'home',
-      },
-    ],
+    loadChildren: () => import('./dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
   },
   {
     path: 'trabajadoresLista',
@@ -48,7 +23,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'landing',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
 ];

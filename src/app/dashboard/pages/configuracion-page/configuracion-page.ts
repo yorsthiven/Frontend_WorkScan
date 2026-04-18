@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { TablaMaestraComponent } from '../../components/maestros/tabla-maestra.component/tabla-maestra.component';
-import { MaestroService } from '../../services/maestro/maestro.service';
+import { TablaMaestraComponent } from '../../../components/maestros/tabla-maestra.component/tabla-maestra.component';
+import { MaestroService } from '../../../services/maestro/maestro.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MaestroFormComponent } from '../../components/maestros/maestro-form.component/maestro-form.component';
+import { MaestroFormComponent } from '../../../components/maestros/maestro-form.component/maestro-form.component';
 
 @Component({
   selector: 'app-configuracion',

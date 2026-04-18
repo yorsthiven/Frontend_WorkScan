@@ -1,5 +1,5 @@
 <nav class="px-4 space-y-1">
-  @for (item of opciones; track item.nombre) {
+  @for (item of dashboardMenu; track item.titulo) {
     <a
       [routerLink]="item.route"
       routerLinkActive="bg-blue-50 text-blue-600 font-semibold"
@@ -12,7 +12,7 @@
       </ng-icon>
 
       <div class="flex flex-col">
-        <span class="text-slate-800 text-sm tracking-wide">{{ item.nombre }}</span>
+        <span class="text-slate-800 text-sm tracking-wide">{{ item.titulo }}</span>
         <span class="text-xs text-slate-600">{{ item.parrafo }}</span>
       </div>
 

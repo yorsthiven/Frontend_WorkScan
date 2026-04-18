@@ -9,7 +9,6 @@ import { AuthService } from '../../../services/login/AuthService';
   selector: 'app-login-component',
   imports: [MaterialModules, FormsModules],
   templateUrl: './login-component.html',
-  styleUrl: './login-component.css',
 })
 export class LoginComponent {
 

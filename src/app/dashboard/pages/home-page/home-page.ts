@@ -6,7 +6,6 @@ import { NgIconComponent } from '@ng-icons/core';
   selector: 'app-home-page',
   imports: [NgIconComponent, DatePipe],
   templateUrl: './home-page.html',
-  styleUrl: './home-page.css',
 })
 export class HomePage {
 
