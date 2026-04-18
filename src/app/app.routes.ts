@@ -2,45 +2,53 @@ import { Routes } from '@angular/router';
 import { TrabajadorLista } from './components/trabajador/trabajador-lista/trabajador-lista';
 import { LoginComponent } from './components/auth/login-component/login-component';
 import { LandingComponent } from './components/landing/landing-component';
+import { ConfiguracionComponent } from './pages/configuracion-page/configuracion-page';
 
 export const routes: Routes = [
   {
     path: 'landing',
-    component: LandingComponent
+    component: LandingComponent,
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./pages/dashboard-page/dashboard-page').then(m => m.DashboardPage),
+    loadComponent: () =>
+      import('./pages/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
     children: [
       {
         path: 'home',
-        loadComponent: () => import('./pages/home-page/home-page').then(m => m.HomePage)
+        loadComponent: () => import('./pages/home-page/home-page').then((m) => m.HomePage),
       },
       {
         path: 'trabajadores',
-        loadComponent: () => import('./pages/trabajadores-page/trabajadores-page').then(m => m.TrabajadoresPage)
+        loadComponent: () =>
+          import('./pages/trabajadores-page/trabajadores-page').then((m) => m.TrabajadoresPage),
       },
       {
         path: 'usuarios',
-        loadComponent: () => import('./pages/usuarios-page/usuarios-page').then(m => m.UsuariosPage)
+        loadComponent: () =>
+          import('./pages/usuarios-page/usuarios-page').then((m) => m.UsuariosPage),
+      },
+      {
+        path: 'configuracion',
+        component: ConfiguracionComponent,
       },
       {
         path: '**',
-        redirectTo: 'home'
-      }
-    ]
+        redirectTo: 'home',
+      },
+    ],
   },
   {
     path: 'trabajadoresLista',
-    component: TrabajadorLista
+    component: TrabajadorLista,
   },
   {
     path: '**',
     redirectTo: 'landing',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];

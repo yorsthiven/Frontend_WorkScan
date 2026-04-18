@@ -35,6 +35,12 @@ export class SideMenuOptions {
       parrafo: 'Gestiona la información y documentos de tus usuarios.',
       route: '/dashboard/usuarios',
       icono: 'heroUser'
+    },
+    {
+      nombre: 'Maestros',
+      parrafo: 'Gestiona la información sobre los diferentes maestros.',
+      route: '/dashboard/configuracion',
+      icono: 'ionBuild'
     }
   ];
 }

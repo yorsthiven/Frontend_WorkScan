@@ -1,0 +1,21 @@
+<h2 mat-dialog-title class="bg-primary text-white p-4">{{ titulo }}</h2>
+
+<mat-dialog-content class="pt-4">
+  <form [formGroup]="form" class="grid grid-cols-1 gap-4">
+
+    @for (campo of campos; track campo) {
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ campo | titlecase }}</mat-label>
+      <input matInput [formControlName]="campo" [placeholder]="'Ingrese ' + campo">
+    </mat-form-field>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="p-4">
+  <button mat-button (click)="form.reset()">Limpiar</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="guardar()">
+    {{ data.elemento ? 'Actualizar' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>
