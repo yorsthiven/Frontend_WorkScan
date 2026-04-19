@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { TrabajadorLista } from './components/trabajador/trabajador-lista/trabajador-lista';
 // import { LandingComponent } from './components/landing/landing-component';
-import { ConfiguracionComponent } from './dashboard/pages/configuracion-page/configuracion-page';
+import { ConfiguracionComponent } from './components/maestros/maestros-page/maestros-page';
 
 export const routes: Routes = [
   {

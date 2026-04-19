@@ -11,7 +11,7 @@ export class MaestroService {
 
   // Método genérico para obtener datos
   getMaestro(endpoint: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${endpoint}/Listar`);
+    return this.http.get<any[]>(`${this.apiUrl}/${endpoint}`);
   }
 
   // Método genérico para guardar (Crear/Editar)

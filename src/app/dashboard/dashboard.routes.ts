@@ -3,7 +3,7 @@ import { DashboardPage } from './pages/dashboard-page/dashboard-page';
 import { HomePage } from './pages/home-page/home-page';
 import { TrabajadoresPage } from './pages/trabajadores-page/trabajadores-page';
 import { UsuariosPage } from './pages/usuarios-page/usuarios-page';
-import { ConfiguracionComponent } from './pages/configuracion-page/configuracion-page';
+import { ConfiguracionComponent } from '../components/maestros/maestros-page/maestros-page';
 
 export const dashboardRoutes: Routes = [
   {

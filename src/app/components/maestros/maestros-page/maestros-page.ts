@@ -1,17 +1,25 @@
 import { Component, inject, signal } from '@angular/core';
-import { TablaMaestraComponent } from '../../../components/maestros/tabla-maestra.component/tabla-maestra.component';
+import { TablaMaestraComponent } from '../tabla-maestra.component/tabla-maestra.component';
 import { MaestroService } from '../../../services/maestro/maestro.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MaestroFormComponent } from '../../../components/maestros/maestro-form.component/maestro-form.component';
+import { MaestroFormComponent } from '../maestro-form.component/maestro-form.component';
+import { MaterialModules } from '../../../shared/material.providers';
 
 @Component({
   selector: 'app-configuracion',
-  imports: [TablaMaestraComponent],
-  templateUrl: './configuracion-page.html',
+  imports: [TablaMaestraComponent,MaterialModules],
+  templateUrl: './maestros-page.html',
 })
 export class ConfiguracionComponent {
   private maestrosService = inject(MaestroService);
   private readonly dialog = inject(MatDialog);
+
+  /**
+   *
+   */
+  constructor() {
+    this.cargarTodosLosMaestros();
+  }
 
   // Simulando datos (luego vendrán de tus servicios)
   listaItems = signal([
@@ -27,12 +35,20 @@ export class ConfiguracionComponent {
     console.log('Editando:', item);
   }
 
+  listaJornadas = signal([{}]);
+  listaCargos = signal([{}]);
+  listaEmpresas = signal([{}]);
+
   cargarTodosLosMaestros() {
     // Cargamos cada tabla usando el mismo servicio pero diferente endpoint
-    this.maestrosService.getMaestro('listaItems').subscribe((res) => this.listaItems.set(res));
-    // this.maestrosService.getMaestro('Dolores').subscribe((res) => this.dolores.set(res));
-    // this.maestrosService.getMaestro('TiposDolor').subscribe((res) => this.tiposDolor.set(res));
-    // this.maestrosService.getMaestro('EscalaEva').subscribe((res) => this.escalasEva.set(res));
+    this.maestrosService.getMaestro('Item').subscribe((res) => {
+      console.log("items",res);
+      this.listaItems.set(res);
+    });
+
+    this.maestrosService.getMaestro('Jornada').subscribe((res) => {this.listaJornadas.set(res), console.log("Jornadas",res);});
+    this.maestrosService.getMaestro('Cargo').subscribe((res) => {this.listaCargos.set(res), console.log("cargos",res);});
+    this.maestrosService.getMaestro('Empresa').subscribe((res) =>{this.listaEmpresas.set(res), console.log("empresas",res);});
   }
 
   abrirModal(maestro: string, campos: string[], elemento?: any) {

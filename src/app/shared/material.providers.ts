@@ -10,6 +10,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
 
 export const MaterialModules = [
   MatTableModule,
@@ -24,5 +25,6 @@ export const MaterialModules = [
   MatOptionModule,
   MatSelectModule,
   MatFormFieldModule,
-  MatCardModule
+  MatCardModule,
+  MatTabsModule
 ];
