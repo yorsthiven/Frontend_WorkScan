@@ -1,0 +1,55 @@
+<!-- <div class="grid grid-cols-1 lg:grid-cols-[minmax(300px,55%)_1fr] md:gap-3 h-full"> -->
+
+<div class="grid grid-rows-[1fr_auto] h-full gap-1">
+
+  <div class="flex flex-col">
+    <!-- <app-tabla-maestra titulo="Inspecciones" color="border-blue-500"
+      [columnas]="['fecha','documentoTrabajador', 'nombreTrabajador','calificacionEva', 'diagnosticoPrincipal']"
+      [datos]="listaInspecciones()">
+    </app-tabla-maestra> -->
+
+    <!-- <app-tabla-maestra [datos]="listaInspecciones()" [columnas]="colsInspeccion">
+
+      <ng-template #plantillaCelda let-item let-columna="columna">
+        @switch (columna.key) {
+        @case ('fecha') {
+        <span class="text-xs text-slate-400 italic">
+          {{ item.fecha | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+        }
+        @case ('calificacionEva') {
+        <div class="flex items-center gap-2">
+          <span [class]="getEvaColor(item.calificacionEva)" class="w-3 h-3 rounded-full"></span>
+          <span class="font-bold">{{ item.calificacionEva }}</span>
+        </div>
+        }
+        @case ('nombreTrabajador') {
+        <div class="flex flex-col">
+          <span class="font-bold text-slate-700">{{ item.nombreTrabajador }}</span>
+          <span class="text-[10px] text-slate-400">{{ item.documentoTrabajador }}</span>
+        </div>
+        }
+        @default {
+        <span class="text-sm text-slate-600">{{ item[columna.key] }}</span>
+        }
+        }
+      </ng-template>
+
+    </app-tabla-maestra> -->
+
+  </div>
+  <div class="grid grid-cols-2 h-36 gap-3 ">
+    <div class="  bg-blue-400">
+
+    </div>
+    <div class=" bg-amber-600">
+
+    </div>
+
+  </div>
+
+</div>
+<!-- <div class="flex bg-indigo-900 h-20">
+
+  </div>-->
+<!-- </div> -->

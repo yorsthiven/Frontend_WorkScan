@@ -1,9 +1,6 @@
 <div class="flex h-screen bg-slate-50 overflow-hidden relative">
 
-  <aside
-    [class.translate-x-0]="menuOpen"
-    [class.-translate-x-full]="!menuOpen"
-    class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 transition-transform duration-300 ease-in-out
+  <aside [class.translate-x-0]="menuOpen" [class.-translate-x-full]="!menuOpen" class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 transition-transform duration-300 ease-in-out
            lg:relative lg:translate-x-0 lg:block">
 
     <app-side-menu class="h-full flex flex-col"></app-side-menu>
@@ -16,17 +13,15 @@
   </div> -->
 
   @if (menuOpen) {
-  <div
-    (click)="menuOpen = false"
-    class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden transition-opacity">
+  <div (click)="menuOpen = false" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden transition-opacity">
   </div>
-}
+  }
 
   <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <header class="h-16 border-b border-slate-200 bg-white px-4 flex items-center justify-between">
       <div class="flex items-center gap-4">
         <button (click)="menuOpen = !menuOpen" class="lg:hidden  text-slate-600">
-           <mat-icon>menu</mat-icon>
+          <mat-icon>menu</mat-icon>
         </button>
         <h1 class="text-xl font-bold text-slate-800">Panel Principal</h1>
       </div>

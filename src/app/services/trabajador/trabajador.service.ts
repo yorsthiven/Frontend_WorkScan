@@ -26,7 +26,7 @@ export class TrabajadorService {
     return this.http.post<RespuestaApi>(`${this.apiUrl}`, trabajador);
   }
 
-  actualizarTrabajador(id:number, trabajador: Trabajador) {
+  actualizarTrabajador(id: number, trabajador: Trabajador) {
     return this.http.put(`${this.apiUrl}/${id}`, trabajador);
   }
 

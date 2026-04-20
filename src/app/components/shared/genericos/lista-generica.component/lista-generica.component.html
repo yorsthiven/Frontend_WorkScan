@@ -20,7 +20,7 @@
       </thead>
 
       <tbody class="divide-y divide-slate-50">
-        @for (item of data(); track item.cedula) {
+        @for (item of data(); track item.id || item.cedula) {
         <tr (click)="seleccionar(item)" class="group cursor-pointer hover:bg-blue-50/30 transition-all duration-300">
 
           @for (col of columnas(); track col.key) {

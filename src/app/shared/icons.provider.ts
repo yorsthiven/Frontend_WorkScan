@@ -13,6 +13,7 @@ import {
   heroHome,
   heroUser,
   heroArrowLeftOnRectangle,
+  heroTableCells,
 } from '@ng-icons/heroicons/outline';
 import {
   heroArrowLeftOnRectangleSolid,
@@ -25,11 +26,14 @@ import { ionBuild } from '@ng-icons/ionicons';
 
 // Exportas una constante con la configuración
 export const appIcons = provideIcons({
+  //BoostrapIcons
+  bootstrapFacebook,
+  bootstrapInstagram,
+
+  //heroIcons
   heroClipboardDocumentCheck,
   heroShieldCheck,
   heroChartBar,
-  bootstrapFacebook,
-  bootstrapInstagram,
   bootstrapLinkedin,
   bootstrapHouse,
   heroHome,
@@ -40,6 +44,7 @@ export const appIcons = provideIcons({
   heroClipboardDocumentCheckSolid,
   heroArrowLeftOnRectangle,
   heroArrowLeftOnRectangleSolid,
+  heroTableCells,
 
   // Ionicons
   ionBuild,

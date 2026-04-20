@@ -28,7 +28,12 @@ export class SideMenuOptions implements OnInit {
         parrafo: item.data?.['parrafo'] ?? '',
         route: `/dashboard/${item.path}`,
         icono: item.data?.['icono'] ?? 'bootstrapHouse',
-      }));
+      }))
+      .sort((a, b) => {
+        if (a.titulo === 'Principal') return -1;
+        if (b.titulo === 'Principal') return 1;
+        return a.titulo.localeCompare(b.titulo);
+      });
   }
 
   opciones: MenuOpciones[] = [

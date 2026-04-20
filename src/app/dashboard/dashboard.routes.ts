@@ -4,6 +4,8 @@ import { HomePage } from './pages/home-page/home-page';
 import { TrabajadoresPage } from './pages/trabajadores-page/trabajadores-page';
 import { UsuariosPage } from './pages/usuarios-page/usuarios-page';
 import { ConfiguracionComponent } from '../components/maestros/maestros-page/maestros-page';
+import { SintomatologiaPage } from './pages/sintomatologia-page/sintomatologia-page';
+import { InspeccionesPage } from './pages/inspecciones-page/inspecciones-page';
 
 export const dashboardRoutes: Routes = [
   {
@@ -44,6 +46,24 @@ export const dashboardRoutes: Routes = [
           titulo: 'Maestros',
           parrafo: 'Gestiona la información sobre los diferentes maestros.',
           icono: 'ionBuild',
+        }
+      },
+      {
+        path: 'sintomatologia',
+        component: SintomatologiaPage,
+        data: {
+          titulo: 'Sintomatología',
+          parrafo: 'Gestiona la información sobre sintomatología del trabajador.',
+          icono: 'ionBuild',
+        }
+      },
+      {
+        path:'inspecciones',
+        component: InspeccionesPage,
+        data: {
+          titulo: 'Inspecciones',
+          parrafo: 'Gestiona las inspecciones del trabajador.',
+          icono: 'heroTableCells',
         }
       },
       {

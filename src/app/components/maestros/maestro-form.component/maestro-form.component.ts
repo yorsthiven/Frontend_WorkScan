@@ -9,7 +9,6 @@ import { MatFormField, MatLabel } from "@angular/material/input";
   selector: 'app-maestro-form',
   imports: [MatDialogContent, MatFormField, MatLabel, MatDialogActions,MaterialModules,FormsModules],
   templateUrl: './maestro-form.component.html',
-  styleUrl: './maestro-form.component.css',
 })
 export class MaestroFormComponent implements OnInit {
   private fb = inject(FormBuilder);

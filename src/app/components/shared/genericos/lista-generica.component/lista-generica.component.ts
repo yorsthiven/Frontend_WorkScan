@@ -11,7 +11,8 @@ export class ListaGenericaComponent<T> {
   // Recibe cualquier array (Trabajadores, Usuarios, etc.)
   data = input.required<any[]>(); // Usamos any[] por ahora para facilitar la compatibilidad
   // Recibe la configuración de qué columnas mostrar
-  columnas = input.required<{ key: string; label: string }[]>();
+  // columnas = input.required<{ key: string; label: string }[]>();
+  columnas = input.required<any[]>();
   // Evento al seleccionar una fila
   filaSeleccionada = output<any>();
 
