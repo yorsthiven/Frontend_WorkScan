@@ -107,3 +107,20 @@ option {
     background-color: white;
     color: #334155; /* slate-700 */
 }
+
+/* En sintomatologia.component.css o estilos globales */
+.mat-mdc-fab.bg-cyan-500 {
+    background-color: #22d3ee !important; /* cyan-400 */
+    color: #0f172a !important; /* slate-900 para contraste */
+}
+
+/* Efecto de pulso suave para que el usuario sepa que puede ampliarlo */
+@keyframes pulse-cyan {
+  0% { shadow: 0 0 0 0 rgba(34, 211, 238, 0.4); }
+  70% { shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+  100% { shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+}
+
+.mat-mdc-fab {
+  animation: pulse-cyan 2s infinite;
+}

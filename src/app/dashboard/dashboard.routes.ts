@@ -4,7 +4,7 @@ import { HomePage } from './pages/home-page/home-page';
 import { TrabajadoresPage } from './pages/trabajadores-page/trabajadores-page';
 import { UsuariosPage } from './pages/usuarios-page/usuarios-page';
 import { ConfiguracionComponent } from '../components/maestros/maestros-page/maestros-page';
-import { SintomatologiaPage } from './pages/sintomatologia-page/sintomatologia-page';
+import { SintomatologiaComponent } from './pages/sintomatologia-component/sintomatologia.component';
 import { InspeccionesPage } from './pages/inspecciones-page/inspecciones-page';
 
 export const dashboardRoutes: Routes = [
@@ -50,7 +50,7 @@ export const dashboardRoutes: Routes = [
       },
       {
         path: 'sintomatologia',
-        component: SintomatologiaPage,
+        component: SintomatologiaComponent,
         data: {
           titulo: 'Sintomatología',
           parrafo: 'Gestiona la información sobre sintomatología del trabajador.',

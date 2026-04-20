@@ -1,4 +1,4 @@
-<mat-card class="p-4 shadow-md border-t-4 {{ colorBorder() }}">
+<!-- <mat-card class="p-4 shadow-md border-t-4 {{ colorBorder() }}">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-lg font-bold text-gray-700">{{ titulo() }}</h2>
     <button mat-mini-fab color="primary" (click)="onAdd.emit()">
@@ -31,6 +31,55 @@
 
     @if (datos().length === 0) {
       <div class="p-4 text-center text-gray-400">No hay datos registrados.</div>
+    }
+  </div>
+</mat-card> -->
+
+<mat-card class="p-4 shadow-md border-t-4 {{ colorBorder() }}">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-lg font-bold text-gray-700">{{ titulo() }}</h2>
+    <button mat-mini-fab color="primary" (click)="onAdd.emit()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table mat-table [dataSource]="datos()" class="w-full">
+
+      @for (col of columnas(); track (col.key || col)) {
+      <ng-container [matColumnDef]="col.key || col">
+        <th mat-header-cell *matHeaderCellDef [style.width]="col.width" class="bg-gray-50 font-bold">
+          {{ formatHeader(col) }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+
+          @if (plantillaCelda) {
+          <ng-container *ngTemplateOutlet="plantillaCelda; context: { $implicit: element, columna: col }">
+          </ng-container>
+          } @else {
+          {{ element[col] }}
+          }
+
+        </td>
+      </ng-container>
+      }
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef class="bg-gray-50 w-24">Acciones</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="accent" (click)="onEdit.emit(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onEdit.emit(row)"
+        class="hover:bg-slate-50 cursor-pointer transition-colors"></tr>
+    </table>
+
+    @if (datos().length === 0) {
+    <div class="p-4 text-center text-gray-400">No hay datos registrados.</div>
     }
   </div>
 </mat-card>

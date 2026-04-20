@@ -1,19 +1,14 @@
-<!-- <div class="grid grid-cols-1 lg:grid-cols-[minmax(300px,55%)_1fr] md:gap-3 h-full"> -->
-
-<div class="grid grid-rows-[1fr_auto] h-full gap-1">
+<div class="grid grid-cols-1 lg:grid-cols-[minmax(300px,55%)_1fr] md:gap-3 h-full">
 
   <div class="flex flex-col">
-    <!-- <app-tabla-maestra titulo="Inspecciones" color="border-blue-500"
-      [columnas]="['fecha','documentoTrabajador', 'nombreTrabajador','calificacionEva', 'diagnosticoPrincipal']"
-      [datos]="listaInspecciones()">
-    </app-tabla-maestra> -->
 
-    <!-- <app-tabla-maestra [datos]="listaInspecciones()" [columnas]="colsInspeccion">
+    <app-tabla-maestra titulo="Inspecciones SST" (onEdit)="seleccionarFila($event)" [datos]="listaInspecciones()"
+      [columnas]="colsInspeccion()">
 
       <ng-template #plantillaCelda let-item let-columna="columna">
         @switch (columna.key) {
         @case ('fecha') {
-        <span class="text-xs text-slate-400 italic">
+        <span class="text-base text-slate-600 italic">
           {{ item.fecha | date:'dd/MM/yyyy HH:mm' }}
         </span>
         }
@@ -23,33 +18,58 @@
           <span class="font-bold">{{ item.calificacionEva }}</span>
         </div>
         }
-        @case ('nombreTrabajador') {
-        <div class="flex flex-col">
-          <span class="font-bold text-slate-700">{{ item.nombreTrabajador }}</span>
-          <span class="text-[10px] text-slate-400">{{ item.documentoTrabajador }}</span>
-        </div>
-        }
         @default {
         <span class="text-sm text-slate-600">{{ item[columna.key] }}</span>
         }
         }
       </ng-template>
 
-    </app-tabla-maestra> -->
-
+    </app-tabla-maestra>
   </div>
-  <div class="grid grid-cols-2 h-36 gap-3 ">
-    <div class="  bg-blue-400">
 
+  <!-- <div class="grid lg:grid-rows-[minmax(300px,49%)_1fr] h-screen  gap-3">
+    <div class="h-full">
+      @if (itemSeleccionado()) {
+      <app-items-component [items]="itemSeleccionado().itemsList"></app-items-component>
+      } @else {
+      <div
+        class="flex flex-col items-center justify-center h-full text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
+        <mat-icon class="text-4xl mb-2">touch_app</mat-icon>
+        <p>Selecciona una inspección para ver sus ítems</p>
+      </div>
+      }
     </div>
-    <div class=" bg-amber-600">
-
+    <div class="h-full ">
+      @if (itemSeleccionado()) {
+      <app-sintomatologia-component [datos]="itemSeleccionado()"></app-sintomatologia-component>
+      } @else {
+      <div
+        class="h-full bg-slate-900/50 rounded-xl border-2 border-dashed border-slate-800 flex items-center justify-center text-slate-500">
+        <p>Seleccione una inspección para ver la sintomatología</p>
+      </div>
+      }
     </div>
+  </div> -->
 
+  <div class="grid lg:grid-rows-[minmax(300px,45%)_1fr] h-full gap-3 overflow-hidden">
+
+  <div class="min-h-0">
+    @if (itemSeleccionado()) {
+      <app-items-component [items]="itemSeleccionado().itemsList"></app-items-component>
+    } @else {
+      <div class="flex flex-col items-center justify-center h-full text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
+        <mat-icon class="text-4xl mb-2">touch_app</mat-icon>
+        <p>Selecciona una inspección</p>
+      </div>
+    }
+  </div>
+
+  <div class="min-h-0 overflow-hidden"> @if (itemSeleccionado()) {
+      <app-sintomatologia-component [datos]="itemSeleccionado()"></app-sintomatologia-component>
+    }
   </div>
 
 </div>
-<!-- <div class="flex bg-indigo-900 h-20">
 
-  </div>-->
-<!-- </div> -->
+
+</div>

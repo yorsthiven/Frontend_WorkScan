@@ -1,0 +1,58 @@
+<div class="flex flex-col h-full bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 h-1/2 border-b border-slate-100">
+
+    <div class="relative flex items-center justify-center overflow-hidden">
+      <img [src]="itemActual()?.fotoUrl || 'assets/placeholder-item.png'"
+        class="object-cover w-full h-full opacity-90 hover:opacity-100 transition-opacity">
+
+      <div class="absolute inset-x-0 flex justify-between px-2">
+        <button mat-mini-fab color="primary" (click)="anterior()" [disabled]="indexActivo() === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="siguiente()" [disabled]="indexActivo() === items().length - 1">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+
+      <span class="absolute bottom-2 left-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded">
+        Ítem {{ indexActivo() + 1 }} de {{ items().length }}
+      </span>
+    </div>
+
+    <div class="bg-slate-400/20 p-3 text-black flex flex-col justify-center">
+      <h3 class="text-xl font-bold border-b border-slate-600 pb-2 mb-3 uppercase">
+        {{ itemActual()?.nombre || 'Nombre del Ítem' }}
+      </h3>
+      <div class="space-y-2 text-sm opacity-90">
+        <p><span class="font-bold text-blue-600">Material:</span> {{ itemActual()?.material }}</p>
+        <p><span class="font-bold text-blue-600">Estado:</span> {{ itemActual()?.estado }}</p>
+        <p><span class="font-bold text-blue-600">Ubicación:</span> {{ itemActual()?.ubicacion }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 h-1/2">
+
+    <div class="bg-slate-400/20 p-4 text-black overflow-y-auto">
+      <div class="flex items-center gap-2 mb-2">
+        <mat-icon class="scale-75">search</mat-icon>
+        <h4 class="font-bold uppercase tracking-wider text-sm">Hallazgos</h4>
+      </div>
+      <p class="text-sm leading-relaxed italic">
+        "{{ itemActual()?.hallazgos || 'No se registraron hallazgos.' }}"
+      </p>
+    </div>
+
+    <div class="bg-slate-400/20 p-4 text-black overflow-y-auto">
+      <div class="flex items-center gap-2 mb-2">
+        <mat-icon class="scale-75">assignment_turned_in</mat-icon>
+        <h4 class="font-bold uppercase tracking-wider text-sm">Recomendaciones</h4>
+      </div>
+      <ul class="text-sm list-disc ml-4 space-y-1">
+        <li>{{ itemActual()?.recomendaciones || 'Sin recomendaciones pendientes.' }}</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
