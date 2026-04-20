@@ -31,12 +31,14 @@ html {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e2e8f0; /* slate-200 */
+  background: #e2e8f0;
+  /* slate-200 */
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1; /* slate-300 */
+  background: #cbd5e1;
+  /* slate-300 */
 }
 
 /* Forzar que el mat-dialog no limite el scroll */
@@ -46,9 +48,12 @@ html {
 
 /* Personalización de los Selects de Material */
 .custom-select .mat-mdc-text-field-wrapper {
-  background-color: #f8fafc !important; /* slate-50 */
-  border-radius: 1.5rem !important; /* Redondeado como tus otros inputs */
-  border: 2px solid #f1f5f9 !important; /* slate-100 */
+  background-color: #f8fafc !important;
+  /* slate-50 */
+  border-radius: 1.5rem !important;
+  /* Redondeado como tus otros inputs */
+  border: 2px solid #f1f5f9 !important;
+  /* slate-100 */
 }
 
 .custom-select .mat-mdc-form-field-flex {
@@ -69,19 +74,22 @@ html {
 
 /* Mensaje de Éxito (Verde) */
 .snack-success {
-  background-color: #10b981 !important; /* emerald-500 */
+  background-color: #10b981 !important;
+  /* emerald-500 */
   color: white !important;
 }
 
 /* Mensaje de Error (Rojo) */
 .snack-error {
-  background-color: #ef4444 !important; /* red-500 */
+  background-color: #ef4444 !important;
+  /* red-500 */
   color: white !important;
 }
 
 /* Mensaje de Advertencia (Amarillo/Naranja) */
 .snack-warning {
-  background-color: #f59e0b !important; /* amber-500 */
+  background-color: #f59e0b !important;
+  /* amber-500 */
   color: white !important;
 }
 
@@ -93,34 +101,51 @@ html {
 
 /* Esto ayuda a que el select no se vea tan rígido en navegadores modernos */
 select {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 /* Evita que el borde azul por defecto de Chrome rompa tu diseño */
 select:focus-visible {
-    outline: none;
+  outline: none;
 }
 
 /* Suaviza un poco el renderizado de las opciones */
 option {
-    padding: 10px;
-    background-color: white;
-    color: #334155; /* slate-700 */
+  padding: 10px;
+  background-color: white;
+  color: #334155;
+  /* slate-700 */
 }
 
 /* En sintomatologia.component.css o estilos globales */
 .mat-mdc-fab.bg-cyan-500 {
-    background-color: #22d3ee !important; /* cyan-400 */
-    color: #0f172a !important; /* slate-900 para contraste */
+  background-color: #22d3ee !important;
+  /* cyan-400 */
+  color: #0f172a !important;
+  /* slate-900 para contraste */
 }
 
 /* Efecto de pulso suave para que el usuario sepa que puede ampliarlo */
 @keyframes pulse-cyan {
-  0% { shadow: 0 0 0 0 rgba(34, 211, 238, 0.4); }
-  70% { shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
-  100% { shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+  0% {
+    shadow: 0 0 0 0 rgba(34, 211, 238, 0.4);
+  }
+
+  70% {
+    shadow: 0 0 0 10px rgba(34, 211, 238, 0);
+  }
+
+  100% {
+    shadow: 0 0 0 0 rgba(34, 211, 238, 0);
+  }
 }
 
 .mat-mdc-fab {
   animation: pulse-cyan 2s infinite;
 }
+/*
+.cdk-overlay-pane.modal-fullscreen-custom .mat-mdc-dialog-container .mdc-dialog__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 20px;
+} */

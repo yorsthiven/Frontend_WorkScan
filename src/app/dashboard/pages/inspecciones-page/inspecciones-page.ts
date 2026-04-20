@@ -59,7 +59,7 @@ export class InspeccionesPage {
     id: 123,
     fecha: '2026-04-20T08:00:00Z',
     trabajador: 'George Stiven Medina',
-    calificacionEva: 6,
+    calificacionEva: 8,
     tipoDolor: {id:1,nombre:"moderado"},
     antecedentesDolor: 'aqui se muestran los primeros antecedentes aqui se muestran los primeros antecedentes aqui se muestran los primeros antecedentes aqui se muestran los primeros antecedentes aqui se muestran los primeros antecedentes',
     diagnosticoPrincipal: 'lo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelantelo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelantelo siento, pero voy a salir adelante',

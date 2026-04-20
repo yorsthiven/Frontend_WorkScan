@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { MaterialModules } from '../../../shared/material.providers';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
@@ -22,7 +22,7 @@ export class SintomatologiaComponent {
   getEvaColor(valor: number): string {
     if (valor <= 1) return '#22c55e'; // Verde
     if (valor <= 3) return '#eab308'; // Amarillo
-    if (valor <= 6) return '#f97316'; // Naranja
+    if (valor <= 7) return '#f97316'; // Naranja
     return '#ef4444'; // Rojo
   }
 
@@ -38,16 +38,25 @@ export class SintomatologiaComponent {
   });
 
   private dialog = inject(MatDialog);
+  estaExpandido = signal(false);
 
-  abrirDetalle() {
+  toggleExpansion() {
+    // Solo permitimos colapsar/expandir si NO estamos en el modal
+    if (!this.dialogRef) {
+      this.estaExpandido.update((v) => !v);
+    }
+  }
+
+  abrirDetalle(event: Event) {
+    event.stopPropagation();
     this.dialog.open(SintomatologiaComponent, {
       data: this.datos(),
       width: '90vw', // 90% del ancho de pantalla
       maxWidth: '100vh',
-      height:'60vh',
+      height: '60vh',
       maxHeight: '90vh', // 90% del alto
       // panelClass: 'modal-sintomatologia-custom',
-      panelClass: 'modal-fullscreen-custom'
+      panelClass: 'modal-fullscreen-custom',
     });
   }
 }
