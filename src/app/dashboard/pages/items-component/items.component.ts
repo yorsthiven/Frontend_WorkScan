@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, signal } f
 import { MaterialModules } from '../../../shared/material.providers';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
+type TabTipo = 'hallazgos' | 'recomendaciones' | 'especificaciones';
+
 @Component({
   selector: 'app-items-component',
   imports: [MaterialModules],
@@ -74,5 +76,13 @@ export class ItemsComponent {
     return `${this.API_URL}${pathLimpio}`;
   }
 
+  // Define el tipo de pestaña para seguridad de tipado
 
+  // Dentro de tu clase
+  tabActiva = signal<TabTipo>('hallazgos');
+  // No olvides agregar este método para que los botones funcionen
+  setTab(tab: TabTipo) {
+    this.tabActiva.set(tab);
+  }
 }
+

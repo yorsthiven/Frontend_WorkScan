@@ -1,146 +1,138 @@
-<div class="flex flex-col h-full bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 relative">
+<div class="flex flex-col h-full bg-white rounded-[2rem] shadow-sm overflow-hidden border border-slate-100 relative">
 
-  <div class="bg-gradient-to-r from-cyan-400 to-blue-600 p-2 flex justify-around items-center shadow-md shrink-0">
+  <div class="bg-slate-900 p-4 flex justify-between items-center shadow-md shrink-0">
     <div class="flex items-center gap-3">
-      <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-        <mat-icon class="text-white">inventory_2</mat-icon>
+      <div class="p-2 bg-white/10 rounded-xl backdrop-blur-md">
+        <mat-icon class="text-white scale-90">inventory_2</mat-icon>
       </div>
-      <h3 class="text-lg font-extrabold text-white tracking-tight uppercase">
+      <h3 class="text-sm font-black text-white tracking-widest uppercase">
         Inspección de Elemento
       </h3>
     </div>
 
-    <div class="flex items-center gap-2 bg-black/10 p- rounded-full border border-white/10">
-      <button mat-icon-button class="!text-white hover:!bg-white/20" (click)="anterior()"
+    <div class="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10">
+      <button mat-icon-button class="!text-white hover:!bg-white/10 !w-8 !h-8" (click)="anterior()"
         [disabled]="indexActivo() === 0">
-        <mat-icon>chevron_left</mat-icon>
+        <mat-icon class="scale-75">chevron_left</mat-icon>
       </button>
-      <span class="text-[10px] font-black text-white px-2 whitespace-nowrap">
+      <span class="text-[10px] font-black text-cyan-400 px-2 min-w-[45px] text-center">
         {{ indexActivo() + 1 }} / {{ items().length }}
       </span>
-      <button mat-icon-button class="!text-white hover:!bg-white/20" (click)="siguiente()"
+      <button mat-icon-button class="!text-white hover:!bg-white/10 !w-8 !h-8" (click)="siguiente()"
         [disabled]="indexActivo() === items().length - 1">
-        <mat-icon>chevron_right</mat-icon>
+        <mat-icon class="scale-75">chevron_right</mat-icon>
       </button>
     </div>
   </div>
 
   <div class="flex-1 overflow-y-auto p-5 space-y-6 custom-scroll">
 
-    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6">
+    <div class="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-6">
 
-      <div
-        class="group relative aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-xl">
-        <div class="w-full h-full flex items-center justify-center">
+      <div class="group relative aspect-video rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 shadow-2xl">
+        <div class="w-full h-full flex items-center justify-center p-2">
           @if (itemActual()?.listaFotos?.length) {
           <img [src]="getFotoUrl(itemActual()?.listaFotos[fotoIndex()].rutaFoto)"
-            class="object-contain w-full h-full transition-all duration-300">
+            class="object-contain w-full h-full animate-in fade-in duration-500">
           } @else {
-          <img [src]="getFotoUrl(undefined)" class="object-contain w-full h-full opacity-40">
+            <div class="flex flex-col items-center gap-2 opacity-20">
+              <mat-icon class="text-white !w-12 !h-12 text-5xl">image_not_supported</mat-icon>
+              <span class="text-[10px] text-white font-bold uppercase">Sin Evidencia</span>
+            </div>
           }
         </div>
 
         @if ((itemActual()?.listaFotos?.length ?? 0) > 1) {
-        <div
-          class="absolute inset-0 flex items-center justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button mat-icon-button (click)="fotoIndex.set(fotoIndex() - 1)" [disabled]="fotoIndex() === 0"
-            class="!bg-black/50 !text-white shadow-lg">
+        <div class="absolute inset-0 flex items-center justify-between px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button mat-mini-fab (click)="fotoIndex.set(fotoIndex() - 1)" [disabled]="fotoIndex() === 0"
+            class="!bg-slate-900/80 !text-white shadow-xl backdrop-blur-sm">
             <mat-icon>chevron_left</mat-icon>
           </button>
-          <button mat-icon-button (click)="fotoIndex.set(fotoIndex() + 1)"
+          <button mat-mini-fab (click)="fotoIndex.set(fotoIndex() + 1)"
             [disabled]="fotoIndex() === (itemActual()?.listaFotos?.length ?? 0) - 1"
-            class="!bg-black/50 !text-white shadow-lg">
+            class="!bg-slate-900/80 !text-white shadow-xl backdrop-blur-sm">
             <mat-icon>chevron_right</mat-icon>
           </button>
         </div>
         }
 
-        <div
-          class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase">
-          Evidencia {{ fotoIndex() + 1 }} / {{ itemActual()?.listaFotos?.length || 0 }}
+        <div class="absolute bottom-4 left-4 bg-slate-900/60 backdrop-blur-md text-white text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest border border-white/10">
+          EVIDENCIA {{ fotoIndex() + 1 }} / {{ itemActual()?.listaFotos?.length || 0 }}
         </div>
       </div>
 
-      <div class="flex flex-col justify-center space-y-4">
+      <div class="flex flex-col justify-center space-y-5">
         <div>
-          <h3 class="text-2xl font-black text-slate-800 leading-tight tracking-tighter uppercase mb-1">
-            {{ itemActual()?.nombre || 'Elemento sin nombre' }}
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 bg-cyan-100 text-cyan-700 text-[9px] font-black rounded uppercase">Activo Fijo</span>
+            <div class="h-px flex-1 bg-slate-100"></div>
+          </div>
+          <h3 class="text-2xl font-black text-slate-800 leading-none tracking-tighter uppercase">
+            {{ itemActual()?.nombre || 'Elemento' }}
           </h3>
-          <div class="h-1 w-12 bg-cyan-400 rounded-full"></div>
         </div>
 
-        <div class="grid grid-cols-1 gap-3">
-          <div class="flex items-center gap-2 p-1 bg-slate-50 rounded-xl border border-slate-100">
-            <mat-icon class="text-blue-500 scale-75">settings_suggest</mat-icon>
-            <p class="text-sm"><span class="font-bold text-slate-500 uppercase text-[10px] block">Material</span>
-              <span class="text-slate-700 font-semibold">{{ itemActual()?.material }}</span>
-            </p>
+        <div class="grid grid-cols-1 gap-2">
+          <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100 group-hover:bg-white transition-colors">
+            <div class="p-2 bg-blue-100 rounded-lg text-blue-600"><mat-icon class="scale-75">settings_suggest</mat-icon></div>
+            <div>
+              <p class="text-[9px] font-black text-slate-400 uppercase">Material</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.material }}</p>
+            </div>
           </div>
-          <div class="flex items-center gap-2 p-1 bg-slate-50 rounded-xl border border-slate-100">
-            <mat-icon class="text-amber-500 scale-75">report_problem</mat-icon>
-            <p class="text-sm"><span class="font-bold text-slate-500 uppercase text-[10px] block">Funciones</span>
-              <span class="text-slate-700 font-semibold">{{ itemActual()?.infoDescBiomecanica.funciones }}</span>
-            </p>
-          </div>
-          <div class="flex items-center gap-2 p-1 bg-slate-50 rounded-xl border border-slate-100">
-            <mat-icon class="text-cyan-500 scale-75">location_on</mat-icon>
-            <p class="text-sm"><span class="font-bold text-slate-500 uppercase text-[10px] block">Ubicación</span>
-              <span class="text-slate-700 font-semibold">{{ itemActual()?.ubicacion }}</span>
-            </p>
+          <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+            <div class="p-2 bg-amber-100 rounded-lg text-amber-600"><mat-icon class="scale-75">location_on</mat-icon></div>
+            <div>
+              <p class="text-[9px] font-black text-slate-400 uppercase">Ubicación</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.ubicacion }}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <div class="bg-blue-50/50 p-5 rounded-2xl border border-blue-100 relative overflow-hidden group">
-        <div class="flex items-center gap-2 mb-3">
-          <div class="p-1.5 bg-blue-500 rounded-lg shadow-blue-200 shadow-lg">
-            <mat-icon class="text-white scale-75">search</mat-icon>
-          </div>
-          <h4 class="font-black text-blue-900 uppercase tracking-widest text-xs">Hallazgos Registrados</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-blue-50/30 p-5 rounded-[2rem] border border-blue-100 flex flex-col">
+        <div class="flex items-center gap-2 mb-4 border-b border-blue-100 pb-2">
+          <mat-icon class="text-blue-500 scale-90">search</mat-icon>
+          <h4 class="font-black text-blue-900 uppercase tracking-widest text-[10px]">Hallazgos del Inspector</h4>
         </div>
-
-        <div class="space-y-3">
+        <div class="space-y-3 flex-1">
           @for (hallazgo of itemActual()?.listaHallazgos; track $index) {
-          <p class="text-sm leading-relaxed text-slate-600 italic border-l-2 border-blue-200 pl-3">
-            "{{ hallazgo.descHallazgos }}"
-          </p>
-          } @empty {
-          <p class="text-sm text-slate-400">No se registraron hallazgos.</p>
-          }
-        </div>
-      </div>
-
-      <div class="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100 relative overflow-hidden group">
-        <div class="flex items-center gap-2 mb-3">
-          <div class="p-1.5 bg-emerald-500 rounded-lg shadow-emerald-200 shadow-lg">
-            <mat-icon class="text-white scale-75">fact_check</mat-icon>
+          <div class="flex gap-3">
+            <div class="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0"></div>
+            <p class="text-xs leading-relaxed text-slate-600 font-medium italic">"{{ hallazgo.descHallazgos }}"</p>
           </div>
-          <h4 class="font-black text-emerald-900 uppercase tracking-widest text-xs">Recomendaciones SST</h4>
-        </div>
-
-        <ul class="text-sm list-none space-y-2">
-          @for (recom of itemActual()?.listaRecomendaciones; track $index) {
-          <li class="flex items-start gap-2 text-slate-600">
-            <mat-icon class="text-emerald-500 scale-50 shrink-0 mt-1">circle</mat-icon>
-            <span>{{ recom.descripcionRecomendaciones }}</span>
-          </li>
           } @empty {
-          <li class="text-slate-400 italic">Sin recomendaciones pendientes.</li>
+          <p class="text-xs text-slate-400 text-center py-4">No se reportaron anomalías.</p>
           }
-        </ul>
+        </div>
       </div>
 
-
+      <div class="bg-emerald-50/30 p-5 rounded-[2rem] border border-emerald-100 flex flex-col">
+        <div class="flex items-center gap-2 mb-4 border-b border-emerald-100 pb-2">
+          <mat-icon class="text-emerald-500 scale-90">fact_check</mat-icon>
+          <h4 class="font-black text-emerald-900 uppercase tracking-widest text-[10px]">Medidas Correctivas</h4>
+        </div>
+        <div class="space-y-2">
+          @for (recom of itemActual()?.listaRecomendaciones; track $index) {
+          <div class="flex items-start gap-2 bg-white/50 p-2 rounded-xl border border-emerald-100/50">
+            <mat-icon class="text-emerald-500 scale-50 mt-0.5">task_alt</mat-icon>
+            <span class="text-xs text-slate-700 font-medium leading-tight">{{ recom.descripcionRecomendaciones }}</span>
+          </div>
+          } @empty {
+          <p class="text-xs text-slate-400 text-center py-4 italic">Sin acciones pendientes.</p>
+          }
+        </div>
+      </div>
     </div>
   </div>
+
   @if (!dialogRef) {
-  <div class="absolute bottom-0 left-0 w-full h-20 pointer-events-none flex items-center justify-start px-4">
-    <button mat-mini-fab
-      class="pointer-events-auto !bg-blue-500 !text-white shadow-lg shadow-blue-500/40 hover:scale-110 transition-transform z-50"
-      (click)="abrirDetalle()" matTooltip="Ver en pantalla completa">
-      <mat-icon>open_in_full</mat-icon>
+  <div class="absolute bottom-6 left-6 z-10">
+    <button mat-fab class="!bg-slate-900 !text-white shadow-2xl hover:scale-110 transition-transform"
+      (click)="abrirDetalle()" matTooltip="Ver inspección completa">
+      <mat-icon>fullscreen</mat-icon>
     </button>
   </div>
   }

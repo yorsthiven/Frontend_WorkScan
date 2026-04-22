@@ -23,8 +23,9 @@ export class TablaMaestraComponent {
 
   // Helper para mostrar encabezados bonitos
   formatHeader(key: any): string {
-    // Si es un objeto, usamos el label. Si es string, lo formateamos.
-    const text = typeof key === 'string' ? key : key.label;
+    // Manejo robusto: si no hay label ni key, retornamos vacío para no romper el render
+    if (!key) return '';
+    const text = typeof key === 'string' ? key : key.label || key.key || '';
     return text.charAt(0).toUpperCase() + text.slice(1);
   }
 

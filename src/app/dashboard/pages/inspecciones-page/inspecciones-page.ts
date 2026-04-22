@@ -7,10 +7,11 @@ import { DatePipe } from '@angular/common';
 import { ItemsComponent } from '../items-component/items.component';
 import { SintomatologiaComponent } from '../sintomatologia-component/sintomatologia.component';
 import { InspeccionDetalle } from '../../../models/inspeccionDetalle.nodel';
+import { InspeccionInfoComponent } from "./components/inspeccion-info.component/inspeccion-info.component";
 
 @Component({
   selector: 'app-inspecciones-page',
-  imports: [MaterialModules,TablaMaestraComponent,DatePipe,ItemsComponent,SintomatologiaComponent,],
+  imports: [MaterialModules, TablaMaestraComponent, DatePipe, ItemsComponent, SintomatologiaComponent, InspeccionInfoComponent],
   templateUrl: './inspecciones-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -64,9 +65,9 @@ export class InspeccionesPage {
   itemSeleccionado = signal<any | null>(null);
 
   // Método para simular la selección en la tabla
-  seleccionarInspeccion() {
-    this.itemSeleccionado.set(this.inspecciones);
-  }
+  // seleccionarInspeccion() {
+  //   this.itemSeleccionado.set(this.inspecciones);
+  // }
 
   seleccionarFila(fila: any) {
     this.itemSeleccionado.set(fila);

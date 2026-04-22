@@ -48,15 +48,15 @@ export const dashboardRoutes: Routes = [
           icono: 'ionBuild',
         }
       },
-      {
-        path: 'sintomatologia',
-        component: SintomatologiaComponent,
-        data: {
-          titulo: 'Sintomatología',
-          parrafo: 'Gestiona la información sobre sintomatología del trabajador.',
-          icono: 'ionBuild',
-        }
-      },
+      // {
+      //   path: 'sintomatologia',
+      //   component: SintomatologiaComponent,
+      //   data: {
+      //     titulo: 'Sintomatología',
+      //     parrafo: 'Gestiona la información sobre sintomatología del trabajador.',
+      //     icono: 'ionBuild',
+      //   }
+      // },
       {
         path:'inspecciones',
         component: InspeccionesPage,
