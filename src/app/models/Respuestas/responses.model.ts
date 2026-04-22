@@ -1,5 +1,7 @@
+import { InspeccionDetalle } from "../inspeccionDetalle.nodel";
+
 export interface RespuestaGetInspecciones {
-  inspecciones: Inspecciones[];
+  inspecciones: InspeccionDetalle[];
   mensaje: string;
 }
 

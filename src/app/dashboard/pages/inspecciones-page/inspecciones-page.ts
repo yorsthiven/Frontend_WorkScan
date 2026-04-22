@@ -6,16 +6,11 @@ import { RespuestaGetInspecciones } from '../../../models/Respuestas/responses.m
 import { DatePipe } from '@angular/common';
 import { ItemsComponent } from '../items-component/items.component';
 import { SintomatologiaComponent } from '../sintomatologia-component/sintomatologia.component';
+import { InspeccionDetalle } from '../../../models/inspeccionDetalle.nodel';
 
 @Component({
   selector: 'app-inspecciones-page',
-  imports: [
-    MaterialModules,
-    TablaMaestraComponent,
-    DatePipe,
-    ItemsComponent,
-    SintomatologiaComponent,
-  ],
+  imports: [MaterialModules,TablaMaestraComponent,DatePipe,ItemsComponent,SintomatologiaComponent,],
   templateUrl: './inspecciones-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -23,22 +18,36 @@ export class InspeccionesPage {
   private inspeccionService = inject(InspeccionService);
   // listaInspecciones = signal([{}]);
   listaInspecciones = signal<any[]>([]);
+  inspecciones = signal<InspeccionDetalle[]>([]);
 
   /**
-   *
+   * En el constructor, cargamos las inspecciones sin filtro para mostrar todo inicialmente.
+   * Luego, cada vez que el usuario escriba en el campo de búsqueda, se llamará a filtrarInspecciones con el término ingresado.
+   * Si el término es vacío, se mostrarán todas las inspecciones.
+   * Si el término no coincide con nada, la tabla mostrará un mensaje de "No encontrado" automáticamente al tener la lista vacía.
+   * Si el término coincide con algunas inspecciones, se mostrarán solo esas.
+   * Además, cada vez que se filtre, se actualiza la señal 'inspecciones' con los resultados obtenidos del servicio.
+   * Esto garantiza que la tabla siempre muestre datos actualizados según el término de búsqueda ingresado por el usuario.
    */
+
   constructor() {
-    this.inspeccionService.getInspeccion().subscribe((res: RespuestaGetInspecciones) => {
-      console.log(res);
-      this.listaInspecciones.set(
-        res.inspecciones.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime()),
-      ); //ordenar por fecha o por id
-    });
+    this.filtrarInspecciones('');
   }
 
+  filtrarInspecciones(termino: string) {
+    this.inspeccionService.getInspeccion(termino).subscribe({
+      next: (data: RespuestaGetInspecciones) => {
+        console.log(data.inspecciones);
+        this.inspecciones.set(data.inspecciones);
+      },
+      error: (err) => {
+        // this.inspecciones.set([]); // <--- Esto fuerza a la tabla a mostrar el mensaje de "No encontrado"
+      },
+    });
+  }
   // En el padre (Configuración de Inspecciones)
   colsInspeccion = signal([
-    { key: 'fecha', label: 'Fecha', width: '180px' },
+    { key: 'fechaInspeccion', label: 'Fecha Inspección', width: '180px' },
     { key: 'documentoTrabajador', label: 'Documento' },
     { key: 'nombreTrabajador', label: 'Trabajador' },
     { key: 'calificacionEva', label: 'EVA', cssClass: 'font-bold' },
@@ -54,62 +63,13 @@ export class InspeccionesPage {
   // Señal que simula el ítem seleccionado en tu tabla
   itemSeleccionado = signal<any | null>(null);
 
-  // Datos de prueba con una lista de ítems para el carousel
-  inspeccionDePrueba = {
-    id: 123,
-    fecha: '2026-04-20T08:00:00Z',
-    trabajador: 'George Stiven Medina',
-    calificacionEva: 8,
-    tipoDolor: {id:1,nombre:"moderado"},
-    antecedentesDolor: 'aqui se muestran los primeros antecedentes aqui se muestran los primeros antecedentes aqui se muestran los primeros antecedentes aqui se muestran los primeros antecedentes aqui se muestran los primeros antecedentes',
-    diagnosticoPrincipal: 'lo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelantelo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelante lo siento, pero voy a salir adelantelo siento, pero voy a salir adelante',
-    itemsList: [
-      {
-        fotoUrl:
-          'https://www.sstsalud.com/wp-content/uploads/2022/10/Arseg-10096AR-casco-dielectrico-rachet-300x300-1.jpg',
-        nombre: 'Casco de Seguridad MSA v-Gard',
-        material: 'Polímero de alta resistencia',
-        estado: 'Crítico',
-        ubicacion: 'Almacén Central',
-        hallazgos:
-          'Se observa fisura longitudinal en la parte superior del casquete. El sistema de suspensión (tafilete) presenta desgaste excesivo en los puntos de anclaje.',
-        recomendaciones:
-          'Retirar el equipo de servicio inmediatamente. No es apto para protección contra impactos según norma ANSI Z89.1.',
-      },
-      {
-        fotoUrl: 'https://www.seguridadyaltura.com/wp-content/uploads/2022/03/8004-1.jpg',
-        nombre: 'Arnés de Seguridad Multipropósito',
-        material: 'Nylon / Poliéster reforzado',
-        estado: 'En Observación',
-        ubicacion: 'Torre de Control - Alturas',
-        hallazgos:
-          'Costuras de seguridad íntegras, pero se detecta oxidación leve en la argolla dorsal. Las hebillas de ajuste rápido funcionan correctamente.',
-        recomendaciones:
-          'Realizar limpieza profunda y aplicar inhibidor de corrosión en herrajes. Programar nueva inspección en 15 días.',
-      }
-    ],
-    // datos: {
-    //   id: 1,
-    //   calificacionEva: 5,
-    //   tipoDolor: 1,
-    //   antecedentesDolor: 'aqui se muestran los primeros antecedentes',
-    //   diagnosticoPrincipal: 'lo siento, pero voy a salir adelante',
-    // },
-  };
-
   // Método para simular la selección en la tabla
   seleccionarInspeccion() {
-    this.itemSeleccionado.set(this.inspeccionDePrueba);
+    this.itemSeleccionado.set(this.inspecciones);
   }
 
-  // Añade esta función dentro de tu clase InspeccionesPage
   seleccionarFila(fila: any) {
-    // Aquí asignas la fila seleccionada.
-    // Nota: Asegúrate de que la 'fila' tenga la propiedad 'itemsList'.
-    // this.itemSeleccionado.set(fila); // este es para cuando ya este funcionando el api
-
-    this.itemSeleccionado.set(this.inspeccionDePrueba); // este para pruebas
-    console.log('Inspección seleccionada:', this.inspeccionDePrueba);
-    console.log('Inspección seleccionada:', fila);
+    this.itemSeleccionado.set(fila);
+    // console.log('Inspección seleccionada:', fila);
   }
 }

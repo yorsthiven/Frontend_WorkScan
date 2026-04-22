@@ -1,8 +1,8 @@
 <div (click)="toggleExpansion()" [class.cursor-pointer]="!dialogRef"
-  class="bg-white rounded-3xl shadow-xl border border-slate-100 relative transition-all duration-300 ease-in-out flex flex-col"
-  [style.height]="dialogRef ? '100%' : (estaExpandido() ? '500px' : 'fit-content')">
+  class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 relative transition-all duration-300 ease-in-out"
+  [style.height]="dialogRef || estaExpandido() ? '100%' : 'fit-content'">
 
-  <div class="bg-gradient-to-r from-cyan-400 to-blue-600 p-4 flex items-center justify-between shadow-md shrink-0 z-20">
+  <div class="bg-gradient-to-r from-cyan-400 to-blue-600 p-3 flex items-center justify-between shadow-md shrink-0">
     <div class="flex items-center gap-3">
       <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm text-white">
         <mat-icon>{{ estaExpandido() || dialogRef ? 'psychology' : 'visibility_off' }}</mat-icon>
@@ -18,9 +18,9 @@
   </div>
 
   @if (estaExpandido() || dialogRef) {
-  <div class="flex-1 overflow-y-auto p-5 space-y-5 custom-scroll pb-24 animate-fade-in">
+  <div class="p-5 space-y-5 custom-scroll pb-20 animate-fade-in">
 
-    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 shrink-0">
+    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
       <div class="flex justify-between items-end mb-3">
         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Escala Visual Analógica (EVA)</span>
         <span class="text-3xl font-black text-slate-800">{{ datos()?.calificacionEva }}/10</span>
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 shrink-0">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
         <p class="text-[10px] text-blue-500 uppercase font-black mb-1">Tipo de Dolor</p>
         <p class="text-sm text-slate-700 font-semibold">{{ datos()?.tipoDolor?.nombre || 'No especificado' }}</p>
@@ -49,7 +49,7 @@
     </div>
 
     @if (!dialogRef) {
-    <div class="absolute bottom-4 left-6 pointer-events-none z-30">
+    <div class="absolute bottom-4 left-6 pointer-events-none">
       <button mat-mini-fab class="pointer-events-auto !bg-blue-600 !text-white shadow-xl"
         (click)="abrirDetalle($event)">
         <mat-icon>open_in_full</mat-icon>
@@ -67,6 +67,7 @@
       <div class="h-full" [style.width]="evaPercentage()"
         [style.background-color]="getEvaColor(datos()?.calificacionEva)"></div>
     </div>
+    <p class="text-[9px] text-center text-slate-400 font-medium">Click para ver detalles del paciente</p>
   </div>
   }
 </div>

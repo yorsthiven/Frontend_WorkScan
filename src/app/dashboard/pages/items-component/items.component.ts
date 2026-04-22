@@ -1,3 +1,4 @@
+import { environment } from './../../../../../enviroment';
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { MaterialModules } from '../../../shared/material.providers';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -11,15 +12,18 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 export class ItemsComponent {
   // 1. Recibe la lista de ítems por input
   itemsInput = input.required<any[]>({ alias: 'items' });
-
+  // ... dentro de tu componente ...
+  readonly API_URL = environment.apiUrl;
   // Recibimos la lista de ítems (desde la inspección seleccionada)
   // items = input.required<any[]>();
-
 
   // 2. Inyectamos las herramientas del Diálogo
   private dialogData = inject(MAT_DIALOG_DATA, { optional: true });
   public dialogRef = inject(MatDialogRef, { optional: true });
   private dialog = inject(MatDialog);
+
+  // Crea una señal para la foto actual del carrusel interno
+  fotoIndex = signal(0);
 
   // 3. Manejo de datos: Prioriza el diálogo si existe, sino usa el input
   items = computed(() => {
@@ -38,13 +42,15 @@ export class ItemsComponent {
 
   anterior() {
     if (this.indexActivo() > 0) {
-      this.indexActivo.update(i => i - 1);
+      this.indexActivo.update((i) => i - 1);
+      this.fotoIndex.set(0);
     }
   }
 
   siguiente() {
     if (this.indexActivo() < this.items().length - 1) {
-      this.indexActivo.update(i => i + 1);
+      this.indexActivo.update((i) => i + 1);
+      this.fotoIndex.set(0);
     }
   }
 
@@ -55,7 +61,18 @@ export class ItemsComponent {
       width: '95vw',
       maxWidth: '1200px',
       height: '90vh',
-      panelClass: 'modal-fullscreen-custom'
+      panelClass: 'modal-fullscreen-custom',
     });
   }
+
+  // Método para limpiar y armar la ruta
+  getFotoUrl(fotoPath: string | undefined): string {
+    if (!fotoPath) return '/no-image.jpg'; // Imagen por defecto
+
+    // Si por error guardaste la ruta con una barra inicial, la quitamos
+    const pathLimpio = fotoPath.startsWith('/') ? fotoPath.substring(1) : fotoPath;
+    return `${this.API_URL}${pathLimpio}`;
+  }
+
+
 }

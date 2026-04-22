@@ -2,14 +2,14 @@
 
   <div class="flex flex-col">
 
-    <app-tabla-maestra titulo="Inspecciones SST" (onEdit)="seleccionarFila($event)" [datos]="listaInspecciones()"
+    <app-tabla-maestra titulo="Inspecciones SST" (onEdit)="seleccionarFila($event)" [datos]="inspecciones()"
       [columnas]="colsInspeccion()">
 
       <ng-template #plantillaCelda let-item let-columna="columna">
         @switch (columna.key) {
-        @case ('fecha') {
+        @case ('fechaInspeccion') {
         <span class="text-base text-slate-600 italic">
-          {{ item.fecha | date:'dd/MM/yyyy HH:mm' }}
+          {{ item.fechaInspeccion | date:'dd/MM/yyyy HH:mm' }}
         </span>
         }
         @case ('calificacionEva') {
@@ -27,11 +27,11 @@
     </app-tabla-maestra>
   </div>
 
-  <div class="grid lg:grid-rows-[minmax(300px,45%)_1fr] h-full gap-3 overflow-hidden">
+  <div class="grid lg:grid-rows-[1fr_1fr_1fr] h-full gap-3 overflow-hidden">
 
     <div class="min-h-0">
       @if (itemSeleccionado()) {
-      <app-items-component [items]="itemSeleccionado().itemsList"></app-items-component>
+      <app-items-component [items]="itemSeleccionado().listaItems"></app-items-component>
       } @else {
       <div
         class="flex flex-col items-center justify-center h-full text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
