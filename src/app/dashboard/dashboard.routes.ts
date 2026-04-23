@@ -48,23 +48,15 @@ export const dashboardRoutes: Routes = [
           icono: 'ionBuild',
         }
       },
-      // {
-      //   path: 'sintomatologia',
-      //   component: SintomatologiaComponent,
-      //   data: {
-      //     titulo: 'Sintomatología',
-      //     parrafo: 'Gestiona la información sobre sintomatología del trabajador.',
-      //     icono: 'ionBuild',
-      //   }
-      // },
       {
         path:'inspecciones',
-        component: InspeccionesPage,
+        // component: InspeccionesPage,
         data: {
           titulo: 'Inspecciones',
           parrafo: 'Gestiona las inspecciones del trabajador.',
           icono: 'heroTableCells',
-        }
+        },
+        loadChildren: () => import('./pages/inspecciones-page/inspeccion.routes').then(m => m.inspeccionRoutes)
       },
       {
         path: '**',

@@ -11,6 +11,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatStep, MatStepper} from '@angular/material/stepper';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 export const MaterialModules = [
   MatTableModule,
@@ -26,5 +29,9 @@ export const MaterialModules = [
   MatSelectModule,
   MatFormFieldModule,
   MatCardModule,
-  MatTabsModule
+  MatTabsModule,
+  MatSliderModule,
+  MatStep,
+  MatStepper,
+  MatCheckboxModule
 ];

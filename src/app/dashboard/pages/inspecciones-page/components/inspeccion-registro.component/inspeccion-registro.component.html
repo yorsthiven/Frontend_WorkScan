@@ -1,0 +1,267 @@
+<div class="p-6 bg-slate-50 min-h-full">
+  <div class="max-w-5xl mx-auto">
+
+    <header class="mb-8">
+      <h1 class="text-3xl font-black text-slate-800 tracking-tight">Nueva Inspección SST</h1>
+      <p class="text-slate-500">Completa los pasos para registrar la evaluación biomecánica.</p>
+    </header>
+
+    <mat-stepper linear #stepper class="rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+
+      <mat-step [stepControl]="datosBasicosForm">
+        <form [formGroup]="datosBasicosForm" class="p-8">
+          <ng-template matStepLabel>Trabajador</ng-template>
+
+          <div class="max-w-4xl mx-auto space-y-6">
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Seleccionar Trabajador</mat-label>
+              <mat-select formControlName="idTrabajador" (selectionChange)="onTrabajadorChange($event.value)"
+                (openedChange)="onSelectOpened($event)">
+
+                <div class="px-4 py-2 sticky top-0 bg-white z-10 border-b border-slate-100">
+                  <div class="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200">
+                    <mat-icon class="text-slate-400 !text-sm flex items-center justify-center">search</mat-icon>
+                    <input matInput placeholder="Escribe para filtrar..." [formControl]="filtroTrabajador"
+                      (keydown)="$event.stopPropagation()" class="text-sm bg-transparent outline-none w-full py-2">
+                  </div>
+                </div>
+
+                @for (t of trabajadores(); track t.id) {
+                <mat-option [value]="t.id">
+                  <span class="font-bold text-slate-700">{{ t.cedula }}  </span>
+                  <span class="text-slate-500 ml-2">{{ t.nombres }}   {{ t.apellidos }}</span>
+                </mat-option>
+                } @empty {
+                <mat-option disabled>No se encontraron resultados</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            @if (trabajadorSeleccionado()) {
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-slate-50 rounded-3xl border border-slate-200 border-dashed animate-in fade-in zoom-in duration-300">
+
+              <div class="col-span-full flex items-center gap-2 mb-2">
+                <div class="h-2 w-2 rounded-full bg-blue-500"></div>
+                <span class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Información de
+                  Verificación</span>
+              </div>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Nombres y Apellidos</mat-label>
+                <input matInput [value]="trabajadorSeleccionado()?.nombres + ' ' + trabajadorSeleccionado()?.apellidos"
+                  readonly>
+                <mat-icon matPrefix class="mr-2 text-slate-400">person</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Documento</mat-label>
+                <input matInput [value]="trabajadorSeleccionado()?.cedula" readonly>
+                <mat-icon matPrefix class="mr-2 text-slate-400">badge</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Correo</mat-label>
+                <input matInput [value]="trabajadorSeleccionado()?.email || 'Sin correo'" readonly>
+                <mat-icon matPrefix class="mr-2 text-slate-400">email</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Teléfono</mat-label>
+                <input matInput [value]="trabajadorSeleccionado()?.numeroContacto || 'Sin teléfono'" readonly>
+                <mat-icon matPrefix class="mr-2 text-slate-400">phone</mat-icon>
+              </mat-form-field>
+
+            </div>
+            }
+
+            <div class="flex justify-end pt-4">
+              <button mat-flat-button color="primary" matStepperNext [disabled]="datosBasicosForm.invalid"
+                class="!rounded-xl !px-12 !py-6 shadow-lg shadow-blue-100" (click)="irAlSiguientePaso()">
+                Siguiente paso
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+      <!-- <mat-step [stepControl]="datosBasicosForm">
+        <form [formGroup]="datosBasicosForm" class="p-8">
+          <ng-template matStepLabel>Trabajador</ng-template>
+
+          <div class="max-w-4xl mx-auto space-y-8">
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Seleccionar Trabajador</mat-label>
+              <mat-select formControlName="idTrabajador" (selectionChange)="onTrabajadorChange($event.value)">
+                @for (t of trabajadores(); track t.id) {
+                <mat-option [value]="t.id">{{ t.nombres }} {{ t.apellidos }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            @if (trabajadorSeleccionado()) {
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-slate-50 rounded-3xl border border-slate-200 animate-in fade-in duration-500">
+
+              <div class="col-span-full mb-2">
+                <span class="text-[10px] font-black uppercase text-blue-600 tracking-widest">Confirmación de
+                  Datos</span>
+              </div>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Nombres y Apellidos</mat-label>
+                <input matInput [value]="trabajadorSeleccionado()?.nombres + ' ' + trabajadorSeleccionado()?.apellidos"
+                  readonly>
+                <mat-icon matPrefix class="mr-2 text-slate-400">person</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Documento de Identidad</mat-label>
+                <input matInput [value]="trabajadorSeleccionado()?.cedula" readonly>
+                <mat-icon matPrefix class="mr-2 text-slate-400">badge</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Correo Electrónico</mat-label>
+                <input matInput [value]="trabajadorSeleccionado()?.email || 'No registrado'" readonly>
+                <mat-icon matPrefix class="mr-2 text-slate-400">alternate_email</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Teléfono / Celular</mat-label>
+                <input matInput [value]="trabajadorSeleccionado()?.numeroContacto || 'No registrado'" readonly>
+                <mat-icon matPrefix class="mr-2 text-slate-400">smartphone</mat-icon>
+              </mat-form-field>
+
+            </div>
+            }
+
+            <div class="flex justify-end mt-8">
+              <button mat-flat-button color="primary" matStepperNext [disabled]="datosBasicosForm.invalid"
+                class="!rounded-xl !px-12 !py-6 shadow-lg shadow-blue-200">
+                Confirmar e Iniciar
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step> -->
+
+      <!-- <mat-step [stepControl]="datosBasicosForm">
+        <form [formGroup]="datosBasicosForm" class="p-8">
+          <ng-template matStepLabel>Trabajador</ng-template>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Seleccionar Trabajador Activo</mat-label>
+              <mat-select formControlName="idTrabajador" (openedChange)="onSelectOpened($event)">
+
+                <div class="px-4 py-2 sticky top-0 bg-white z-10 border-b border-slate-100">
+                  <div class="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200">
+                    <mat-icon class="text-slate-400 !text-sm flex items-center justify-center">search</mat-icon>
+                    <input matInput placeholder="Escribe para buscar..." [formControl]="filtroTrabajador"
+                      (keydown)="$event.stopPropagation()" class="text-sm bg-transparent outline-none w-full">
+                  </div>
+                </div>
+
+                @for (t of trabajadores(); track t.id) {
+                <mat-option [value]="t.id">
+                  <span class="font-bold text-slate-700">{{ t.cedula }}</span>
+                  <span class="text-slate-500 ml-2">{{ t.nombres }} {{ t.apellidos }}</span>
+                </mat-option>
+                } @empty {
+                <mat-option disabled>No se encontraron resultados</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="flex justify-end mt3 md:mt-6">
+            <button mat-flat-button color="primary" matStepperNext (click)="irAlSiguientePaso()">Siguiente</button>
+          </div>
+        </form>
+      </mat-step> -->
+
+      <mat-step [stepControl]="sintomatologiaForm">
+        <form [formGroup]="sintomatologiaForm" class=" p-3 md:p-8 flex flex-col gap-6">
+          <ng-template matStepLabel>Sintomatología</ng-template>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Diagnóstico Médico / Motivo</mat-label>
+              <textarea matInput formControlName="diagnostico" placeholder="Ej: Lumbalgia inespecífica..."
+                rows="3"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Antecedentes Relevantes</mat-label>
+              <textarea matInput formControlName="antecedentes" placeholder="Cirugías, terapias previas..."
+                rows="3"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6 items-center bg-slate-50 p-2 md:p-6 rounded-3xl border border-slate-100">
+
+            <div class="flex flex-col gap-2">
+              <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest">¿Presenta Dolor?</label>
+              <mat-checkbox formControlName="dolor" color="primary">Sí, manifiesta molestia</mat-checkbox>
+            </div>
+
+            <div class="md:col-span-2">
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Escala Visual Analógica
+                  (EVA)</label>
+                <span class="text-xl font-black" [ngClass]="getEvaLabelColor()">
+                  {{ sintomatologiaForm.get('calificacionEva')?.value }}/10
+                </span>
+              </div>
+              <mat-slider min="0" max="10" step="1" discrete showTickMarks class="w-full">
+                <input matSliderThumb formControlName="calificacionEva">
+              </mat-slider>
+              <div class="flex justify-between text-[9px] text-slate-400 font-bold px-1">
+                <span>SIN DOLOR</span>
+                <span>MODERADO</span>
+                <span>INSOPORTABLE</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex justify-between mt-4">
+            <button mat-button matStepperPrevious class="!rounded-xl" (click)="irAlPasoAtras()">Atrás</button>
+            <button mat-flat-button color="primary" matStepperNext class="!rounded-xl !px-8"
+              (click)="irAlSiguientePaso()">Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Items & Hallazgos</ng-template>
+        <div class="p-8">
+          <div class="space-y-4 mb-8">
+            @for (item of itemsEvaluados(); track $index) {
+            <div class="p-4 bg-white border border-slate-200 rounded-2xl flex justify-between items-center">
+              <span class="font-bold text-slate-700">{{ item.idItemNavigation.nombre }}</span>
+              <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+            } @empty {
+            <div class="text-center py-10 border-2 border-dashed border-slate-200 rounded-3xl text-slate-400">
+              No has agregado ítems todavía.
+            </div>
+            }
+          </div>
+
+          <button mat-stroked-button color="primary" class="w-full !py-6 !rounded-2xl border-2"
+            (click)="abrirModalAgregarItem()">
+            <mat-icon>add_a_photo</mat-icon>
+            Agregar Ítem / Evidencia
+          </button>
+        </div>
+        <div class="flex justify-between p-8 bg-slate-50">
+          <button mat-button matStepperPrevious (click)="irAlPasoAtras()">Atrás</button>
+          <button mat-flat-button color="accent" (click)="finalizarInspeccion()">Finalizar Registro</button>
+        </div>
+      </mat-step>
+
+    </mat-stepper>
+  </div>
+</div>

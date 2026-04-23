@@ -150,3 +150,17 @@ option {
   border-radius: 20px;
 } */
 
+/* Esto obliga al slider a usar todo el espacio sin dejar huecos a los lados */
+/* Forzamos al componente de Material a ocupar todo el ancho disponible */
+mat-slider {
+  width: 100% !important;
+  max-width: none !important;
+  display: block !important;
+  margin: 0 !important;
+}
+
+/* Ajuste opcional para centrar el pulgar con la línea */
+.slider-container {
+  display: flex;
+  align-items: center;
+}

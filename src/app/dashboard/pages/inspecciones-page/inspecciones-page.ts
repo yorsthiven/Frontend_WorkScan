@@ -7,11 +7,19 @@ import { DatePipe } from '@angular/common';
 import { ItemsComponent } from '../items-component/items.component';
 import { SintomatologiaComponent } from '../sintomatologia-component/sintomatologia.component';
 import { InspeccionDetalle } from '../../../models/inspeccionDetalle.nodel';
-import { InspeccionInfoComponent } from "./components/inspeccion-info.component/inspeccion-info.component";
+import { InspeccionInfoComponent } from './components/inspeccion-info.component/inspeccion-info.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inspecciones-page',
-  imports: [MaterialModules, TablaMaestraComponent, DatePipe, ItemsComponent, SintomatologiaComponent, InspeccionInfoComponent],
+  imports: [
+    MaterialModules,
+    TablaMaestraComponent,
+    DatePipe,
+    ItemsComponent,
+    SintomatologiaComponent,
+    InspeccionInfoComponent,
+  ],
   templateUrl: './inspecciones-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -73,5 +81,10 @@ export class InspeccionesPage {
   seleccionarFila(fila: any) {
     this.itemSeleccionado.set(fila);
     // console.log('Inspección seleccionada:', fila);
+  }
+  private router = inject(Router);
+  // Esta es la función que se ejecuta al darle click al botón "+"
+  irARegistro() {
+    this.router.navigate(['dashboard/inspecciones/registro']); // La ruta que definas en tu app.routes.ts
   }
 }
