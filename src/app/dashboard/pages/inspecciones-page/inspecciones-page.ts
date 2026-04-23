@@ -51,6 +51,7 @@ export class InspeccionesPage {
     { key: 'fechaInspeccion', label: 'Fecha Inspección', width: '180px' },
     { key: 'documentoTrabajador', label: 'Documento' },
     { key: 'nombreTrabajador', label: 'Trabajador' },
+    { key: 'cargoTrabajador', label: 'Cargo', cssClass: 'font-bold' },
     { key: 'calificacionEva', label: 'EVA', cssClass: 'font-bold' },
   ]);
 

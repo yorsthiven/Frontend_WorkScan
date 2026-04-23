@@ -2,7 +2,7 @@
   class="bg-white rounded-[2rem] shadow-sm overflow-hidden border border-slate-100 relative transition-all duration-500 ease-in-out"
   [style.height]="dialogRef || estaExpandido() ? '100%' : 'fit-content'">
 
-  <div class="bg-slate-900 p-4 flex items-center justify-between shadow-md shrink-0">
+  <div class="bg-slate-900 p-3 flex items-center justify-between shadow-md shrink-0">
     <div class="flex items-center gap-3">
       <div class="p-2 bg-white/10 rounded-xl backdrop-blur-md text-white">
         <mat-icon class="scale-90">{{ estaExpandido() || dialogRef ? 'psychology' : 'visibility_off' }}</mat-icon>
@@ -26,7 +26,8 @@
     <div class="bg-slate-50 p-5 rounded-3xl border border-slate-100 shadow-inner">
       <div class="flex justify-between items-end mb-4">
         <div>
-          <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Escala Visual Analógica</span>
+          <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Escala Visual
+            Analógica</span>
           <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Nivel de Dolor</span>
         </div>
         <div class="flex flex-col items-end">
@@ -36,25 +37,33 @@
       </div>
 
       <div class="relative h-6 w-full bg-slate-200 rounded-full overflow-hidden shadow-inner p-1">
-        <div class="h-full transition-all duration-1000 ease-out rounded-full shadow-lg"
-          [style.width]="evaPercentage()"
+        <div class="h-full transition-all duration-1000 ease-out rounded-full shadow-lg" [style.width]="evaPercentage()"
           [style.background-color]="getEvaColor(datos()?.calificacionEva)">
         </div>
         <div class="absolute inset-0 flex justify-between px-4 pointer-events-none opacity-20">
           @for(i of [1,2,3,4,5,6,7,8,9]; track i) {
-            <div class="w-px h-full bg-white/50"></div>
+          <div class="w-px h-full bg-white/50"></div>
           }
         </div>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm group hover:border-blue-200 transition-colors">
+    <div class="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr] gap-4">
+      <div
+        class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm group hover:border-blue-200 transition-colors">
+        <div class="flex items-center gap-2 mb-2">
+          <mat-icon class="text-blue-500 scale-75">category</mat-icon>
+          <p class="text-[10px] text-slate-400 uppercase font-black">Presenta Dolor</p>
+        </div>
+        <p class="text-sm text-slate-700 font-bold ml-7">{{ datos()?.dolor ? 'Sí' : 'No' }}</p>
+      </div>
+      <div
+        class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm group hover:border-blue-200 transition-colors">
         <div class="flex items-center gap-2 mb-2">
           <mat-icon class="text-blue-500 scale-75">category</mat-icon>
           <p class="text-[10px] text-slate-400 uppercase font-black">Tipo de Dolor</p>
         </div>
-        <p class="text-sm text-slate-700 font-bold ml-7">{{ datos()?.tipoDolor?.nombre || 'No especificado' }}</p>
+        <p class="text-sm text-slate-700 font-bold ml-7">{{ datos()?.tipoDolor == 1 ? 'Fuerte' : 'No especificado' }}</p>
       </div>
 
       <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm border-l-4 border-l-amber-400">
@@ -62,13 +71,16 @@
           <mat-icon class="text-amber-500 scale-75">history</mat-icon>
           <p class="text-[10px] text-slate-400 uppercase font-black">Antecedentes</p>
         </div>
-        <p class="text-sm text-slate-600 italic ml-7">{{ datos()?.antecedentesDolor || 'Sin antecedentes reportados' }}</p>
+        <p class="text-sm text-slate-600 italic ml-7">{{ datos()?.antecedentes || 'Sin antecedentes reportados' }}
+        </p>
       </div>
     </div>
 
-    <div class="bg-gradient-to-br from-cyan-50 to-blue-50 p-6 rounded-[2rem] border border-cyan-100 relative overflow-hidden">
+    <div
+      class="bg-gradient-to-br from-cyan-50 to-blue-50 p-6 rounded-[2rem] border border-cyan-100 relative overflow-hidden">
       <mat-icon class="absolute -right-2 -bottom-2 text-cyan-200/50 scale-[3] rotate-12">assignment</mat-icon>
-      <p class="text-[10px] text-cyan-700 uppercase font-black tracking-widest mb-2 relative z-10">Diagnóstico Principal</p>
+      <p class="text-[10px] text-cyan-700 uppercase font-black tracking-widest mb-2 relative z-10">Diagnóstico Principal
+      </p>
       <p class="text-base text-slate-700 font-medium italic relative z-10">"{{ datos()?.diagnosticoPrincipal }}"</p>
     </div>
 
@@ -82,22 +94,21 @@
     }
   </div>
   } @else {
-    <div class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
-      <div class="flex flex-col gap-1 w-full max-w-[70%]">
-        <div class="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase">
-          <span>EVA</span>
-          <span>{{ datos()?.calificacionEva }}/10</span>
-        </div>
-        <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-          <div class="h-full transition-all duration-500"
-            [style.width]="evaPercentage()"
-            [style.background-color]="getEvaColor(datos()?.calificacionEva)"></div>
-        </div>
+  <div class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+    <div class="flex flex-col gap-1 w-full max-w-[70%]">
+      <div class="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase">
+        <span>EVA</span>
+        <span>{{ datos()?.calificacionEva }}/10</span>
       </div>
-      <div class="flex flex-col items-end">
-        <span class="text-[9px] font-black text-blue-500 uppercase">Ver más</span>
-        <mat-icon class="text-blue-500 scale-75">ads_click</mat-icon>
+      <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+        <div class="h-full transition-all duration-500" [style.width]="evaPercentage()"
+          [style.background-color]="getEvaColor(datos()?.calificacionEva)"></div>
       </div>
     </div>
+    <div class="flex flex-col items-end">
+      <span class="text-[9px] font-black text-blue-500 uppercase">Ver más</span>
+      <mat-icon class="text-blue-500 scale-75">ads_click</mat-icon>
+    </div>
+  </div>
   }
 </div>

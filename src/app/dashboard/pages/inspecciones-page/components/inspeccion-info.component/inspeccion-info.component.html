@@ -1,6 +1,6 @@
 <div class="flex flex-col h-full bg-white rounded-[2rem] shadow-sm overflow-hidden border border-slate-100 relative">
 
-  <div class="bg-slate-900 p-4 flex justify-between items-center shadow-md shrink-0">
+  <div class="bg-slate-900 p-3 flex justify-between items-center shadow-md shrink-0">
     <div class="flex items-center gap-3">
       <div class="p-2 bg-white/10 rounded-xl backdrop-blur-md">
         <mat-icon class="text-white scale-90">engineering</mat-icon>
@@ -12,7 +12,7 @@
 
     <div class="flex flex-col items-end">
       <p class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Fecha Reporte</p>
-      <p class="text-xs font-bold text-cyan-400">{{ data()?.fecha | date:'dd MMM, yyyy' }}</p>
+      <p class="text-xs font-bold text-cyan-400">{{ data()?.fechaInspeccion | date:'dd MMM, yyyy' }}</p>
     </div>
   </div>
 
@@ -27,7 +27,7 @@
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-1 p-4 bg-slate-50 rounded-2xl border border-slate-100">
           <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Nombre del Colaborador</p>
-          <p class="text-base font-bold text-slate-800 tracking-tight">{{ data()?.trabajador?.nombre }}</p>
+          <p class="text-base font-bold text-slate-800 tracking-tight">{{ data()?.nombreTrabajador }}</p>
         </div>
         <div class="px-5 py-4 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center gap-3">
           <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
@@ -45,22 +45,22 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm border-l-4 border-l-blue-500 group hover:bg-blue-50/30 transition-colors">
           <p class="text-[9px] font-black text-blue-500 uppercase mb-2">Funciones Principales</p>
-          <p class="text-xs text-slate-600 leading-relaxed font-medium">{{ data()?.funciones || 'No descritas' }}</p>
+          <p class="text-xs text-slate-600 leading-relaxed font-medium">{{ data()?.listaItems[0].infoDescBiomecanica.funciones || 'No descritas' }}</p>
         </div>
 
         <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm border-l-4 border-l-orange-500 group hover:bg-orange-50/30 transition-colors">
           <p class="text-[9px] font-black text-orange-500 uppercase mb-2">Cargas Físicas</p>
-          <p class="text-xs text-slate-600 leading-relaxed font-medium">{{ data()?.cargas || 'Sin reporte de cargas' }}</p>
+          <p class="text-xs text-slate-600 leading-relaxed font-medium">{{ data()?.listaItems[0].infoDescBiomecanica.cargas || 'Sin reporte de cargas' }}</p>
         </div>
 
         <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm border-l-4 border-l-purple-500 group hover:bg-purple-50/30 transition-colors">
           <p class="text-[9px] font-black text-purple-500 uppercase mb-2">Movimientos Repetitivos</p>
-          <p class="text-xs text-slate-600 leading-relaxed font-medium">{{ data()?.movimientos || 'No identificados' }}</p>
+          <p class="text-xs text-slate-600 leading-relaxed font-medium">{{ data()?.listaItems[0].infoDescBiomecanica.movimientos || 'No identificados' }}</p>
         </div>
 
         <div class="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm border-l-4 border-l-cyan-500 group hover:bg-cyan-50/30 transition-colors">
           <p class="text-[9px] font-black text-cyan-500 uppercase mb-2">Evaluación Postural</p>
-          <p class="text-xs text-slate-600 leading-relaxed font-medium">{{ data()?.postura || 'Postura neutra' }}</p>
+          <p class="text-xs text-slate-600 leading-relaxed font-medium">{{ data()?.listaItems[0].infoDescBiomecanica.postura || 'Postura neutra' }}</p>
         </div>
       </div>
     </section>
@@ -75,9 +75,9 @@
           </div>
           <div>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Firma del Inspector</p>
-            <p class="text-base font-bold tracking-tight">{{ data()?.usuario?.nombre }}</p>
+            <p class="text-base font-bold tracking-tight">{{ data()?.rolUsuario }}</p>
             <div class="flex items-center gap-2 mt-0.5">
-              <span class="text-[10px] text-cyan-400 font-black uppercase">{{ data()?.usuario?.rol }}</span>
+              <span class="text-[10px] text-cyan-400 font-black uppercase">{{ data()?.nombreUsuario }}</span>
               <span class="h-1 w-1 rounded-full bg-slate-500"></span>
               <span class="text-[10px] text-slate-400 font-medium italic">WorkScan Certified</span>
             </div>

@@ -1,6 +1,6 @@
 <div class="flex flex-col h-full bg-white rounded-[2rem] shadow-sm overflow-hidden border border-slate-100 relative">
 
-  <div class="bg-slate-900 p-4 flex justify-between items-center shadow-md shrink-0">
+  <div class="bg-slate-900 p-3 flex justify-between items-center shadow-md shrink-0">
     <div class="flex items-center gap-3">
       <div class="p-2 bg-white/10 rounded-xl backdrop-blur-md">
         <mat-icon class="text-white scale-90">inventory_2</mat-icon>
@@ -29,21 +29,23 @@
 
     <div class="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-6">
 
-      <div class="group relative aspect-video rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 shadow-2xl">
+      <div
+        class="group relative aspect-video rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 shadow-2xl">
         <div class="w-full h-full flex items-center justify-center p-2">
           @if (itemActual()?.listaFotos?.length) {
           <img [src]="getFotoUrl(itemActual()?.listaFotos[fotoIndex()].rutaFoto)"
             class="object-contain w-full h-full animate-in fade-in duration-500">
           } @else {
-            <div class="flex flex-col items-center gap-2 opacity-20">
-              <mat-icon class="text-white !w-12 !h-12 text-5xl">image_not_supported</mat-icon>
-              <span class="text-[10px] text-white font-bold uppercase">Sin Evidencia</span>
-            </div>
+          <div class="flex flex-col items-center gap-2 opacity-20">
+            <mat-icon class="text-white !w-12 !h-12 text-5xl">image_not_supported</mat-icon>
+            <span class="text-[10px] text-white font-bold uppercase">Sin Evidencia</span>
+          </div>
           }
         </div>
 
         @if ((itemActual()?.listaFotos?.length ?? 0) > 1) {
-        <div class="absolute inset-0 flex items-center justify-between px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div
+          class="absolute inset-0 flex items-center justify-between px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button mat-mini-fab (click)="fotoIndex.set(fotoIndex() - 1)" [disabled]="fotoIndex() === 0"
             class="!bg-slate-900/80 !text-white shadow-xl backdrop-blur-sm">
             <mat-icon>chevron_left</mat-icon>
@@ -56,15 +58,18 @@
         </div>
         }
 
-        <div class="absolute bottom-4 left-4 bg-slate-900/60 backdrop-blur-md text-white text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest border border-white/10">
+        <div
+          class="absolute bottom-4 left-4 bg-slate-900/60 backdrop-blur-md
+              text-white text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest border border-white/10">
           EVIDENCIA {{ fotoIndex() + 1 }} / {{ itemActual()?.listaFotos?.length || 0 }}
         </div>
       </div>
 
-      <div class="flex flex-col justify-center space-y-5">
+      <div class="flex flex-col justify-center space-y-2">
         <div>
           <div class="flex items-center gap-2 mb-1">
-            <span class="px-2 py-0.5 bg-cyan-100 text-cyan-700 text-[9px] font-black rounded uppercase">Activo Fijo</span>
+            <span class="px-2 py-0.5 bg-cyan-100 text-cyan-700 text-[9px] font-black rounded uppercase">Activo
+              Fijo</span>
             <div class="h-px flex-1 bg-slate-100"></div>
           </div>
           <h3 class="text-2xl font-black text-slate-800 leading-none tracking-tighter uppercase">
@@ -73,19 +78,42 @@
         </div>
 
         <div class="grid grid-cols-1 gap-2">
-          <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100 group-hover:bg-white transition-colors">
-            <div class="p-2 bg-blue-100 rounded-lg text-blue-600"><mat-icon class="scale-75">settings_suggest</mat-icon></div>
+          <div
+            class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100 group-hover:bg-white transition-colors">
+            <div class="p-2 bg-blue-100 rounded-lg text-blue-600"><mat-icon class="scale-75">settings_suggest</mat-icon>
+            </div>
             <div>
               <p class="text-[9px] font-black text-slate-400 uppercase">Material</p>
               <p class="text-sm font-bold text-slate-700">{{ itemActual()?.material }}</p>
             </div>
           </div>
           <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
-            <div class="p-2 bg-amber-100 rounded-lg text-amber-600"><mat-icon class="scale-75">location_on</mat-icon></div>
-            <div>
-              <p class="text-[9px] font-black text-slate-400 uppercase">Ubicación</p>
-              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.ubicacion }}</p>
+            <div class="p-2 bg-amber-100 rounded-lg text-amber-600"><mat-icon class="scale-75">straighten</mat-icon>
             </div>
+            @if(itemActual()?.listaHallazgos[0].alto != null) {
+            <div class="text-center">
+              <p class="text-[9px] font-black text-slate-400 uppercase">Alto</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.listaHallazgos[0].alto }}</p>
+            </div>
+            }
+            @if(itemActual()?.listaHallazgos[0].ancho != null) {
+            <div class="text-center">
+              <p class="text-[9px] font-black text-slate-400 uppercase">Ancho</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.listaHallazgos[0].ancho }}</p>
+            </div>
+            }
+            @if(itemActual()?.listaHallazgos[0].largo != null) {
+            <div class="text-center">
+              <p class="text-[9px] font-black text-slate-400 uppercase">Largo</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.listaHallazgos[0].largo }}</p>
+            </div>
+            }
+            @if(itemActual()?.listaHallazgos[0].pulgadas != null) {
+            <div class="text-center">
+              <p class="text-[9px] font-black text-slate-400 uppercase">Pulgadas</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.listaHallazgos[0].pulgadas }}</p>
+            </div>
+            }
           </div>
         </div>
       </div>
@@ -112,7 +140,7 @@
       <div class="bg-emerald-50/30 p-5 rounded-[2rem] border border-emerald-100 flex flex-col">
         <div class="flex items-center gap-2 mb-4 border-b border-emerald-100 pb-2">
           <mat-icon class="text-emerald-500 scale-90">fact_check</mat-icon>
-          <h4 class="font-black text-emerald-900 uppercase tracking-widest text-[10px]">Medidas Correctivas</h4>
+          <h4 class="font-black text-emerald-900 uppercase tracking-widest text-[10px]">Recomendaciones</h4>
         </div>
         <div class="space-y-2">
           @for (recom of itemActual()?.listaRecomendaciones; track $index) {

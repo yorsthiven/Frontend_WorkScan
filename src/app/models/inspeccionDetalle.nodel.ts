@@ -13,11 +13,11 @@ export interface InspeccionDetalle {
   Dolor: boolean;
   TipoDolor: number;
   DiagnosticoPrincipal: string;
-  Antecedentes: string;
-  Funciones: string;
-  Postura: string;
-  Movimientos: string;
-  Cargas: string;
+  antecedentes: string;
+  funciones: string;
+  postura: string;
+  movimientos: string;
+  cargas: string;
   ListaItems: Array<ItemResumenResumenDto>;
 }
 // --------------
