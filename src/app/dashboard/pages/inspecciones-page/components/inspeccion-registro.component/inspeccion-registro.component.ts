@@ -23,11 +23,19 @@ import { Trabajador } from '../../../../../models/trabajador.model';
 export class InspeccionRegistroComponent {
   private _fb = inject(FormBuilder);
   private _dialog = inject(MatDialog);
-  trabajadores = signal<{ id: number; cedula: string; nombres: string; apellidos: string ; email:string; numeroContacto:string}[]>([]);
+  trabajadores = signal<
+    {
+      id: number;
+      cedula: string;
+      nombres: string;
+      apellidos: string;
+      email: string;
+      numeroContacto: string;
+    }[]
+  >([]);
   trabajadorService = inject(TrabajadorService);
   filtroTrabajador = new FormControl('');
   trabajadorSeleccionado = signal<Trabajador | null>(null);
-
   ngOnInit() {
     this.cargarTrabajadores('');
     // 2. Lógica de búsqueda reactiva
@@ -40,6 +48,22 @@ export class InspeccionRegistroComponent {
       .subscribe((data) => this.trabajadores.set(data));
   }
 
+  // tiposDolores = signal<{ id: number; nombre: string;}[]>([]);
+  //prueba de tipos de dolores
+  tiposDolores = signal([
+    { id: 1, nombre: 'Sin dolor' },
+    { id: 2, nombre: 'Agudo' },
+    { id: 3, nombre: 'Crónico' },
+    { id: 4, nombre: 'Nociceptivo' },
+    { id: 5, nombre: 'Neuropático' },
+    { id: 6, nombre: 'Inflamatorio' },
+    { id: 7, nombre: 'Mecánico' },
+    { id: 8, nombre: 'Referido' },
+    { id: 9, nombre: 'Punzante' },
+    { id: 10, nombre: 'Opresivo' },
+    { id: 11, nombre: 'Constante' },
+  ]);
+
   datosBasicosForm = this._fb.group({
     idTrabajador: [null as number | null, Validators.required],
     estado: 1, // "En Proceso" por defecto
@@ -48,9 +72,9 @@ export class InspeccionRegistroComponent {
   // Paso 2: Sintomatología
   sintomatologiaForm = this._fb.group({
     diagnostico: ['', Validators.required],
-    antecedentes: [''],
+    antecedentes: ['', Validators.required],
     dolor: [true],
-    tipoDolor: [0],
+    tipoDolor: [{ value: 0, disabled: false }, Validators.required],
     calificacionEva: [0, [Validators.min(0), Validators.max(10)]],
   });
 
@@ -79,7 +103,7 @@ export class InspeccionRegistroComponent {
 
   abrirModalAgregarItem() {
     const dialogRef = this._dialog.open(DialogItemComponent, {
-      width: '600px',
+      width: '800px',
       disableClose: true,
       panelClass: 'custom-dialog-container',
     });
@@ -158,6 +182,22 @@ export class InspeccionRegistroComponent {
     const seleccionado = this.trabajadores().find((t) => t.id === id);
     if (seleccionado) {
       this.trabajadorSeleccionado.set(seleccionado);
+    }
+  }
+
+  // -----TIPO DE DOLOR-----
+  onTipoDolorChange(tipo: number) {
+    // Aquí puedes manejar la lógica según el tipo de dolor seleccionado
+    console.log('Tipo de dolor seleccionado:', tipo);
+  }
+
+  onDolorChange(checked: boolean) {
+    if (!checked) {
+      this.sintomatologiaForm.get('calificacionEva')?.setValue(0);
+      this.sintomatologiaForm.get('tipoDolor')?.setValue(1);
+      this.sintomatologiaForm.get('tipoDolor')?.disable();
+    } else {
+      this.sintomatologiaForm.get('tipoDolor')?.enable();
     }
   }
 }

@@ -29,8 +29,8 @@
 
                 @for (t of trabajadores(); track t.id) {
                 <mat-option [value]="t.id">
-                  <span class="font-bold text-slate-700">{{ t.cedula }}  </span>
-                  <span class="text-slate-500 ml-2">{{ t.nombres }}   {{ t.apellidos }}</span>
+                  <span class="font-bold text-slate-700">{{ t.cedula }} </span>
+                  <span class="text-slate-500 ml-2">{{ t.nombres }} {{ t.apellidos }}</span>
                 </mat-option>
                 } @empty {
                 <mat-option disabled>No se encontraron resultados</mat-option>
@@ -82,6 +82,7 @@
                 Siguiente paso
               </button>
             </div>
+
           </div>
         </form>
       </mat-step>
@@ -203,9 +204,23 @@
 
             <div class="flex flex-col gap-2">
               <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest">¿Presenta Dolor?</label>
-              <mat-checkbox formControlName="dolor" color="primary">Sí, manifiesta molestia</mat-checkbox>
+              <mat-checkbox formControlName="dolor" color="primary" (change)="onDolorChange($event.checked)">
+                Sí, manifiesta molestia
+              </mat-checkbox>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tipo dolor</mat-label>
+                <mat-select formControlName="tipoDolor" (selectionChange)="onTipoDolorChange($event.value)">
+                  <!-- (openedChange)="onSelectOpened($event)" -->
+                  @for (t of tiposDolores(); track t.id) {
+                  <mat-option [value]="t.id">
+                    <span class="text-slate-500 ml-2">{{ t.nombre }} </span>
+                  </mat-option>
+                  } @empty {
+                  <mat-option disabled>No se encontraron resultados</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
             </div>
-
             <div class="md:col-span-2">
               <div class="flex justify-between items-center mb-2">
                 <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Escala Visual Analógica
@@ -214,7 +229,8 @@
                   {{ sintomatologiaForm.get('calificacionEva')?.value }}/10
                 </span>
               </div>
-              <mat-slider min="0" max="10" step="1" discrete showTickMarks class="w-full">
+              <mat-slider min="0" max="10" step="1" discrete showTickMarks class="w-full"
+                [disabled]="!sintomatologiaForm.get('dolor')?.value">
                 <input matSliderThumb formControlName="calificacionEva">
               </mat-slider>
               <div class="flex justify-between text-[9px] text-slate-400 font-bold px-1">
@@ -226,14 +242,75 @@
 
           </div>
 
-          <div class="flex justify-between mt-4">
+          <!-- <div class="flex justify-between mt-4">
             <button mat-button matStepperPrevious class="!rounded-xl" (click)="irAlPasoAtras()">Atrás</button>
             <button mat-flat-button color="primary" matStepperNext class="!rounded-xl !px-8"
               (click)="irAlSiguientePaso()">Siguiente</button>
+          </div> -->
+          <div class="flex justify-between mt-6">
+            <button mat-button matStepperPrevious type="button" class="!rounded-xl"
+              (click)="irAlPasoAtras()">Atrás</button>
+            <button mat-flat-button color="primary" matStepperNext
+              [disabled]="sintomatologiaForm.invalid || sintomatologiaForm.get('tipoDolor')?.value === 0"
+              class="!rounded-xl !px-10 shadow-lg shadow-blue-100" (click)="irAlSiguientePaso()">
+              Siguiente
+            </button>
           </div>
         </form>
       </mat-step>
 
+      <mat-step [stepControl]="biomecanicaGeneralForm">
+        <form [formGroup]="biomecanicaGeneralForm" class="p-8 space-y-6">
+          <ng-template matStepLabel>Descripción Biomecánica</ng-template>
+
+          <div class="max-w-4xl mx-auto grid grid-cols-2 gap-3">
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Funciones del Cargo</mat-label>
+              <textarea matInput formControlName="funciones" rows="3"
+                placeholder="Describa las tareas principales del trabajador..."></textarea>
+              <mat-icon matPrefix class="mr-2 text-slate-400">work</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Postura</mat-label>
+              <textarea matInput formControlName="postura" rows="3"
+                placeholder="Ej: Mantiene postura sedente prolongada con inclinación de tronco..."></textarea>
+              <mat-icon matPrefix class="mr-2 text-slate-400">accessibility</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Movimientos</mat-label>
+              <textarea matInput formControlName="movimientos" rows="3"
+                placeholder="Ej: Movimientos repetitivos de flexo-extensión de muñeca..."></textarea>
+              <mat-icon matPrefix class="mr-2 text-slate-400">history</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Cargas</mat-label>
+              <textarea matInput formControlName="cargas" rows="3"
+                placeholder="Ej: Manipulación manual de cargas de aproximadamente 10kg..."></textarea>
+              <mat-icon matPrefix class="mr-2 text-slate-400">fitness_center</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="flex justify-between mt-6">
+            <button mat-button matStepperPrevious type="button" class="!rounded-xl"
+              (click)="irAlPasoAtras()">Atrás</button>
+            <button mat-flat-button color="primary" matStepperNext [disabled]="biomecanicaGeneralForm.invalid"
+              class="!rounded-xl !px-10 shadow-lg shadow-blue-100" (click)="irAlSiguientePaso()">
+              Siguiente
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <!-- <mat-step [stepControl]="biomecanicaGeneralForm">
+        <div class="flex justify-between mt-4">
+          <button mat-button matStepperPrevious class="!rounded-xl" (click)="irAlPasoAtras()">Atrás</button>
+          <button mat-flat-button color="primary" matStepperNext class="!rounded-xl !px-8"
+            (click)="irAlSiguientePaso()">Siguiente</button>
+        </div>
+      </mat-step> -->
       <mat-step>
         <ng-template matStepLabel>Items & Hallazgos</ng-template>
         <div class="p-8">
