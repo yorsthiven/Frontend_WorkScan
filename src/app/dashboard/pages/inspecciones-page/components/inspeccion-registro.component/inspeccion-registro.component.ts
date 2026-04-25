@@ -14,16 +14,18 @@ import { MatStepper } from '@angular/material/stepper';
 import { TrabajadorService } from '../../../../../services/trabajador/trabajador.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { Trabajador } from '../../../../../models/trabajador.model';
+import { TablaMaestraComponent } from '../../../../../components/maestros/tabla-maestra.component/tabla-maestra.component';
+import { InspeccionService } from '../../../../../services/inspeccion/inspeccion.service';
 
 @Component({
   selector: 'app-inspeccion-registro',
-  imports: [MaterialModules, ReactiveFormsModule],
+  imports: [MaterialModules, ReactiveFormsModule, TablaMaestraComponent],
   templateUrl: './inspeccion-registro.component.html',
 })
 export class InspeccionRegistroComponent {
   private _fb = inject(FormBuilder);
   private _dialog = inject(MatDialog);
-  trabajadores = signal<
+  listaTrabajadores = signal<
     {
       id: number;
       cedula: string;
@@ -34,6 +36,7 @@ export class InspeccionRegistroComponent {
     }[]
   >([]);
   trabajadorService = inject(TrabajadorService);
+  inspeccionService = inject(InspeccionService);
   filtroTrabajador = new FormControl('');
   trabajadorSeleccionado = signal<Trabajador | null>(null);
   ngOnInit() {
@@ -45,7 +48,9 @@ export class InspeccionRegistroComponent {
         distinctUntilChanged(), // Solo busca si el texto cambió
         switchMap((valor) => this.trabajadorService.getTrabajadores(valor || '')),
       )
-      .subscribe((data) => this.trabajadores.set(data));
+      .subscribe((data) => {
+        this.listaTrabajadores.set(data);
+      });
   }
 
   // tiposDolores = signal<{ id: number; nombre: string;}[]>([]);
@@ -73,7 +78,7 @@ export class InspeccionRegistroComponent {
   sintomatologiaForm = this._fb.group({
     diagnostico: ['', Validators.required],
     antecedentes: ['', Validators.required],
-    dolor: [true],
+    dolor: [true, Validators.required],
     tipoDolor: [{ value: 0, disabled: false }, Validators.required],
     calificacionEva: [0, [Validators.min(0), Validators.max(10)]],
   });
@@ -99,23 +104,35 @@ export class InspeccionRegistroComponent {
 
     console.log('Enviando a la API:', inspeccionFinal);
     // Aquí llamarías a tu servicio POST
+    this.guardarInspeccion(inspeccionFinal);
+
   }
 
   abrirModalAgregarItem() {
     const dialogRef = this._dialog.open(DialogItemComponent, {
       width: '800px',
-      disableClose: true,
+      disableClose: false,
+      maxWidth: '95vw',
+      maxHeight: '90vh',
       panelClass: 'custom-dialog-container',
+      autoFocus: false,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Mapeamos el resultado al formato AuxDescBiomecanicaItemCreateDto
         const nuevoItemEvaluado = {
-          idItem: result.idItem,
-          idDescripcionBiomecanica: '', // Se genera en el backend o se vincula luego
-          idDescripcionBiomecanicaNavigation: this.biomecanicaGeneralForm.value, // Tomamos la biomecánica del paso 3
+          idItem: result.idItem || result.itemInfo?.idItem, // Ajuste según lo que devuelva tu modal
+          idDescripcionBiomecanica: result.idDescripcionBiomecanica || result.itemInfo?.idDescripcionBiomecanica,
+          idDescripcionBiomecanicaNavigation: this.biomecanicaGeneralForm.value,
+
+          // Mapeamos los datos para que la tabla los encuentre fácilmente
           idItemNavigation: result,
+
+          // AGREGAMOS ESTAS LÍNEAS PARA LA TABLA:
+          nombre: result.nombre || result.itemInfo?.nombre,
+          material: result.material || result.itemInfo?.material,
+          hallazgos: result.hallazgos || [],
+          fotos: result.fotos || [],
         };
 
         this.itemsEvaluados.update((items) => [...items, nuevoItemEvaluado]);
@@ -135,10 +152,6 @@ export class InspeccionRegistroComponent {
   @ViewChild('stepper') stepper!: MatStepper;
 
   irAlSiguientePaso() {
-    // Aquí puedes meter lógica extra
-    // console.log('Procesando datos antes de seguir...');
-
-    // Ordenamos al stepper avanzar
     this.stepper.next();
   }
 
@@ -160,17 +173,12 @@ export class InspeccionRegistroComponent {
           email: `${t.email}`,
           numeroContacto: `${t.numeroContacto}`,
         }));
-        this.trabajadores.set(lista);
+        this.listaTrabajadores.set(lista);
       },
       error: (err) => console.error('Error cargando trabajadores', err),
     });
   }
 
-  buscarTrabajadores(query: string) {
-    this.trabajadorService.getTrabajadores(query).subscribe((data) => {
-      this.trabajadores.set(data);
-    });
-  }
   // Limpia la búsqueda cuando se cierra el select
   onSelectOpened(opened: boolean) {
     if (!opened) {
@@ -179,7 +187,7 @@ export class InspeccionRegistroComponent {
   }
   // Función para capturar el cambio
   onTrabajadorChange(id: number) {
-    const seleccionado = this.trabajadores().find((t) => t.id === id);
+    const seleccionado = this.listaTrabajadores().find((t) => t.id === id);
     if (seleccionado) {
       this.trabajadorSeleccionado.set(seleccionado);
     }
@@ -188,7 +196,6 @@ export class InspeccionRegistroComponent {
   // -----TIPO DE DOLOR-----
   onTipoDolorChange(tipo: number) {
     // Aquí puedes manejar la lógica según el tipo de dolor seleccionado
-    console.log('Tipo de dolor seleccionado:', tipo);
   }
 
   onDolorChange(checked: boolean) {
@@ -200,4 +207,43 @@ export class InspeccionRegistroComponent {
       this.sintomatologiaForm.get('tipoDolor')?.enable();
     }
   }
+
+  // ------ITEM EVALUADOS------
+
+  // Definimos las columnas que verá el usuario en la tabla de este paso
+  columnasItems = ['nombre', 'material', 'hallazgos', 'acciones'];
+
+  eliminarItem(itemAEliminar: any) {
+    // Filtramos para quitar el ítem de la lista
+    this.itemsEvaluados.update((prev) => prev.filter((i) => i !== itemAEliminar));
+  }
+
+guardarInspeccion(inspeccionFinal: RegistroInspeccion) {
+    // const inspeccionFinal: RegistroInspeccion = {
+    //   estado: this.datosBasicosForm.value.estado!,
+    //   idTrabajador: this.datosBasicosForm.value.idTrabajador!,
+    //   idSintomatologiaNavigation: this.sintomatologiaForm.value as any,
+    //   itemsEvaluados: this.itemsEvaluados(),
+    // };
+
+    this.inspeccionService.guardarInspeccionCompleta(inspeccionFinal).subscribe({
+      next: (resp) => {
+        console.log('Inspección guardada correctamente');
+        console.log("respuesta",resp);
+        // Aquí puedes redirigir o mostrar un mensaje de éxito
+      },
+      error: (err) => {
+        console.error('Error al guardar la inspección', err);
+        // Aquí puedes mostrar un mensaje de error
+      }
+    });
+  }
+
+  // En el padre (Configuración de Inspecciones)
+  colsItems = signal([
+    { key: 'nombre', label: 'Nombre' },
+    { key: 'hallazgos', label: 'Hallazgos', cssClass: '!text-center font-bold' },
+    { key: 'fotos', label: 'Fotos' },
+    { key: 'recomendaciones', label: 'Recomendaciones', cssClass: 'font-bold' },
+  ]);
 }

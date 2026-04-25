@@ -14,6 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStep, MatStepper} from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatAutocomplete, MatAutocompleteModule} from '@angular/material/autocomplete';
 
 export const MaterialModules = [
   MatTableModule,
@@ -33,5 +34,7 @@ export const MaterialModules = [
   MatSliderModule,
   MatStep,
   MatStepper,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatAutocomplete,
+  MatAutocompleteModule
 ];

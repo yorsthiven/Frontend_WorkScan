@@ -1,40 +1,127 @@
-<h2 mat-dialog-title class="!font-black !text-slate-800 uppercase tracking-tighter">Detalle del Ítem</h2>
+<div class="flex justify-between items-center p-5 border-b border-slate-100 bg-white sticky top-0 z-10">
+  <div>
+    <h2 class="!font-black text-xl uppercase tracking-tighter text-slate-800 !m-0">
+      {{ modoCreacion() ? 'Crear Nuevo Ítem' : 'Seleccionar Ítem Evaluado' }}
+    </h2>
+    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Inspección Técnica de Seguridad</p>
+  </div>
 
-<mat-dialog-content>
-  <form [formGroup]="itemForm" class="flex flex-col gap-4 mt-2">
+  <button mat-icon-button mat-dialog-close class="text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Nombre del Ítem</mat-label>
-      <input matInput formControlName="nombre">
-    </mat-form-field>
+<mat-dialog-content class="!m-0 !p-6 custom-scrollbar">
+  <form [formGroup]="itemForm" class="space-y-8">
 
-    <div class="grid grid-cols-2 gap-4">
-      <mat-form-field appearance="outline">
-        <mat-label>Material</mat-label>
-        <input matInput formControlName="material">
-      </mat-form-field>
-    </div>
+    <section class="space-y-3">
+      <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1 flex items-center gap-2">
+        <mat-icon class="!text-sm">inventory_2</mat-icon> Equipo / Herramienta
+      </label>
 
-    <div class="p-4 border-2 border-dashed border-slate-200 rounded-2xl">
-      <p class="text-xs font-bold text-slate-400 uppercase mb-2">Evidencia Fotográfica</p>
-      <input type="file" multiple (change)="onFileSelected($event)" accept="image/*" class="hidden" #fileInput>
+      <div class="flex items-start gap-2">
+        <mat-form-field appearance="outline" class="flex-1">
+          <mat-select placeholder="Seleccione un ítem" (selectionChange)="onItemSeleccionado($event.value)">
+            <div class="px-4 py-2 sticky top-0 bg-white z-20 border-b border-slate-100">
+              <div
+                class="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200 focus-within:border-blue-400 transition-all">
+                <mat-icon class="text-slate-400 !text-sm">search</mat-icon>
+                <input matInput placeholder="Filtrar por nombre o material..." [formControl]="filtroItemControl"
+                  (keydown)="$event.stopPropagation()" class="text-sm bg-transparent outline-none w-full py-2">
+              </div>
+            </div>
 
-      <div class="flex flex-wrap gap-2 mb-4">
-        @for (foto of fotos(); track $index) {
-        <img [src]="foto" class="w-20 h-20 object-cover rounded-lg shadow-md">
-        }
+            @for (item of listaItems(); track item.id) {
+            <mat-option [value]="item" class="!h-auto !py-3 border-b border-slate-50 last:border-0">
+              <div class="flex flex-col">
+                <span class="font-bold text-slate-700 leading-tight">{{ item.nombre }}</span>
+                <span class="text-[10px] text-slate-400 uppercase tracking-wider">{{ item.material }}</span>
+              </div>
+            </mat-option>
+            } @empty {
+            <mat-option disabled class="text-center py-4 text-slate-400">No se encontraron resultados</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="button"
+          class="!h-[56px] !rounded-2xl shadow-lg shadow-blue-100 hover:shadow-blue-200 transition-all"
+          (click)="abrirFormularioMaestro()">
+          <mat-icon>add</mat-icon>
+          <span class="hidden md:inline ml-1 text-xs font-black uppercase">Nuevo</span>
+        </button>
+      </div>
+    </section>
+
+    @if (itemForm.get('idItem')?.value) {
+    <section
+      class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-blue-50/30 rounded-[2rem] border border-blue-100 border-dashed animate-in fade-in zoom-in duration-300">
+      <div class="col-span-full flex items-center gap-2 mb-2">
+        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+        <span class="text-[10px] font-black uppercase text-blue-600 tracking-widest">Ficha Técnica del Maestro</span>
       </div>
 
-      <button mat-stroked-button type="button" class="w-full" (click)="fileInput.click()">
-        <mat-icon>camera_alt</mat-icon> Seleccionar Imágenes
-      </button>
+      <mat-form-field appearance="fill" class="col-span-2">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-span-2">
+        <mat-label>Material</mat-label>
+        <input matInput formControlName="material" readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill"><mat-label>Pulgadas</mat-label><input matInput formControlName="pulgada"
+          readonly></mat-form-field>
+      <mat-form-field appearance="fill"><mat-label>Alto</mat-label><input matInput formControlName="alto"
+          readonly></mat-form-field>
+      <mat-form-field appearance="fill"><mat-label>Ancho</mat-label><input matInput formControlName="ancho"
+          readonly></mat-form-field>
+      <mat-form-field appearance="fill"><mat-label>Largo</mat-label><input matInput formControlName="largo"
+          readonly></mat-form-field>
+    </section>
+    }
+
+    <div class="space-y-10 pb-4">
+      <app-input-busqueda-lista titulo="Hallazgos Detectados" placeholder="Describa el problema encontrado..."
+        icono="report_problem" colorIcono="text-amber-500" colorBoton="warn" claseItem="bg-amber-50/50 border-amber-100"
+        (onChanged)="hallazgos.set($event)">
+      </app-input-busqueda-lista>
+
+      <app-input-busqueda-lista titulo="Recomendaciones Técnicas" placeholder="¿Qué acción se debe tomar?"
+        icono="fact_check" colorIcono="text-blue-500" colorBoton="primary" claseItem="bg-blue-50/50 border-blue-100"
+        (onChanged)="recomendaciones.set($event)">
+      </app-input-busqueda-lista>
+
+      <app-photo-uploader (onChanged)="fotos.set($event)">
+      </app-photo-uploader>
     </div>
 
   </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="!pb-6 !px-6">
-  <button mat-button (click)="cancelar()">Cancelar</button>
-  <button mat-flat-button color="primary" (click)="guardar()" [disabled]="itemForm.invalid">Agregar a
-    Inspección</button>
+<mat-dialog-actions align="end" class="!p-6 border-t border-slate-100 bg-white sticky bottom-0 z-50">
+  <button mat-button mat-dialog-close class="text-slate-500 font-bold uppercase text-[10px] tracking-widest">
+    Cancelar
+  </button>
+
+  <button mat-flat-button color="primary" class="!rounded-2xl !px-8 !h-[50px] shadow-lg shadow-blue-100"
+    (click)="guardar()" [disabled]="!itemForm.get('idItem')?.value && !modoCreacion()">
+    <div class="flex items-center gap-2">
+      <mat-icon class="!text-lg">add_circle</mat-icon>
+      <span class="font-black uppercase text-xs tracking-wider">Agregar Item</span>
+    </div>
+  </button>
 </mat-dialog-actions>
+
+<!-- <mat-dialog-actions align="end" class="!p-6 border-t border-slate-100 bg-slate-50/50 sticky bottom-0 z-10">
+  <button mat-button mat-dialog-close class="!rounded-xl text-slate-500 px-6">
+    Cancelar
+  </button>
+
+  <button mat-flat-button color="primary" class="!rounded-xl !px-10 !h-[48px] shadow-lg shadow-blue-200 transition-all"
+    (click)="guardar()" [disabled]="!itemForm.get('idItem')?.value && !modoCreacion()">
+    <mat-icon class="mr-2">check_circle</mat-icon>
+    Finalizar Inspección
+  </button>
+</mat-dialog-actions> -->

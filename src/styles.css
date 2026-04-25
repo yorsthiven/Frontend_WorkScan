@@ -27,18 +27,18 @@ html {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  /* background: transparent; */
+  background: #f1f1f1;
+  border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
-  /* slate-200 */
+  background: #cbd5e1;
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1;
-  /* slate-300 */
+  background: #94a3b8;
 }
 
 /* Forzar que el mat-dialog no limite el scroll */
@@ -143,6 +143,7 @@ option {
 .mat-mdc-fab {
   animation: pulse-cyan 2s infinite;
 }
+
 /*
 .cdk-overlay-pane.modal-fullscreen-custom .mat-mdc-dialog-container .mdc-dialog__surface {
   background: transparent !important;
@@ -163,4 +164,19 @@ mat-slider {
 .slider-container {
   display: flex;
   align-items: center;
+}
+
+/* Altura máxima del contenido para forzar el scroll */
+mat-dialog-content {
+  max-height: 70vh !important;
+  /* El contenido ocupará máximo el 70% de la pantalla */
+  overflow-y: auto !important;
+  display: block;
+}
+
+/* Evitar que el diálogo se vea pegado a los bordes en móviles */
+@media (max-width: 600px) {
+  mat-dialog-content {
+    padding: 1rem !important;
+  }
 }

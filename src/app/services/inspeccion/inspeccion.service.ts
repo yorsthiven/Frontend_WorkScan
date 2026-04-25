@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { RespuestaGetInspecciones } from '../../models/Respuestas/responses.model';
-import { InspeccionDetalle } from '../../models/inspeccionDetalle.nodel';
 import { Observable } from 'rxjs';
+import { RegistroInspeccion } from '../../models/registroInspeccion.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,5 +16,7 @@ export class InspeccionService {
     return this.http.get<RespuestaGetInspecciones>(this.apiUrl, { params });
   }
 
-  constructor() {}
+  guardarInspeccionCompleta(inspeccionCreateDto: RegistroInspeccion): Observable<any> {
+    return this.http.post(this.apiUrl, inspeccionCreateDto);
+  }
 }

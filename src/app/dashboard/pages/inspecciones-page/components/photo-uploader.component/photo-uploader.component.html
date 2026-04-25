@@ -1,0 +1,42 @@
+<div class="space-y-4">
+  <div class="flex items-center gap-2">
+    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">
+      Evidencias Fotográficas
+    </label>
+    <div class="h-[1px] flex-1 bg-slate-100"></div>
+  </div>
+
+  <div class="relative group cursor-pointer" (click)="fileInput.click()">
+    <input type="file" #fileInput multiple class="hidden" accept="image/*" (change)="onFileSelected($event)">
+
+    <div
+      class="flex flex-col items-center justify-center p-8 border-2 border-dashed border-slate-200 rounded-3xl bg-slate-50 group-hover:bg-blue-50 group-hover:border-blue-200 transition-all duration-300">
+      <div
+        class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+        <mat-icon class="text-blue-500">add_a_photo</mat-icon>
+      </div>
+      <p class="text-xs font-bold text-slate-600">Capturar o Subir Fotos</p>
+      <p class="text-[10px] text-slate-400 uppercase tracking-tighter">JPG, PNG o capturas directas</p>
+    </div>
+  </div>
+
+  @if (fotos().length > 0) {
+  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 p-2">
+    @for (foto of fotos(); track $index) {
+    <div class="relative aspect-square group animate-in zoom-in duration-200">
+      <img [src]="foto"
+        class="w-full h-full object-cover rounded-2xl border-2 border-white shadow-md group-hover:brightness-75 transition-all">
+
+      <button type="button" (click)="eliminarFoto($index)"
+        class="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 hover:scale-110 transition-all">
+        <mat-icon class="!text-[12px]">close</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+  } @else {
+  <div class="py-4 text-center">
+    <p class="text-[10px] text-slate-300 uppercase font-bold tracking-widest italic">Sin evidencias adjuntas</p>
+  </div>
+  }
+</div>

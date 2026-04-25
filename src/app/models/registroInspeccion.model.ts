@@ -7,7 +7,7 @@ export interface RegistroInspeccion {
 
 export interface AuxDescBiomecanicaItemCreateDto {
   idItem: number;
-  idDescripcionBiomecanica: string;
+  idDescripcionBiomecanica: number;
   idDescripcionBiomecanicaNavigation: DescripcionBiomecanicaCreateDto;
   idItemNavigation: ItemRegistroDto;
 }

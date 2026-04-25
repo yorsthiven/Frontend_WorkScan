@@ -46,7 +46,6 @@ export class InspeccionesPage {
   filtrarInspecciones(termino: string) {
     this.inspeccionService.getInspeccion(termino).subscribe({
       next: (data: RespuestaGetInspecciones) => {
-        console.log(data.inspecciones);
         this.inspecciones.set(data.inspecciones);
       },
       error: (err) => {
@@ -80,7 +79,6 @@ export class InspeccionesPage {
 
   seleccionarFila(fila: any) {
     this.itemSeleccionado.set(fila);
-    // console.log('Inspección seleccionada:', fila);
   }
   private router = inject(Router);
   // Esta es la función que se ejecuta al darle click al botón "+"
