@@ -6,7 +6,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RegistroInspeccion } from '../../../../../models/registroInspeccion.model';
+import {
+  ItemRegistroDto,
+  RegistroInspeccion,
+} from '../../../../../models/registroInspeccion.model';
 import { MaterialModules } from '../../../../../shared/material.providers';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogItemComponent } from '../dialog-item.component/dialog-item.component';
@@ -92,20 +95,20 @@ export class InspeccionRegistroComponent {
   });
 
   // Lista de items evaluados que se irá llenando
-  itemsEvaluados = signal<any[]>([]);
+  itemsEvaluados = signal<ItemRegistroDto[]>([]);
 
   finalizarInspeccion() {
     const inspeccionFinal: RegistroInspeccion = {
       estado: this.datosBasicosForm.value.estado!,
       idTrabajador: this.datosBasicosForm.value.idTrabajador!,
       idSintomatologiaNavigation: this.sintomatologiaForm.value as any,
-      itemsEvaluados: this.itemsEvaluados(),
+      items: this.itemsEvaluados(),
+      descripcionBiomecanica: this.biomecanicaGeneralForm.value as any,
     };
 
     console.log('Enviando a la API:', inspeccionFinal);
     // Aquí llamarías a tu servicio POST
     this.guardarInspeccion(inspeccionFinal);
-
   }
 
   abrirModalAgregarItem() {
@@ -118,26 +121,48 @@ export class InspeccionRegistroComponent {
       autoFocus: false,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: ItemRegistroDto) => {
       if (result) {
-        const nuevoItemEvaluado = {
-          idItem: result.idItem || result.itemInfo?.idItem, // Ajuste según lo que devuelva tu modal
-          idDescripcionBiomecanica: result.idDescripcionBiomecanica || result.itemInfo?.idDescripcionBiomecanica,
-          idDescripcionBiomecanicaNavigation: this.biomecanicaGeneralForm.value,
-
-          // Mapeamos los datos para que la tabla los encuentre fácilmente
-          idItemNavigation: result,
-
-          // AGREGAMOS ESTAS LÍNEAS PARA LA TABLA:
-          nombre: result.nombre || result.itemInfo?.nombre,
-          material: result.material || result.itemInfo?.material,
+        // Forzamos que las listas sean arreglos aunque vengan vacías
+        const itemSeguro: ItemRegistroDto = {
+          ...result,
           hallazgos: result.hallazgos || [],
           fotos: result.fotos || [],
+          recomendaciones: result.recomendaciones || [],
         };
 
-        this.itemsEvaluados.update((items) => [...items, nuevoItemEvaluado]);
+        this.itemsEvaluados.update((items) => [...items, itemSeguro]);
       }
     });
+    // dialogRef.afterClosed().subscribe((result: ItemRegistroDto) => {
+    //   if (result) {
+    //     // 2. Insertamos el objeto tal cual viene del modal
+    //     // Como el modal ya devuelve un ItemRegistroDto, solo lo agregamos
+    //     this.itemsEvaluados.update((items) => [...items, result]);
+
+    //     console.log('Lista de ítems actualizada:', this.itemsEvaluados());
+    //   }
+    // });
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   if (result) {
+    //     const nuevoItemEvaluado = {
+    //       idItem: result.idItem || result.itemInfo?.idItem, // Ajuste según lo que devuelva tu modal
+    //       // idDescripcionBiomecanica: result.idDescripcionBiomecanica || result.itemInfo?.idDescripcionBiomecanica,
+    //       // idDescripcionBiomecanicaNavigation: this.biomecanicaGeneralForm.value,
+
+    //       // Mapeamos los datos para que la tabla los encuentre fácilmente
+    //       idItemNavigation: result,
+
+    //       // AGREGAMOS ESTAS LÍNEAS PARA LA TABLA:
+    //       nombre: result.nombre || result.itemInfo?.nombre,
+    //       material: result.material || result.itemInfo?.material,
+    //       hallazgos: result.hallazgos || [],
+    //       fotos: result.fotos || [],
+    //     };
+
+    //     this.itemsEvaluados.update((items) => [...items, nuevoItemEvaluado]);
+    //   }
+    // });
   }
 
   // Helper para el color del slider EVA
@@ -218,24 +243,24 @@ export class InspeccionRegistroComponent {
     this.itemsEvaluados.update((prev) => prev.filter((i) => i !== itemAEliminar));
   }
 
-guardarInspeccion(inspeccionFinal: RegistroInspeccion) {
+  guardarInspeccion(inspeccionFinal: RegistroInspeccion) {
     // const inspeccionFinal: RegistroInspeccion = {
     //   estado: this.datosBasicosForm.value.estado!,
     //   idTrabajador: this.datosBasicosForm.value.idTrabajador!,
     //   idSintomatologiaNavigation: this.sintomatologiaForm.value as any,
     //   itemsEvaluados: this.itemsEvaluados(),
     // };
-
+    console.log('inicio de guardar inspeccion: ----> ', inspeccionFinal);
     this.inspeccionService.guardarInspeccionCompleta(inspeccionFinal).subscribe({
       next: (resp) => {
         console.log('Inspección guardada correctamente');
-        console.log("respuesta",resp);
+        console.log('respuesta', resp);
         // Aquí puedes redirigir o mostrar un mensaje de éxito
       },
       error: (err) => {
         console.error('Error al guardar la inspección', err);
         // Aquí puedes mostrar un mensaje de error
-      }
+      },
     });
   }
 

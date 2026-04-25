@@ -13,3 +13,8 @@ export interface Inspecciones {
   idInspeccion: number;
   nombreTrabajador: string;
 }
+
+export interface RespuestaPostInspeccion {
+  inspeccion: boolean;
+  mensaje: string;
+}

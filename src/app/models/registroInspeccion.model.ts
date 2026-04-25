@@ -1,8 +1,9 @@
 export interface RegistroInspeccion {
   estado: number; // "En Proceso", "Completada", etc.
   idTrabajador: number;
-  itemsEvaluados: AuxDescBiomecanicaItemCreateDto[];
   idSintomatologiaNavigation: SintomatologiaCreateDto;
+  items: ItemRegistroDto[];
+  descripcionBiomecanica:DescripcionBiomecanicaCreateDto
 }
 
 export interface AuxDescBiomecanicaItemCreateDto {
