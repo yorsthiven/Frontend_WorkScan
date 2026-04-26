@@ -19,10 +19,12 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { Trabajador } from '../../../../../models/trabajador.model';
 import { TablaMaestraComponent } from '../../../../../components/maestros/tabla-maestra.component/tabla-maestra.component';
 import { InspeccionService } from '../../../../../services/inspeccion/inspeccion.service';
+import { SpinnerGenericoComponent } from '../../../../../components/shared/genericos/spinner-generico.component/spinner-generico.component';
+import { NotificacionService } from '../../../../../services/notificacion/notificacion.service';
 
 @Component({
   selector: 'app-inspeccion-registro',
-  imports: [MaterialModules, ReactiveFormsModule, TablaMaestraComponent],
+  imports: [MaterialModules, ReactiveFormsModule, TablaMaestraComponent, SpinnerGenericoComponent],
   templateUrl: './inspeccion-registro.component.html',
 })
 export class InspeccionRegistroComponent {
@@ -38,16 +40,20 @@ export class InspeccionRegistroComponent {
       numeroContacto: string;
     }[]
   >([]);
+
+  isLoading = signal(false);
+  private notificacion = inject(NotificacionService);
   trabajadorService = inject(TrabajadorService);
   inspeccionService = inject(InspeccionService);
   filtroTrabajador = new FormControl('');
   trabajadorSeleccionado = signal<Trabajador | null>(null);
+
   ngOnInit() {
     this.cargarTrabajadores('');
     // 2. Lógica de búsqueda reactiva
     this.filtroTrabajador.valueChanges
       .pipe(
-        debounceTime(300), // Espera 300ms después de que el usuario deja de escribir
+        debounceTime(200), // Espera 200ms después de que el usuario deja de escribir
         distinctUntilChanged(), // Solo busca si el texto cambió
         switchMap((valor) => this.trabajadorService.getTrabajadores(valor || '')),
       )
@@ -134,35 +140,6 @@ export class InspeccionRegistroComponent {
         this.itemsEvaluados.update((items) => [...items, itemSeguro]);
       }
     });
-    // dialogRef.afterClosed().subscribe((result: ItemRegistroDto) => {
-    //   if (result) {
-    //     // 2. Insertamos el objeto tal cual viene del modal
-    //     // Como el modal ya devuelve un ItemRegistroDto, solo lo agregamos
-    //     this.itemsEvaluados.update((items) => [...items, result]);
-
-    //     console.log('Lista de ítems actualizada:', this.itemsEvaluados());
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result) {
-    //     const nuevoItemEvaluado = {
-    //       idItem: result.idItem || result.itemInfo?.idItem, // Ajuste según lo que devuelva tu modal
-    //       // idDescripcionBiomecanica: result.idDescripcionBiomecanica || result.itemInfo?.idDescripcionBiomecanica,
-    //       // idDescripcionBiomecanicaNavigation: this.biomecanicaGeneralForm.value,
-
-    //       // Mapeamos los datos para que la tabla los encuentre fácilmente
-    //       idItemNavigation: result,
-
-    //       // AGREGAMOS ESTAS LÍNEAS PARA LA TABLA:
-    //       nombre: result.nombre || result.itemInfo?.nombre,
-    //       material: result.material || result.itemInfo?.material,
-    //       hallazgos: result.hallazgos || [],
-    //       fotos: result.fotos || [],
-    //     };
-
-    //     this.itemsEvaluados.update((items) => [...items, nuevoItemEvaluado]);
-    //   }
-    // });
   }
 
   // Helper para el color del slider EVA
@@ -244,22 +221,21 @@ export class InspeccionRegistroComponent {
   }
 
   guardarInspeccion(inspeccionFinal: RegistroInspeccion) {
-    // const inspeccionFinal: RegistroInspeccion = {
-    //   estado: this.datosBasicosForm.value.estado!,
-    //   idTrabajador: this.datosBasicosForm.value.idTrabajador!,
-    //   idSintomatologiaNavigation: this.sintomatologiaForm.value as any,
-    //   itemsEvaluados: this.itemsEvaluados(),
-    // };
+    this.isLoading.set(true);
     console.log('inicio de guardar inspeccion: ----> ', inspeccionFinal);
     this.inspeccionService.guardarInspeccionCompleta(inspeccionFinal).subscribe({
       next: (resp) => {
         console.log('Inspección guardada correctamente');
         console.log('respuesta', resp);
-        // Aquí puedes redirigir o mostrar un mensaje de éxito
+        const mensajeExito = resp.mensaje || 'Operación exitosa';
+        this.notificacion.show('success', 'Completado', mensajeExito);
+        this.isLoading.set(false);
       },
       error: (err) => {
         console.error('Error al guardar la inspección', err);
         // Aquí puedes mostrar un mensaje de error
+        this.isLoading.set(false);
+        this.notificacion.show('error', 'Error', err.error?.mensaje || 'Error al procesar');
       },
     });
   }

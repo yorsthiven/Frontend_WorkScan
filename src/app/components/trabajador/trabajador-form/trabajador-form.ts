@@ -13,7 +13,6 @@ import { capitalizarFrase } from '../../../shared/formatear';
   selector: 'app-trabajador-form',
   imports: [MaterialModules, FormsModules, InputGenericoComponent, SpinnerGenericoComponent],
   templateUrl: './trabajador-form.html',
-  styleUrl: './trabajador-form.css',
 })
 export class TrabajadorForm {
   private trabajadorService = inject(TrabajadorService);
@@ -111,23 +110,6 @@ export class TrabajadorForm {
         },
       });
 
-      // // Llamamos al servicio aquí mismo
-      // this.trabajadorService.crearTrabajador(trabajadorDto).subscribe({
-      //   next: (res) => {
-      //     // Si el backend responde OK (ej: 201 Created)
-      //     this.notificacion.show('success', 'Éxito', res.mensaje);
-      //     this.isLoading.set(false);
-      //     this.dialogRef.close(res); // Cerramos el modal y enviamos el nuevo trabajador de vuelta
-      //   },
-      //   error: (err) => {
-      //     this.isLoading.set(false);
-      //     const mensajeError = err.error?.mensaje || 'Error inesperado en el servidor';
-      //     // Si hay error, el modal se queda abierto y puedes mostrar un mensaje
-      //     // MENSAJE ROJO (Error)
-      //     this.notificacion.show('error', 'Error en Registro', mensajeError);
-      //     // alert('Hubo un error al guardar el trabajador. Revisa los datos.');
-      //   },
-      // });
     }
   }
 
@@ -187,7 +169,7 @@ export class TrabajadorForm {
           idCargo: cargoEncontrado?.id,
           idJornada: jornadaEncontrada?.id,
         });
-      }, 100); // 100ms suelen bastar para que la señal se actualice
+      }, 100);
 
       // 1. Llenamos el formulario con los datos existentes
       // this.form.patchValue(this.modalData.trabajador);

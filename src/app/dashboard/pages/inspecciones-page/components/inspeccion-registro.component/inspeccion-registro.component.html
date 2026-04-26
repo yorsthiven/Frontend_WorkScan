@@ -262,16 +262,6 @@
             </ng-template>
           </app-tabla-maestra>
 
-          <!-- <div class="flex justify-between mt-12 pt-6 border-t border-slate-100">
-            <button mat-button matStepperPrevious class="!rounded-xl">Atrás</button>
-
-            <button mat-flat-button color="success" [disabled]="itemsEvaluados().length === 0"
-              (click)="finalizarInspeccion()"
-              class="!rounded-xl !px-12 !bg-green-600 !text-white shadow-lg shadow-green-200">
-              <mat-icon class="mr-2">check_circle</mat-icon>
-              Guardar Inspección Completa
-            </button>
-          </div> -->
           <div class="flex justify-between mt-6">
             <button mat-button matStepperPrevious type="button" class="!rounded-xl"
               (click)="irAlPasoAtras()">Atrás</button>
@@ -285,3 +275,7 @@
     </mat-stepper>
   </div>
 </div>
+
+@if (isLoading()) {
+  <app-spinner-generico></app-spinner-generico>
+}

@@ -6,12 +6,6 @@
     <app-side-menu class="h-full flex flex-col"></app-side-menu>
   </aside>
 
-  <!-- <div
-    *ngIf="menuOpen"
-    (click)="menuOpen = false"
-    class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden">
-  </div> -->
-
   @if (menuOpen) {
   <div (click)="menuOpen = false" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden transition-opacity">
   </div>

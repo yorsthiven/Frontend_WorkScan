@@ -61,50 +61,6 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-full">
 
-        <!--
-        <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-slate-700 ml-1">Cargo</label>
-          <mat-form-field appearance="outline" class="custom-select">
-            <mat-select [formControl]="getControl('idCargo')" placeholder="Selecciona cargo">
-              @for (cargo of cargos(); track cargo.id) {
-              <mat-option [value]="cargo.id">{{ cargo.nombre }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-        -->
-
-
-        <!-- <div class="flex flex-col gap-2">
-          <label class="text-[10px] font-black uppercase tracking-widest text-blue-600/50 ml-1">Cargo</label>
-          <div class="relative group">
-            <select formControlName="idCargo"
-              class="w-full h-[56px] px-5 bg-slate-50 border border-slate-100 rounded-[1.2rem] text-sm font-semibold text-slate-700 outline-none transition-all duration-300 appearance-none cursor-pointer focus:bg-white focus:ring-4 focus:ring-blue-600/5 focus:border-blue-500/50">
-              <option [ngValue]="null" disabled>Selecciona el cargo...</option>
-              @for (cargo of cargos(); track cargo.id) {
-              <option [ngValue]="cargo.id">{{ cargo.nombre }}</option>
-              }
-            </select>
-
-            <div
-              class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-              <mat-icon class="text-xl">expand_more</mat-icon>
-            </div>
-          </div>
-        </div> -->
-
-        <!--  se comentarea porque al editar no me traia los selectes llenos- toco crear rapido una nueva propiedad que majera numero porque esta maneja es string -->
-        <!-- <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-slate-700 ml-1">Cargo</label>
-          <mat-form-field appearance="outline" class="custom-select">
-            <mat-select [formControl]="getControl('idCargo')" placeholder="Selecciona cargo">
-              @for (cargo of cargos(); track cargo.id) {
-                <mat-option [value]="cargo.id">{{ cargo.nombre }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div> -->
-
         <div class="flex flex-col gap-1.5">
           <label class="text-sm font-bold text-slate-700 ml-1">Cargo</label>
           <mat-form-field appearance="outline" class="custom-select">
@@ -116,17 +72,6 @@
           </mat-form-field>
         </div>
 
-        <!--  se comentarea porque al editar no me traia los selectes llenos- toco crear rapido una nueva propiedad que majera numero porque esta maneja es string -->
-        <!-- <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-slate-700 ml-1">Jornada</label>
-          <mat-form-field appearance="outline" class="custom-select">
-            <mat-select [formControl]="getControl('idJornada')" placeholder="Selecciona jornada">
-              @for (j of jornadas(); track j.id) {
-              <mat-option [value]="j.id">{{ j.nombre }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div> -->
 
         <div class="flex flex-col gap-1.5">
           <label class="text-sm font-bold text-slate-700 ml-1">Jornada</label>
@@ -139,18 +84,6 @@
           </mat-form-field>
         </div>
 
-        <!--
-        <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-bold text-slate-700 ml-1">Rol de Usuario</label>
-          <mat-form-field appearance="outline" class="custom-select">
-            <mat-select [formControl]="getControl('idRol')" placeholder="Selecciona rol">
-              @for (rol of roles(); track rol.id) {
-              <mat-option [value]="rol.id">{{ rol.nombre }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div> -->
-
       </div>
 
     </form>
@@ -161,10 +94,7 @@
     <button (click)="cerrar()" class="px-8 py-4 font-bold text-slate-400 hover:text-slate-600 transition-all">
       Cancelar
     </button>
-    <!-- <button (click)="guardar()" [disabled]="form.invalid"
-      class="px-10 py-4 bg-blue-600 disabled:bg-slate-200 text-white rounded-[1.8rem] font-black shadow-xl shadow-blue-500/20 active:scale-95 transition-all">
-      Guardar Registro
-    </button> -->
+
     <button (click)="guardar()" [disabled]="form.invalid || isLoading()"
       class="px-10 py-4 bg-blue-600 disabled:bg-slate-200 text-white rounded-[1.8rem] font-black shadow-xl shadow-blue-500/20 active:scale-95 transition-all">
 

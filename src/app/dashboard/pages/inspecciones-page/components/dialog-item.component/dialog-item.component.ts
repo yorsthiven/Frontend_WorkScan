@@ -117,19 +117,6 @@ export class DialogItemComponent {
     }
   }
 
-  // guardar() {
-  //   if (this.modoCreacion() || this.itemForm.get('idItemMaestro')?.value) {
-  //     const resultado = {
-  //       itemInfo: this.itemForm.value,
-  //       hallazgos: this.hallazgos(),
-  //       recomendaciones: this.recomendaciones(),
-  //       fotos: this.fotos(),
-  //       esNuevo: this.modoCreacion(),
-  //     };
-  //     this._dialogRef.close(resultado);
-  //   }
-  // }
-
   guardar() {
     const idSeleccionado = this.itemForm.get('idItem')?.value;
 
