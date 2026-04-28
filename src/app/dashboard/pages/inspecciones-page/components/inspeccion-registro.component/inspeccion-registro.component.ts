@@ -1,11 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, signal, ViewChild } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, effect, inject, signal, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   ItemRegistroDto,
   RegistroInspeccion,
@@ -15,12 +9,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogItemComponent } from '../dialog-item.component/dialog-item.component';
 import { MatStepper } from '@angular/material/stepper';
 import { TrabajadorService } from '../../../../../services/trabajador/trabajador.service';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, merge, switchMap } from 'rxjs';
 import { Trabajador } from '../../../../../models/trabajador.model';
 import { TablaMaestraComponent } from '../../../../../components/maestros/tabla-maestra.component/tabla-maestra.component';
 import { InspeccionService } from '../../../../../services/inspeccion/inspeccion.service';
 import { SpinnerGenericoComponent } from '../../../../../components/shared/genericos/spinner-generico.component/spinner-generico.component';
 import { NotificacionService } from '../../../../../services/notificacion/notificacion.service';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-inspeccion-registro',
@@ -47,19 +43,52 @@ export class InspeccionRegistroComponent {
   inspeccionService = inject(InspeccionService);
   filtroTrabajador = new FormControl('');
   trabajadorSeleccionado = signal<Trabajador | null>(null);
+  // En el padre (Configuración de Inspecciones)
+  colsItems = signal([
+    { key: 'nombre', label: 'Nombre' },
+    { key: 'hallazgos', label: 'Hallazgos', cssClass: '!text-center font-bold' },
+    { key: 'fotos', label: 'Fotos' },
+    { key: 'recomendaciones', label: 'Recomendaciones', cssClass: 'font-bold' },
+  ]);
+
+  // Dentro de tu componente
+  constructor(private router: Router) {
+    // El effect detecta cambios en señales automáticamente
+    effect(() => {
+      // Agregamos un chequeo manual para que no falle al cargar la página
+      if (this.itemsEvaluados().length > 0) {
+        this.guardarProgresoLocal();
+      }
+    });
+  }
 
   ngOnInit() {
+    // 1. Carga inicial y lógica de búsqueda (Trabajadores)
     this.cargarTrabajadores('');
-    // 2. Lógica de búsqueda reactiva
     this.filtroTrabajador.valueChanges
       .pipe(
-        debounceTime(200), // Espera 200ms después de que el usuario deja de escribir
-        distinctUntilChanged(), // Solo busca si el texto cambió
+        debounceTime(200),
+        distinctUntilChanged(),
         switchMap((valor) => this.trabajadorService.getTrabajadores(valor || '')),
       )
       .subscribe((data) => {
         this.listaTrabajadores.set(data);
       });
+
+    // 2. ACTIVAR EL AUTOGUARDADO
+    // Lo ponemos ANTES de verificar el borrador para que empiece a escuchar
+    merge(
+      this.datosBasicosForm.valueChanges,
+      this.sintomatologiaForm.valueChanges,
+      this.biomecanicaGeneralForm.valueChanges,
+    )
+      .pipe(debounceTime(800), distinctUntilChanged())
+      .subscribe(() => {
+        this.guardarProgresoLocal();
+      });
+
+    // 3. LA PREGUNTA MÁGICA (Solo una vez)
+    this.verificarBorrador();
   }
 
   // tiposDolores = signal<{ id: number; nombre: string;}[]>([]);
@@ -225,8 +254,13 @@ export class InspeccionRegistroComponent {
     console.log('inicio de guardar inspeccion: ----> ', inspeccionFinal);
     this.inspeccionService.guardarInspeccionCompleta(inspeccionFinal).subscribe({
       next: (resp) => {
-        console.log('Inspección guardada correctamente');
-        console.log('respuesta', resp);
+        // 1. ELIMINAR EL BORRADOR (Súper importante para que no aparezca en la siguiente)
+        localStorage.removeItem('workscan_borrador');
+
+        // 2. REDIRIGIR A LA LISTA
+        this.router.navigate(['/dashboard/inspecciones']);
+
+        console.log('Inspección guardada correctamente', resp);
         const mensajeExito = resp.mensaje || 'Operación exitosa';
         this.notificacion.show('success', 'Completado', mensajeExito);
         this.isLoading.set(false);
@@ -240,11 +274,63 @@ export class InspeccionRegistroComponent {
     });
   }
 
-  // En el padre (Configuración de Inspecciones)
-  colsItems = signal([
-    { key: 'nombre', label: 'Nombre' },
-    { key: 'hallazgos', label: 'Hallazgos', cssClass: '!text-center font-bold' },
-    { key: 'fotos', label: 'Fotos' },
-    { key: 'recomendaciones', label: 'Recomendaciones', cssClass: 'font-bold' },
-  ]);
+  private aplicarBorrador(borrador: any) {
+    if (!borrador) return;
+
+    // 1. Rellenamos los 3 formularios con seguridad
+    if (borrador.base) this.datosBasicosForm.patchValue(borrador.base);
+    if (borrador.sintomatologia) this.sintomatologiaForm.patchValue(borrador.sintomatologia);
+    if (borrador.descripcionBiomecanica) this.biomecanicaGeneralForm.patchValue(borrador.descripcionBiomecanica);
+
+    // 2. Seteamos la señal de ítems
+    this.itemsEvaluados.set(borrador.items || []);
+
+    // 3. Movemos el stepper al paso guardado
+    if (borrador.pasoActual !== undefined) {
+      setTimeout(() => {
+        if (this.stepper) {
+          this.stepper.selectedIndex = borrador.pasoActual;
+        }
+      }, 200); // Pequeño delay para que el DOM del stepper esté listo
+    }
+  }
+
+  private guardarProgresoLocal() {
+    if (!this.stepper) return;
+    // El ? evita que el código "explote" si el stepper aún no existe
+    const pasoActual = this.stepper?.selectedIndex || 0;
+
+    const borrador = {
+      base: this.datosBasicosForm.value,
+      sintomatologia: this.sintomatologiaForm.value,
+      descripcionBiomecanica: this.biomecanicaGeneralForm.value,
+      items: this.itemsEvaluados(),
+      pasoActual: pasoActual,
+    };
+    localStorage.setItem('workscan_borrador', JSON.stringify(borrador));
+  }
+
+  private verificarBorrador() {
+    const borradorGuardado = localStorage.getItem('workscan_borrador');
+    if (!borradorGuardado) return;
+
+    Swal.fire({
+      title: '¿Deseas retomar la inspección?',
+      text: 'Parece que dejaste una inspección a medias. ¿Quieres continuar donde quedaste?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, continuar',
+      cancelButtonText: 'No, empezar de cero',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.aplicarBorrador(JSON.parse(borradorGuardado));
+      } else {
+        localStorage.removeItem('workscan_borrador');
+        // Opcional: resetear formularios si es necesario
+      }
+    });
+  }
 }

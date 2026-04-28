@@ -6,8 +6,7 @@
       <p class="text-slate-500">Completa los pasos para registrar la evaluación biomecánica.</p>
     </header>
 
-    <mat-stepper linear #stepper class="rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
-      [selectedIndex]="0">
+    <mat-stepper linear #stepper class="rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
 
       <mat-step [stepControl]="datosBasicosForm">
         <form [formGroup]="datosBasicosForm" class="p-8">
@@ -277,5 +276,5 @@
 </div>
 
 @if (isLoading()) {
-  <app-spinner-generico></app-spinner-generico>
+<app-spinner-generico></app-spinner-generico>
 }
