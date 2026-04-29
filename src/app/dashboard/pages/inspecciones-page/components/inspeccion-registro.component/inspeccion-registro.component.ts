@@ -7,7 +7,7 @@ import {
 import { MaterialModules } from '../../../../../shared/material.providers';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogItemComponent } from '../dialog-item.component/dialog-item.component';
-import { MatStepper } from '@angular/material/stepper';
+import { MatStepper, MatStepLabel } from '@angular/material/stepper';
 import { TrabajadorService } from '../../../../../services/trabajador/trabajador.service';
 import { debounceTime, distinctUntilChanged, merge, switchMap } from 'rxjs';
 import { Trabajador } from '../../../../../models/trabajador.model';
@@ -20,22 +20,19 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-inspeccion-registro',
-  imports: [MaterialModules, ReactiveFormsModule, TablaMaestraComponent, SpinnerGenericoComponent],
+  imports: [
+    MaterialModules,
+    ReactiveFormsModule,
+    TablaMaestraComponent,
+    SpinnerGenericoComponent,
+    MatStepLabel,
+  ],
   templateUrl: './inspeccion-registro.component.html',
 })
 export class InspeccionRegistroComponent {
   private _fb = inject(FormBuilder);
   private _dialog = inject(MatDialog);
-  listaTrabajadores = signal<
-    {
-      id: number;
-      cedula: string;
-      nombres: string;
-      apellidos: string;
-      email: string;
-      numeroContacto: string;
-    }[]
-  >([]);
+  listaTrabajadores = signal<{id: number;cedula: string;nombres: string;apellidos: string;email: string;numeroContacto: string;}[]>([]);
 
   isLoading = signal(false);
   private notificacion = inject(NotificacionService);
@@ -132,7 +129,7 @@ export class InspeccionRegistroComponent {
   // Lista de items evaluados que se irá llenando
   itemsEvaluados = signal<ItemRegistroDto[]>([]);
 
-  finalizarInspeccion() {
+  finalizarInspeccion2() {
     const inspeccionFinal: RegistroInspeccion = {
       estado: this.datosBasicosForm.value.estado!,
       idTrabajador: this.datosBasicosForm.value.idTrabajador!,
@@ -143,7 +140,86 @@ export class InspeccionRegistroComponent {
 
     console.log('Enviando a la API:', inspeccionFinal);
     // Aquí llamarías a tu servicio POST
-    this.guardarInspeccion(inspeccionFinal);
+    // this.guardarInspeccion(inspeccionFinal);
+  }
+
+  finalizarInspeccion() {
+    this.isLoading.set(true);
+    const formData = new FormData();
+
+    // 1. Datos Básicos
+    const basico = this.datosBasicosForm.value;
+    formData.append('IdTrabajador', basico.idTrabajador!.toString());
+    formData.append('Estado', basico.estado!.toString());
+
+    // 2. Sintomatología (Mapeo manual según tu DTO de C#)
+    const sintoma = this.sintomatologiaForm.value;
+    formData.append('IdSintomatologiaNavigation.Diagnostico', sintoma.diagnostico || '');
+    formData.append('IdSintomatologiaNavigation.Antecedentes', sintoma.antecedentes || '');
+    formData.append('IdSintomatologiaNavigation.Dolor', sintoma.dolor?.toString() || 'false');
+    formData.append('IdSintomatologiaNavigation.TipoDolor', sintoma.tipoDolor?.toString() || '0');
+    formData.append(
+      'IdSintomatologiaNavigation.CalificacionEva',
+      sintoma.calificacionEva?.toString() || '0',
+    );
+    // ... repite con Hormigueo, Entumecimiento, etc.
+
+    // 3. Descripción Biomecánica General
+    const biomec = this.biomecanicaGeneralForm.value;
+    formData.append('DescripcionBiomecanica.Funciones', biomec.funciones || '');
+    formData.append('DescripcionBiomecanica.Postura', biomec.postura || '');
+    formData.append('DescripcionBiomecanica.Movimientos', biomec.movimientos || '');
+    formData.append('DescripcionBiomecanica.Cargas', biomec.cargas || '');
+
+    // 4. ÍTEMS EVALUADOS (Aquí está la magia)
+    // this.itemsEvaluados().forEach((item, index) => {
+    this.itemsEvaluados().forEach((item: ItemRegistroDto, index: number) => {
+      formData.append(`Items[${index}].IdItem`, item.idItem.toString());
+      formData.append(`Items[${index}].Nombre`, item.nombre.toString());
+      formData.append(`Items[${index}].Material`, item.material || '');
+      formData.append(`Items[${index}].Alto`, item.alto?.toString() || '0');
+      formData.append(`Items[${index}].Ancho`, item.ancho?.toString() || '0');
+      formData.append(`Items[${index}].Largo`, item.largo?.toString() || '0');
+
+      // Hallazgos y Recomendaciones (Listas de strings)
+      item.hallazgos.forEach((h, hIdx) => {
+        formData.append(`Items[${index}].Hallazgos[${hIdx}]`, h);
+      });
+      item.recomendaciones.forEach((r, rIdx) => {
+        formData.append(`Items[${index}].Recomendaciones[${rIdx}]`, r);
+      });
+
+      console.log(item);
+      // FOTOS (Los archivos File[] que vienen del modal)
+      console.log(formData);
+      // FOTOS
+      if (item.fotos && item.fotos.length > 0) {
+        item.fotos.forEach((fotoFile: File) => {
+          formData.append(`Items[${index}].Fotos`, fotoFile, fotoFile.name);
+        });
+      }
+    });
+
+    // 5. Envío al Service
+    this.inspeccionService.crearInspeccion(formData).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        //  1. ELIMINAR EL BORRADOR (Súper importante para que no aparezca en la siguiente)
+        localStorage.removeItem('workscan_borrador');
+        Swal.fire('¡Guardado!', 'La inspección se registró con éxito', 'success');
+        this.router.navigate(['/dashboard/inspecciones']);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        console.error('erroorrr', err);
+        Swal.fire({
+          title: 'Error',
+          text: `${err.error?.mensaje || ''}`,
+          icon: 'error',
+        });
+
+      },
+    });
   }
 
   abrirModalAgregarItem() {
@@ -165,7 +241,7 @@ export class InspeccionRegistroComponent {
           fotos: result.fotos || [],
           recomendaciones: result.recomendaciones || [],
         };
-
+        console.log(itemSeguro);
         this.itemsEvaluados.update((items) => [...items, itemSeguro]);
       }
     });
@@ -249,38 +325,14 @@ export class InspeccionRegistroComponent {
     this.itemsEvaluados.update((prev) => prev.filter((i) => i !== itemAEliminar));
   }
 
-  guardarInspeccion(inspeccionFinal: RegistroInspeccion) {
-    this.isLoading.set(true);
-    console.log('inicio de guardar inspeccion: ----> ', inspeccionFinal);
-    this.inspeccionService.guardarInspeccionCompleta(inspeccionFinal).subscribe({
-      next: (resp) => {
-        // 1. ELIMINAR EL BORRADOR (Súper importante para que no aparezca en la siguiente)
-        localStorage.removeItem('workscan_borrador');
-
-        // 2. REDIRIGIR A LA LISTA
-        this.router.navigate(['/dashboard/inspecciones']);
-
-        console.log('Inspección guardada correctamente', resp);
-        const mensajeExito = resp.mensaje || 'Operación exitosa';
-        this.notificacion.show('success', 'Completado', mensajeExito);
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        console.error('Error al guardar la inspección', err);
-        // Aquí puedes mostrar un mensaje de error
-        this.isLoading.set(false);
-        this.notificacion.show('error', 'Error', err.error?.mensaje || 'Error al procesar');
-      },
-    });
-  }
-
   private aplicarBorrador(borrador: any) {
     if (!borrador) return;
 
     // 1. Rellenamos los 3 formularios con seguridad
     if (borrador.base) this.datosBasicosForm.patchValue(borrador.base);
     if (borrador.sintomatologia) this.sintomatologiaForm.patchValue(borrador.sintomatologia);
-    if (borrador.descripcionBiomecanica) this.biomecanicaGeneralForm.patchValue(borrador.descripcionBiomecanica);
+    if (borrador.descripcionBiomecanica)
+      this.biomecanicaGeneralForm.patchValue(borrador.descripcionBiomecanica);
 
     // 2. Seteamos la señal de ítems
     this.itemsEvaluados.set(borrador.items || []);

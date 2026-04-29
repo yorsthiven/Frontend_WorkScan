@@ -21,13 +21,14 @@ export interface DescripcionBiomecanicaCreateDto {
 }
 
 export interface ItemRegistroDto {
+  idItem: number;
   nombre: number;
   material: string;
   alto: number;
   ancho: number;
   largo: number;
   pulgada: number;
-  fotos: string[]; // ruta de la carpeta donde estan las fotos
+  fotos: File[]; // ruta de la carpeta donde estan las fotos
   hallazgos: string[];
   recomendaciones: string[];
 }

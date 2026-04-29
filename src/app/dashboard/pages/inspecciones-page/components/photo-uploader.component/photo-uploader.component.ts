@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+  output,
+  signal,
+} from '@angular/core';
 import { MaterialModules } from '../../../../../shared/material.providers';
 
 @Component({
@@ -8,34 +15,37 @@ import { MaterialModules } from '../../../../../shared/material.providers';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoUploaderComponent {
-  // Emitimos el array de Base64 al padre
-  onChanged = output<string[]>();
-
-  fotos = signal<string[]>([]);
+  onChanged = output<File[]>();
+  fotosBase64 = signal<string[]>([]);
+  archivosReales = signal<File[]>([]);
 
   onFileSelected(event: any) {
     const files: FileList = event.target.files;
     if (!files) return;
 
-    Array.from(files).forEach((file) => {
-      // Validar que sea imagen
-      if (!file.type.startsWith('image/')) return;
+    const nuevosArchivos = Array.from(files).filter((f) => f.type.startsWith('image/'));
 
+    nuevosArchivos.forEach((file) => {
+      // 1. Guardamos el binario para el backend
+      this.archivosReales.update((prev) => [...prev, file]);
+
+      // 2. Generamos el base64 para la vista
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        const base64 = e.target.result;
-        this.fotos.update((prev) => [...prev, base64]);
-        this.onChanged.emit(this.fotos());
+        this.fotosBase64.update((prev) => [...prev, e.target.result]);
       };
       reader.readAsDataURL(file);
     });
 
-    // Limpiar el input para permitir subir la misma foto si se borró
+    // 3. Emitimos los BINARIOS al padre (Dialog)
+    this.onChanged.emit(this.archivosReales());
     event.target.value = '';
   }
 
   eliminarFoto(index: number) {
-    this.fotos.update((prev) => prev.filter((_, i) => i !== index));
-    this.onChanged.emit(this.fotos());
+    this.fotosBase64.update((prev) => prev.filter((_, i) => i !== index));
+    this.archivosReales.update((prev) => prev.filter((_, i) => i !== index));
+    this.onChanged.emit(this.archivosReales());
   }
+
 }

@@ -20,9 +20,9 @@
     </div>
   </div>
 
-  @if (fotos().length > 0) {
+  @if (fotosBase64().length > 0) {
   <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 p-2">
-    @for (foto of fotos(); track $index) {
+    @for (foto of fotosBase64(); track $index) {
     <div class="relative aspect-square group animate-in zoom-in duration-200">
       <img [src]="foto"
         class="w-full h-full object-cover rounded-2xl border-2 border-white shadow-md group-hover:brightness-75 transition-all">
