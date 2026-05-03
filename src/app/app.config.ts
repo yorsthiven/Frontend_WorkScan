@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { appIcons } from './shared/icons.provider';
 import { authInterceptor } from './shared/auth.interceptor';
+import { ngrokInterceptor } from './core/interceptors/ngrok-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,10 +14,10 @@ export const appConfig: ApplicationConfig = {
       routes,
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled', // Restaura el scroll al navegar
-        anchorScrolling: 'enabled'            // ¡ESTO habilita el #id!
-      })
+        anchorScrolling: 'enabled', // ¡ESTO habilita el #id!
+      }),
     ),
-    provideHttpClient(withInterceptors([authInterceptor])),
-    appIcons
-  ]
+    provideHttpClient(withInterceptors([authInterceptor, ngrokInterceptor])),
+    appIcons,
+  ],
 };

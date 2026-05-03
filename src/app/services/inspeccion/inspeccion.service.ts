@@ -1,33 +1,32 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import {
-  RespuestaGetInspecciones,
-  RespuestaPostInspeccion,
-} from '../../models/Respuestas/responses.model';
+import {  RespuestaGetInspecciones,  RespuestaPostInspeccion,} from '../../models/Respuestas/responses.model';
 import { Observable } from 'rxjs';
-import { RegistroInspeccion } from '../../models/registroInspeccion.model';
+import { environment } from '../../../enviroments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InspeccionService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://localhost:7064/api/Inspeccion';
+  // private apiUrl = 'https://localhost:7064/api/Inspeccion';
+  private apiUrl = `${environment.apiUrl}/Inspeccion`;
 
   getInspeccion(filtro: string): Observable<RespuestaGetInspecciones> {
     const params = new HttpParams().set('buscar', filtro);
     return this.http.get<RespuestaGetInspecciones>(this.apiUrl, { params });
   }
 
-  guardarInspeccionCompleta(inspeccionCreateDto: RegistroInspeccion,): Observable<RespuestaPostInspeccion> {
-    console.log('llega al service', inspeccionCreateDto);
-    // return this.http.post<RespuestaPostInspeccion>(this.apiUrl, inspeccionCreateDto);
-    return this.http.post<RespuestaPostInspeccion>(`${this.apiUrl}`, inspeccionCreateDto);
-  }
+  // guardarInspeccionCompleta(inspeccionCreateDto: RegistroInspeccion,): Observable<RespuestaPostInspeccion> {
+  //   console.log('llega al service', inspeccionCreateDto);
+  //   // return this.http.post<RespuestaPostInspeccion>(this.apiUrl, inspeccionCreateDto);
+  //   return this.http.post<RespuestaPostInspeccion>(`${this.apiUrl}`, inspeccionCreateDto);
+  // }
 
   // En inspeccion.service.ts
   crearInspeccion(formData: FormData): Observable<RespuestaPostInspeccion> {
-    console.log('llega al service', formData);
+    // console.log('llega al service', formData);
+    // console.log('APIURL -->', this.apiUrl);
     // NO agregues 'Content-Type': 'application/json' aquí
     // porque el navegador debe poner 'multipart/form-data' automáticamente
     return this.http.post<RespuestaPostInspeccion>(`${this.apiUrl}`, formData);

@@ -1,4 +1,4 @@
-import { environment } from './../../../../../enviroment';
+import { environment } from '../../../../enviroments/environment';
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { MaterialModules } from '../../../shared/material.providers';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';

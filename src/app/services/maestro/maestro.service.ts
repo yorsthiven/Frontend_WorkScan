@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../enviroments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MaestroService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://localhost:7064/api';
+  // private apiUrl = 'https://localhost:7064/api';
+  private apiUrl = `${environment.apiUrl}`;
 
   // Método genérico para obtener datos
   getMaestro(endpoint: string): Observable<any[]> {

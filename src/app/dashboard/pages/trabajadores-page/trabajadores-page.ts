@@ -9,6 +9,7 @@ import { SpinnerGenericoComponent } from '../../../components/shared/genericos/s
 import { TrabajadorService } from '../../../services/trabajador/trabajador.service';
 import { Trabajador } from '../../../models/trabajador.model';
 import { TrabajadorForm } from '../../../components/trabajador/trabajador-form/trabajador-form';
+import { EnConstruccion } from "../../../components/en-construccion/en-construccion";
 
 interface ItemSelect {
   id: number;
@@ -24,11 +25,14 @@ interface ItemSelect {
     ListaGenericaComponent,
     SearchGenericoComponent,
     SpinnerGenericoComponent,
-  ],
+    EnConstruccion
+],
   templateUrl: './trabajadores-page.html',
 })
 export class TrabajadoresPage {
   private trabajadorService = inject(TrabajadorService);
+
+  moduloNoListo = false;
 
   isLoading = signal(false);
   trabajadores = signal<Trabajador[]>([]);

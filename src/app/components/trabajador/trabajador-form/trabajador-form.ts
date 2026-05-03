@@ -60,9 +60,9 @@ export class TrabajadorForm {
       numeroContacto: new FormControl('', [Validators.required]),
       // IDs (Más adelante los cambiaremos por Selects, por ahora números)
       idRol: new FormControl(1, [Validators.required]),
-      idJornada: new FormControl(null),
+      idJornada: new FormControl(1),
       idEmpresa: new FormControl(1, [Validators.required]),
-      idCargo: new FormControl(null),
+      idCargo: new FormControl(1),
       numeroCargo: new FormControl(null, [Validators.required]),
       numeroJornada: new FormControl(null, [Validators.required]),
     });

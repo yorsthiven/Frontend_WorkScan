@@ -1,14 +1,17 @@
 import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { NgIconComponent } from '@ng-icons/core';
+import { MaterialModules } from '../../../shared/material.providers';
+import { EnConstruccion } from "../../../components/en-construccion/en-construccion";
 
 @Component({
   selector: 'app-home-page',
-  imports: [NgIconComponent, DatePipe],
+  imports: [NgIconComponent, DatePipe, MaterialModules, EnConstruccion],
   templateUrl: './home-page.html',
 })
 export class HomePage {
 
+  moduloNoListo = true;
   ultimasInspecciones = [
     {
       id: 1,

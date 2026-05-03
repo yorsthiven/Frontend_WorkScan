@@ -32,7 +32,16 @@ import Swal from 'sweetalert2';
 export class InspeccionRegistroComponent {
   private _fb = inject(FormBuilder);
   private _dialog = inject(MatDialog);
-  listaTrabajadores = signal<{id: number;cedula: string;nombres: string;apellidos: string;email: string;numeroContacto: string;}[]>([]);
+  listaTrabajadores = signal<
+    {
+      id: number;
+      cedula: string;
+      nombres: string;
+      apellidos: string;
+      email: string;
+      numeroContacto: string;
+    }[]
+  >([]);
 
   isLoading = signal(false);
   private notificacion = inject(NotificacionService);
@@ -138,7 +147,7 @@ export class InspeccionRegistroComponent {
       descripcionBiomecanica: this.biomecanicaGeneralForm.value as any,
     };
 
-    console.log('Enviando a la API:', inspeccionFinal);
+    // console.log('Enviando a la API:', inspeccionFinal);
     // Aquí llamarías a tu servicio POST
     // this.guardarInspeccion(inspeccionFinal);
   }
@@ -189,17 +198,30 @@ export class InspeccionRegistroComponent {
         formData.append(`Items[${index}].Recomendaciones[${rIdx}]`, r);
       });
 
-      console.log(item);
+      // console.log(item);
       // FOTOS (Los archivos File[] que vienen del modal)
-      console.log(formData);
       // FOTOS
+      // console.log('FormData:', formData);
+
+      // if (item.fotos && item.fotos.length > 0) {
+      //   item.fotos.forEach((fotoFile: File) => {
+      //     formData.append(`Items[${index}].Fotos`, fotoFile, fotoFile.name);
+      //   });
+      // }
+      // FOTOS (Solo si existen y son archivos válidos)
       if (item.fotos && item.fotos.length > 0) {
-        item.fotos.forEach((fotoFile: File) => {
-          formData.append(`Items[${index}].Fotos`, fotoFile, fotoFile.name);
+        item.fotos.forEach((fotoFile: any) => {
+          if (fotoFile instanceof File || fotoFile instanceof Blob) {
+            // Intentamos sacar el nombre, si no existe (es un Blob), inventamos uno
+            const nombreArchivo = (fotoFile as File).name || `foto_${index}.jpg`;
+
+            formData.append(`Items[${index}].Fotos`, fotoFile, nombreArchivo);
+          }
         });
       }
     });
 
+    // console.log('linea antes de ir al service:', formData);
     // 5. Envío al Service
     this.inspeccionService.crearInspeccion(formData).subscribe({
       next: (res) => {
@@ -211,13 +233,12 @@ export class InspeccionRegistroComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        console.error('erroorrr', err);
+        // console.error('erroorrr', err);
         Swal.fire({
           title: 'Error',
           text: `${err.error?.mensaje || ''}`,
           icon: 'error',
         });
-
       },
     });
   }
@@ -241,7 +262,7 @@ export class InspeccionRegistroComponent {
           fotos: result.fotos || [],
           recomendaciones: result.recomendaciones || [],
         };
-        console.log(itemSeguro);
+        // console.log(itemSeguro);
         this.itemsEvaluados.update((items) => [...items, itemSeguro]);
       }
     });

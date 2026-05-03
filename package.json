@@ -35,7 +35,6 @@
     "@ng-icons/core": "^33.2.0",
     "@ng-icons/heroicons": "^33.2.0",
     "@ng-icons/ionicons": "^33.2.1",
-    "@tailwindcss/postcss": "^4.2.2",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.26.24",
     "tslib": "^2.3.0"
@@ -44,9 +43,10 @@
     "@angular/build": "^21.0.2",
     "@angular/cli": "^21.0.2",
     "@angular/compiler-cli": "^21.0.0",
+    "@tailwindcss/postcss": "^4.2.4",
     "autoprefixer": "^10.4.27",
     "jsdom": "^27.1.0",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.13",
     "tailwindcss": "^4.2.2",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
