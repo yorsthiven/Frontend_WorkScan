@@ -46,11 +46,11 @@
         @if ((itemActual()?.listaFotos?.length ?? 0) > 1) {
         <div
           class="absolute inset-0 flex items-center justify-between px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button mat-mini-fab (click)="fotoAnterior()" [disabled]="fotoIndex() === 0"
+          <button mat-mini-fab (click)="this.fotoIndex.update((i) => i - 1)" [disabled]="fotoIndex() === 0"
             class="!bg-slate-900/80 !text-white shadow-xl backdrop-blur-sm">
             <mat-icon>chevron_left</mat-icon>
           </button>
-          <button mat-mini-fab (click)="fotoSiguiente()"
+          <button mat-mini-fab (click)="this.fotoIndex.update((i) => i + 1)"
             [disabled]="fotoIndex() === (itemActual()?.listaFotos?.length ?? 0) - 1"
             class="!bg-slate-900/80 !text-white shadow-xl backdrop-blur-sm">
             <mat-icon>chevron_right</mat-icon>

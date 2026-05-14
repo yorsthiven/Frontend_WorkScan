@@ -38,19 +38,13 @@ export class ItemsComponent {
 
   // 2. Agregamos este efecto para limpiar el carrusel de fotos
   constructor() {
-    console.log("entra al constructor");
-    console.log(this.fotoIndex());
-
     this.fotoIndex.set(0);
-
+    // Efecto adicional para monitorear cambios en la lista de ítems (cambio de inspección)
     effect(() => {
-      // Vigilamos el indexActivo (cambio de inspección/elemento)
-      this.indexActivo();
-
-      // Cada vez que cambie el elemento, volvemos a la primera foto
+      this.items();
+      // Cuando cambia la lista de ítems, resetear ambos índices
+      this.indexActivo.set(0);
       this.fotoIndex.set(0);
-
-      console.log('Cambiando de elemento: Reset de fotoIndex a 0');
     });
   }
   // 3. Manejo de datos: Prioriza el diálogo si existe, sino usa el input
@@ -65,13 +59,11 @@ export class ItemsComponent {
   // itemActual = computed(() => this.items()[this.indexActivo()]);
   itemActual = computed(() => {
     const lista = this.items();
-    console.log(lista);
     return lista.length > 0 ? lista[this.indexActivo()] : null;
   });
 
   anterior() {
     if (this.indexActivo() > 0) {
-      console.log('anterior');
       this.fotoIndex.set(0);
       this.indexActivo.update((i) => i - 1);
     }
@@ -79,23 +71,8 @@ export class ItemsComponent {
 
   siguiente() {
     if (this.indexActivo() < this.items().length - 1) {
-      console.log('siguiente');
       this.fotoIndex.set(0);
       this.indexActivo.update((i) => i + 1);
-    }
-  }
-  // También asegúrate de que el método de cambio de foto tenga límites:
-  fotoAnterior() {
-    if (this.fotoIndex() > 0) {
-      this.fotoIndex.update((i) => i - 1);
-      // this.fotoIndex.set(fotoIndex() - 1)
-    }
-  }
-
-  fotoSiguiente() {
-    const totalFotos = this.itemActual()?.listaFotos?.length || 0;
-    if (this.fotoIndex() < totalFotos - 1) {
-      this.fotoIndex.update((i) => i + 1);
     }
   }
 
@@ -112,8 +89,6 @@ export class ItemsComponent {
 
   // Método para limpiar y armar la ruta exacta hacia los archivos de wwwroot
   getFotoUrl(fotoPath: string | undefined): string {
-    console.log(this.fotoIndex());
-    console.log("+++++++",this.itemActual()?.listaFotos[this.fotoIndex()].rutaFoto);
     if (!fotoPath) return '/no-image.jpg'; // Imagen por defecto si no hay ruta
 
     // 1. Si tu base de datos devuelve la palabra "apiuploads", la corregimos por "uploads"

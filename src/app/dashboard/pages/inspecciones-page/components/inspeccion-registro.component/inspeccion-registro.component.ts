@@ -324,6 +324,12 @@ export class InspeccionRegistroComponent {
   // -----TIPO DE DOLOR-----
   onTipoDolorChange(tipo: number) {
     // Aquí puedes manejar la lógica según el tipo de dolor seleccionado
+    if (tipo != 1) {
+      this.sintomatologiaForm.get('calificacionEva')?.enable();
+    }else{
+      this.sintomatologiaForm.get('calificacionEva')?.setValue(0);
+      this.sintomatologiaForm.get('calificacionEva')?.disable();
+    }
   }
 
   onDolorChange(checked: boolean) {
