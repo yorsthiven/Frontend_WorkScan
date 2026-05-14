@@ -25,7 +25,7 @@ interface ItemSelect {
     ListaGenericaComponent,
     SearchGenericoComponent,
     SpinnerGenericoComponent,
-    EnConstruccion
+    // EnConstruccion
 ],
   templateUrl: './trabajadores-page.html',
 })

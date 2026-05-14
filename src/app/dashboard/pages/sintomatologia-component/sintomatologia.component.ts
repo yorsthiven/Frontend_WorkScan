@@ -9,6 +9,20 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SintomatologiaComponent {
+  // 1. Diccionario privado con el catálogo oficial de tipos de dolor de WorkScan
+  private readonly CATALOGO_DOLORES: Record<number, string> = {
+    1: 'Sin dolor',
+    2: 'Agudo',
+    3: 'Crónico',
+    4: 'Nociceptivo',
+    5: 'Neuropático',
+    6: 'Inflamatorio',
+    7: 'Mecánico',
+    8: 'Referido',
+    9: 'Punzante',
+    10: 'Opresivo',
+    11: 'Constante',
+  };
   // Recibe la inspección seleccionada
   // datos = input.required<any>();
   datosInput = input.required<any>({ alias: 'datos' });
@@ -37,6 +51,14 @@ export class SintomatologiaComponent {
     return this.dialogData || this.datosInput();
   });
 
+  // 2. Nueva señal computada para traducir el ID numérico a texto legible
+  tipoDolorTexto = computed(() => {
+    const idDolor = this.datos()?.tipoDolor;
+    if (!idDolor) return 'No especificado';
+
+    // Retorna el nombre si existe en el catálogo; de lo contrario, "No especificado"
+    return this.CATALOGO_DOLORES[idDolor] || 'No especificado';
+  });
   private dialog = inject(MatDialog);
   estaExpandido = signal(false);
 
@@ -55,7 +77,6 @@ export class SintomatologiaComponent {
       maxWidth: '100vh',
       height: '60vh',
       maxHeight: '90vh', // 90% del alto
-      // panelClass: 'modal-sintomatologia-custom',
       panelClass: 'modal-fullscreen-custom',
     });
   }

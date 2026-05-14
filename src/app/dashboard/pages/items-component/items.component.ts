@@ -1,5 +1,14 @@
 import { environment } from '../../../../enviroments/environment';
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+  effect,
+} from '@angular/core';
+
 import { MaterialModules } from '../../../shared/material.providers';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
@@ -27,6 +36,23 @@ export class ItemsComponent {
   // Crea una señal para la foto actual del carrusel interno
   fotoIndex = signal(0);
 
+  // 2. Agregamos este efecto para limpiar el carrusel de fotos
+  constructor() {
+    console.log("entra al constructor");
+    console.log(this.fotoIndex());
+
+    this.fotoIndex.set(0);
+
+    effect(() => {
+      // Vigilamos el indexActivo (cambio de inspección/elemento)
+      this.indexActivo();
+
+      // Cada vez que cambie el elemento, volvemos a la primera foto
+      this.fotoIndex.set(0);
+
+      console.log('Cambiando de elemento: Reset de fotoIndex a 0');
+    });
+  }
   // 3. Manejo de datos: Prioriza el diálogo si existe, sino usa el input
   items = computed(() => {
     return this.dialogData?.items || this.itemsInput() || [];
@@ -39,20 +65,37 @@ export class ItemsComponent {
   // itemActual = computed(() => this.items()[this.indexActivo()]);
   itemActual = computed(() => {
     const lista = this.items();
+    console.log(lista);
     return lista.length > 0 ? lista[this.indexActivo()] : null;
   });
 
   anterior() {
     if (this.indexActivo() > 0) {
-      this.indexActivo.update((i) => i - 1);
+      console.log('anterior');
       this.fotoIndex.set(0);
+      this.indexActivo.update((i) => i - 1);
     }
   }
 
   siguiente() {
     if (this.indexActivo() < this.items().length - 1) {
-      this.indexActivo.update((i) => i + 1);
+      console.log('siguiente');
       this.fotoIndex.set(0);
+      this.indexActivo.update((i) => i + 1);
+    }
+  }
+  // También asegúrate de que el método de cambio de foto tenga límites:
+  fotoAnterior() {
+    if (this.fotoIndex() > 0) {
+      this.fotoIndex.update((i) => i - 1);
+      // this.fotoIndex.set(fotoIndex() - 1)
+    }
+  }
+
+  fotoSiguiente() {
+    const totalFotos = this.itemActual()?.listaFotos?.length || 0;
+    if (this.fotoIndex() < totalFotos - 1) {
+      this.fotoIndex.update((i) => i + 1);
     }
   }
 
@@ -67,16 +110,31 @@ export class ItemsComponent {
     });
   }
 
-  // Método para limpiar y armar la ruta
+  // Método para limpiar y armar la ruta exacta hacia los archivos de wwwroot
   getFotoUrl(fotoPath: string | undefined): string {
-    if (!fotoPath) return '/no-image.jpg'; // Imagen por defecto
+    console.log(this.fotoIndex());
+    console.log("+++++++",this.itemActual()?.listaFotos[this.fotoIndex()].rutaFoto);
+    if (!fotoPath) return '/no-image.jpg'; // Imagen por defecto si no hay ruta
 
-    // Si por error guardaste la ruta con una barra inicial, la quitamos
-    const pathLimpio = fotoPath.startsWith('/') ? fotoPath.substring(1) : fotoPath;
-    return `${this.API_URL}${pathLimpio}`;
+    // 1. Si tu base de datos devuelve la palabra "apiuploads", la corregimos por "uploads"
+    let pathLimpio = fotoPath.replace('apiuploads/', 'uploads/');
+
+    // 2. Reemplazamos barras invertidas de Windows (\) por barras normales (/)
+    pathLimpio = pathLimpio.replace(/\\/g, '/').trim();
+
+    // 3. Quitamos barra inicial si existe para evitar dobles barras "//"
+    if (pathLimpio.startsWith('/')) {
+      pathLimpio = pathLimpio.substring(1);
+    }
+
+    // 4. Extraemos la raíz del servidor (ej: 'https://localhost:7064/') quitándole el '/api'
+    // Esto evita alterar tu environment.apiUrl global que usan tus servicios de datos
+    const serverBase = this.API_URL.replace(/\/api\/?$/, '');
+    const baseUrl = serverBase.endsWith('/') ? serverBase : `${serverBase}/`;
+
+    // Retorna la combinación perfecta: https://localhost:7064/uploads/inspecciones/imagen1.png
+    return `${baseUrl}${pathLimpio}`;
   }
-
-  // Define el tipo de pestaña para seguridad de tipado
 
   // Dentro de tu clase
   tabActiva = signal<TabTipo>('hallazgos');
@@ -85,4 +143,3 @@ export class ItemsComponent {
     this.tabActiva.set(tab);
   }
 }
-

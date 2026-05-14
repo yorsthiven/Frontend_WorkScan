@@ -27,13 +27,13 @@ export class TrabajadorService {
 
   // En trabajador.service.ts
   crearTrabajador(trabajador: Trabajador): Observable<RespuestaApi> {
-    console.log(trabajador);
-    console.log("entro en crear trabajador");
+    // console.log(trabajador);
+    // console.log("entro en crear trabajador");
     return this.http.post<RespuestaApi>(`${this.apiUrl}`, trabajador);
   }
 
   actualizarTrabajador(id: number, trabajador: Trabajador) {
-    console.log("entro en actualizarTrabajador");
+    // console.log("entro en actualizarTrabajador");
     return this.http.put(`${this.apiUrl}/${id}`, trabajador);
   }
 

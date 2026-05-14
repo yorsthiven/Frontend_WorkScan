@@ -46,6 +46,7 @@ export class InspeccionesPage {
   filtrarInspecciones(termino: string) {
     this.inspeccionService.getInspeccion(termino).subscribe({
       next: (data: RespuestaGetInspecciones) => {
+        console.log(data);
         this.inspecciones.set(data.inspecciones);
       },
       error: (err) => {

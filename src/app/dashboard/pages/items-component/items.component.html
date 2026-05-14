@@ -46,11 +46,11 @@
         @if ((itemActual()?.listaFotos?.length ?? 0) > 1) {
         <div
           class="absolute inset-0 flex items-center justify-between px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button mat-mini-fab (click)="fotoIndex.set(fotoIndex() - 1)" [disabled]="fotoIndex() === 0"
+          <button mat-mini-fab (click)="fotoAnterior()" [disabled]="fotoIndex() === 0"
             class="!bg-slate-900/80 !text-white shadow-xl backdrop-blur-sm">
             <mat-icon>chevron_left</mat-icon>
           </button>
-          <button mat-mini-fab (click)="fotoIndex.set(fotoIndex() + 1)"
+          <button mat-mini-fab (click)="fotoSiguiente()"
             [disabled]="fotoIndex() === (itemActual()?.listaFotos?.length ?? 0) - 1"
             class="!bg-slate-900/80 !text-white shadow-xl backdrop-blur-sm">
             <mat-icon>chevron_right</mat-icon>
@@ -90,28 +90,28 @@
           <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
             <div class="p-2 bg-amber-100 rounded-lg text-amber-600"><mat-icon class="scale-75">straighten</mat-icon>
             </div>
-            @if(itemActual()?.listaHallazgos[0].alto != null) {
+            @if(itemActual().alto != null) {
             <div class="text-center">
               <p class="text-[9px] font-black text-slate-400 uppercase">Alto</p>
-              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.listaHallazgos[0].alto }}</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual().alto }}</p>
             </div>
             }
-            @if(itemActual()?.listaHallazgos[0].ancho != null) {
+            @if(itemActual().ancho != null) {
             <div class="text-center">
               <p class="text-[9px] font-black text-slate-400 uppercase">Ancho</p>
-              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.listaHallazgos[0].ancho }}</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual().ancho }}</p>
             </div>
             }
-            @if(itemActual()?.listaHallazgos[0].largo != null) {
+            @if(itemActual().largo != null) {
             <div class="text-center">
               <p class="text-[9px] font-black text-slate-400 uppercase">Largo</p>
-              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.listaHallazgos[0].largo }}</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual().largo }}</p>
             </div>
             }
-            @if(itemActual()?.listaHallazgos[0].pulgadas != null) {
+            @if(itemActual().pulgadas != null) {
             <div class="text-center">
               <p class="text-[9px] font-black text-slate-400 uppercase">Pulgadas</p>
-              <p class="text-sm font-bold text-slate-700">{{ itemActual()?.listaHallazgos[0].pulgadas }}</p>
+              <p class="text-sm font-bold text-slate-700">{{ itemActual().pulgadas }}</p>
             </div>
             }
           </div>
