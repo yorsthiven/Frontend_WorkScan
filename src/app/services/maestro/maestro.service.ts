@@ -19,13 +19,16 @@ export class MaestroService {
   // Método genérico para guardar (Crear/Editar)
   guardarMaestro(endpoint: string, data: any, isEdit: boolean): Observable<any> {
     if (isEdit) {
-      return this.http.put(`${this.apiUrl}/${endpoint}/Actualizar/${data.id}`, data);
+      return this.http.put(`${this.apiUrl}/${endpoint}/${data.id}`, data);
+      console.log("editarmaestro");
     }
-    return this.http.post(`${this.apiUrl}/${endpoint}/Crear`, data);
+    console.log("nuevomaestro: ",endpoint,data, isEdit);
+    console.log(this.apiUrl+"/"+endpoint);
+    return this.http.post(`${this.apiUrl}/${endpoint}`, data);
   }
 
   // Método genérico para eliminar
   eliminarMaestro(endpoint: string, id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${endpoint}/Eliminar/${id}`);
+    return this.http.delete(`${this.apiUrl}/${endpoint}/${id}`);
   }
 }

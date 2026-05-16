@@ -137,7 +137,7 @@ export class InspeccionRegistroComponent {
 
   // Lista de items evaluados que se irá llenando
   itemsEvaluados = signal<ItemRegistroDto[]>([]);
-  
+
   // Señal para rastrear si está editando un item
   itemEnEdicion = signal<ItemRegistroDto | null>(null);
 
@@ -275,7 +275,7 @@ export class InspeccionRegistroComponent {
   abrirModalEditarItem(itemAEditar: ItemRegistroDto) {
     // Establecemos que está en edición
     this.itemEnEdicion.set(itemAEditar);
-    
+
     const dialogRef = this._dialog.open(DialogItemComponent, {
       data: itemAEditar, // Pasamos el item que vamos a editar
       width: '800px',
@@ -289,7 +289,7 @@ export class InspeccionRegistroComponent {
     dialogRef.afterClosed().subscribe((result: ItemRegistroDto) => {
       // Limpiamos la señal de edición
       this.itemEnEdicion.set(null);
-      
+
       if (result) {
         // Forzamos que las listas sean arreglos aunque vengan vacías
         const itemSeguro: ItemRegistroDto = {

@@ -9,36 +9,47 @@
 
         <mat-tab label="Items de Examen">
           <div class="p-4">
-            <app-tabla-maestra titulo="Items de Examen" color="border-blue-500" [columnas]="['nombre', 'material']"
-              [datos]="listaItems()">
+            <app-tabla-maestra titulo="ITEMS DE EXAMEN" color="border-blue-500" [columnas]="['nombre', 'material','alto','largo','ancho', 'pulgada']"
+              [datos]="listaItems()"
+              (onAdd)="agregarItem()"
+              (onEdit)="editarItem($event)"
+              (onDelete)="eliminarItem($event)">
             </app-tabla-maestra>
           </div>
         </mat-tab>
 
         <mat-tab label="Jornadas">
           <div class="p-4">
-            <app-tabla-maestra titulo="Jornadas" color="border-red-500" [columnas]="['id', 'nombreJornada']"
-              [datos]="listaJornadas()">
+            <app-tabla-maestra titulo="JORNADAS" color="border-red-500" [columnas]="['id', 'nombreJornada']"
+              [datos]="listaJornadas()"
+              (onAdd)="agregarJornada()"
+              (onEdit)="editarJornada($event)"
+              (onDelete)="eliminarJornada($event)">
             </app-tabla-maestra>
           </div>
         </mat-tab>
+
         <mat-tab label="Cargos">
           <div class="p-4">
-            <app-tabla-maestra titulo="Cargos" color="border-blue-500" [columnas]="['id','nombreCargo']"
-              [datos]="listaCargos()">
+            <app-tabla-maestra titulo="CARGOS" color="border-blue-500" [columnas]="['id','nombreCargo']"
+              [datos]="listaCargos()"
+              (onAdd)="agregarCargo()"
+              (onEdit)="editarCargo($event)"
+              (onDelete)="eliminarCargo($event)">
             </app-tabla-maestra>
           </div>
         </mat-tab>
 
         <mat-tab label="Empresas">
           <div class="p-4">
-            <app-tabla-maestra titulo="Empresas" color="border-red-500" [columnas]="['id', 'nombreEmpresa']"
-              [datos]="listaEmpresas()">
+            <app-tabla-maestra titulo="EMPRESAS" color="border-red-500" [columnas]="['id', 'nombreEmpresa']"
+              [datos]="listaEmpresas()"
+              (onAdd)="agregarEmpresa()"
+              (onEdit)="editarEmpresa($event)"
+              (onDelete)="eliminarEmpresa($event)">
             </app-tabla-maestra>
           </div>
         </mat-tab>
-
-
 
       </mat-tab-group>
     </mat-card>
