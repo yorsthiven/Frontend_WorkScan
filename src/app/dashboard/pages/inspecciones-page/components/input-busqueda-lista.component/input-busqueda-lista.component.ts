@@ -1,5 +1,5 @@
 import { MaterialModules } from './../../../../../shared/material.providers';
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal, effect } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -16,6 +16,7 @@ export class InputBusquedaListaComponent {
   colorIcono = input<string>('text-slate-400');
   colorBoton = input<string>('primary');
   claseItem = input<string>('bg-slate-50 border-slate-100');
+  datosIniciales = input<string[]>([]);
 
   // Evento para enviar los datos al padre
   onChanged = output<string[]>();
@@ -23,6 +24,20 @@ export class InputBusquedaListaComponent {
   // Lógica interna
   control = new FormControl('');
   lista = signal<string[]>([]);
+  
+  private datosInicalesYaCargados = signal(false);
+
+  constructor() {
+    // Cargar datos iniciales solo una vez
+    effect(() => {
+      const datos = this.datosIniciales();
+      // Solo cargamos si no se han cargado aún y si hay datos iniciales
+      if (datos && datos.length > 0 && !this.datosInicalesYaCargados()) {
+        this.datosInicalesYaCargados.set(true);
+        this.lista.set([...datos]);
+      }
+    });
+  }
 
   agregar() {
     const valor = this.control.value?.trim();

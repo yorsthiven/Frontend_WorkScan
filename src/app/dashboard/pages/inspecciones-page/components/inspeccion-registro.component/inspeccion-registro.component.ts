@@ -137,6 +137,9 @@ export class InspeccionRegistroComponent {
 
   // Lista de items evaluados que se irá llenando
   itemsEvaluados = signal<ItemRegistroDto[]>([]);
+  
+  // Señal para rastrear si está editando un item
+  itemEnEdicion = signal<ItemRegistroDto | null>(null);
 
   finalizarInspeccion2() {
     const inspeccionFinal: RegistroInspeccion = {
@@ -268,6 +271,40 @@ export class InspeccionRegistroComponent {
     });
   }
 
+   // Nuevo método para editar un item existente
+  abrirModalEditarItem(itemAEditar: ItemRegistroDto) {
+    // Establecemos que está en edición
+    this.itemEnEdicion.set(itemAEditar);
+    
+    const dialogRef = this._dialog.open(DialogItemComponent, {
+      data: itemAEditar, // Pasamos el item que vamos a editar
+      width: '800px',
+      disableClose: false,
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      panelClass: 'custom-dialog-container',
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result: ItemRegistroDto) => {
+      // Limpiamos la señal de edición
+      this.itemEnEdicion.set(null);
+      
+      if (result) {
+        // Forzamos que las listas sean arreglos aunque vengan vacías
+        const itemSeguro: ItemRegistroDto = {
+          ...result,
+          hallazgos: result.hallazgos || [],
+          fotos: result.fotos || [],
+          recomendaciones: result.recomendaciones || [],
+        };
+        // Actualizamos el item EN LUGAR de agregar uno nuevo
+        this.itemsEvaluados.update((items) =>
+          items.map((i) => (i === itemAEditar ? itemSeguro : i))
+        );
+      }
+    });
+  }
   // Helper para el color del slider EVA
   getEvaLabelColor() {
     const eva = this.sintomatologiaForm.get('calificacionEva')?.value || 0;
@@ -348,8 +385,23 @@ export class InspeccionRegistroComponent {
   columnasItems = ['nombre', 'material', 'hallazgos', 'acciones'];
 
   eliminarItem(itemAEliminar: any) {
-    // Filtramos para quitar el ítem de la lista
-    this.itemsEvaluados.update((prev) => prev.filter((i) => i !== itemAEliminar));
+    // Confirmación antes de eliminar
+    Swal.fire({
+      title: '¿Eliminar ítem?',
+      text: `¿Estás seguro de que deseas eliminar "${itemAEliminar.nombre}"? Esta acción no se puede deshacer.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#ef4444', // Rojo
+      cancelButtonColor: '#6b7280',  // Gris
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Eliminamos el ítem
+        this.itemsEvaluados.update((prev) => prev.filter((i) => i !== itemAEliminar));
+        Swal.fire('Eliminado', `El ítem "${itemAEliminar.nombre}" fue eliminado.`, 'success');
+      }
+    });
   }
 
   private aplicarBorrador(borrador: any) {
@@ -412,4 +464,6 @@ export class InspeccionRegistroComponent {
       }
     });
   }
+
+
 }

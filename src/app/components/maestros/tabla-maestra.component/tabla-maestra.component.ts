@@ -12,6 +12,9 @@ export class TablaMaestraComponent {
   colorBorder = input<string>('border-blue-500'); // Por defecto azul
   columnas = input.required<any[]>(); // Ej: ['nombre', 'material']
   datos = input.required<any[]>();
+  mostrarBotonAgregar = input<boolean>(true);
+  mostrarBotonEditar = input<boolean>(true);
+  mostrarBotonEliminar = input<boolean>(true);
 
   // Captura la plantilla que envías desde el HTML padre
   @ContentChild('plantillaCelda') plantillaCelda?: TemplateRef<any>;

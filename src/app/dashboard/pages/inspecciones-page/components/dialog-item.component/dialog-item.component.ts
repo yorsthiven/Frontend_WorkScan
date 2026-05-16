@@ -1,12 +1,13 @@
 import { ItemModel } from './../../../../../models/item.model';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject, signal } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModules } from '../../../../../shared/material.providers';
 import { debounceTime, distinctUntilChanged, of, switchMap, tap } from 'rxjs';
 import { ItemService } from '../../../../../services/item/item.service';
 import { InputBusquedaListaComponent } from '../input-busqueda-lista.component/input-busqueda-lista.component';
 import { PhotoUploaderComponent } from '../photo-uploader.component/photo-uploader.component';
+import { ItemRegistroDto } from '../../../../../models/registroInspeccion.model';
 
 @Component({
   selector: 'app-dialog-item.component',
@@ -23,8 +24,10 @@ export class DialogItemComponent {
   private _fb = inject(FormBuilder);
   private _dialogRef = inject(MatDialogRef<DialogItemComponent>);
   private _itemsService = inject(ItemService);
+  private _dialogData = inject(MAT_DIALOG_DATA, { optional: true }) as ItemRegistroDto | undefined;
 
   modoCreacion = signal<boolean>(false);
+  modoEdicion = signal<boolean>(false); // Nueva señal para detectar edición
   listaItems = signal<ItemModel[]>([]); // Items que vienen de la API
 
   idItemSeleccionado = signal<number>(0);
@@ -49,10 +52,39 @@ export class DialogItemComponent {
   });
 
   ngOnInit() {
-    // 1. Carga inicial de ítems para que no aparezca vacío al abrir
-    this.cargarItems('');
+    // 1. Si hay datos (modo edición), prellenamos el formulario
+    if (this._dialogData) {
+      this.modoEdicion.set(true);
+      this.itemForm.patchValue({
+        idItem: this._dialogData.idItem,
+        nombre: this._dialogData.nombre,
+        material: this._dialogData.material,
+        alto: this._dialogData.alto,
+        ancho: this._dialogData.ancho,
+        largo: this._dialogData.largo,
+        pulgada: this._dialogData.pulgada,
+      });
+      this.hallazgos.set(this._dialogData.hallazgos || []);
+      this.recomendaciones.set(this._dialogData.recomendaciones || []);
+      this.fotos.set(this._dialogData.fotos || []);
 
-    // 2. Escucha reactiva del input de búsqueda
+      // En modo edición, cargar el item en la lista para que se muestre seleccionado
+      this.cargarItems('');
+      // Después de cargar, preseleccionar el item
+      setTimeout(() => {
+        const itemEnEdicion = this.listaItems().find(item => item.id === this._dialogData!.idItem);
+        if (itemEnEdicion) {
+          this.itemForm.patchValue({ idItem: itemEnEdicion.id });
+        }
+      }, 200);
+    }
+
+    // 2. Carga inicial de ítems para que no aparezca vacío al abrir
+    if (!this._dialogData) {
+      this.cargarItems('');
+    }
+
+    // 3. Escucha reactiva del input de búsqueda
     this.filtroItemControl.valueChanges
       .pipe(
         debounceTime(400),
@@ -101,36 +133,6 @@ export class DialogItemComponent {
       this.itemForm.get(controlName)?.reset();
     }
   }
-
-  // guardar() {
-  //   const idSeleccionado = this.itemForm.get('idItem')?.value;
-
-  //   if (idSeleccionado || this.modoCreacion()) {
-  //     // Creamos el objeto asegurando que las listas nunca sean undefined
-  //     const resultado = {
-  //       // Usamos getRawValue para obtener todos los campos del form incluyendo los readonly
-  //       ...this.itemForm.getRawValue(),
-  //       hallazgos: this.hallazgos() || [],
-  //       recomendaciones: this.recomendaciones() || [],
-  //       fotos: this.fotos() || [],
-  //       esNuevo: this.modoCreacion(),
-  //     };
-
-  //     // Eliminamos basura del objeto final
-  //     delete (resultado as any).hallazgoTemporal;
-  //     delete (resultado as any).recomendacionTemporal;
-  //     // this._dialogRef.close(resultado);
-  //     // Al cerrar el diálogo (método agregarItem o similar)
-  //     this._dialogRef.close({
-  //       ...this.itemForm.value,
-  //       idItem: idSeleccionado,
-  //       hallazgos: this.hallazgos(),
-  //       recomendaciones: this.recomendaciones(),
-  //       fotos: this.fotos(), // Aquí viajan los Files
-  //     });
-  //   }
-  // }
-
   // MÉTODO PARA CERRAR EL MODAL Y ENVIAR LOS DATOS AL COMPONENTE PRINCIPAL
   confirmarItem() {
     if (this.itemForm.invalid) {
@@ -218,6 +220,10 @@ export class DialogItemComponent {
 
   eliminarRecomendacion(index: number) {
     this.recomendaciones.update((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  cerrarModal() {
+    this._dialogRef.close();
   }
 
   // ------ SECCION DE FOTOS------

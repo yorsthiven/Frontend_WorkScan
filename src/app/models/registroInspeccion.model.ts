@@ -22,7 +22,7 @@ export interface DescripcionBiomecanicaCreateDto {
 
 export interface ItemRegistroDto {
   idItem: number;
-  nombre: number;
+  nombre: string;
   material: string;
   alto: number;
   ancho: number;

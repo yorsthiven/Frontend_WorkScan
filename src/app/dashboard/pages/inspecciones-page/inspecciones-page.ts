@@ -73,11 +73,6 @@ export class InspeccionesPage {
   // Señal que simula el ítem seleccionado en tu tabla
   itemSeleccionado = signal<any | null>(null);
 
-  // Método para simular la selección en la tabla
-  // seleccionarInspeccion() {
-  //   this.itemSeleccionado.set(this.inspecciones);
-  // }
-
   seleccionarFila(fila: any) {
     this.itemSeleccionado.set(fila);
   }

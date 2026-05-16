@@ -11,11 +11,13 @@
       </h2>
     </div>
 
+    @if (mostrarBotonAgregar()) {
     <button mat-mini-fab
       class="!bg-cyan-500 !text-white hover:scale-110 transition-transform shadow-lg shadow-cyan-500/30"
       (click)="onAdd.emit()">
       <mat-icon>add</mat-icon>
     </button>
+    }
   </div>
 
   <div class="overflow-x-auto custom-scroll">
@@ -43,11 +45,28 @@
         <th mat-header-cell *matHeaderCellDef
           class="!bg-slate-50 !text-[10px] !font-black !text-slate-400 !uppercase !tracking-widest !border-b !border-slate-100 w-20 text-center">
           Acciones</th>
-        <td mat-cell *matCellDef="let element" class="text-center">
-          <button mat-icon-button class="text-slate-400 hover:text-blue-600 transition-colors"
-            (click)="$event.stopPropagation(); onEdit.emit(element)">
-            <mat-icon class="scale-90">edit_note</mat-icon>
-          </button>
+        <!-- <td mat-cell *matCellDef="let element" class="text-center flex justify-center items-center gap-1 h-14"> -->
+          <td mat-cell *matCellDef="let element" class="mat-mdc-cell mdc-data-table__cell cdk-cell text-center cdk-column-acciones mat-column-acciones" role="cell">
+          <div class="flex justify-center items-center gap-1">
+            @if (mostrarBotonEditar()) {
+            <button mat-icon-button class="text-slate-400 hover:text-blue-600 transition-colors"
+              (click)="$event.stopPropagation(); onEdit.emit(element)"
+              title="Editar">
+              <mat-icon class="scale-90">edit_note</mat-icon>
+            </button>
+            } @else {
+            <div class="w-10 h-10"></div>
+            }
+            @if (mostrarBotonEliminar()) {
+            <button mat-icon-button class="text-slate-400 hover:text-red-600 transition-colors"
+              (click)="$event.stopPropagation(); onDelete.emit(element)"
+              title="Eliminar">
+              <mat-icon class="scale-90">delete_outline</mat-icon>
+            </button>
+            } @else {
+            <div class="w-10 h-10"></div>
+            }
+          </div>
         </td>
       </ng-container>
 

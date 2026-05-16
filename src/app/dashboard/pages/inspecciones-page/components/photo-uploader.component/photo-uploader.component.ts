@@ -1,8 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Output,
+  Input,
+  effect,
+  input,
   output,
   signal,
 } from '@angular/core';
@@ -18,6 +19,31 @@ export class PhotoUploaderComponent {
   onChanged = output<File[]>();
   fotosBase64 = signal<string[]>([]);
   archivosReales = signal<File[]>([]);
+  fotosIniciales = input<File[]>([]);
+  
+  private fotosInicalesYaCargadas = signal(false);
+
+  constructor() {
+    // Cargar fotos iniciales solo una vez
+    effect(() => {
+      const fotos = this.fotosIniciales();
+      // Solo cargamos si no se han cargado aún y si hay fotos iniciales
+      if (fotos && fotos.length > 0 && !this.fotosInicalesYaCargadas()) {
+        this.fotosInicalesYaCargadas.set(true);
+        this.archivosReales.set([...fotos]);
+        // Convertir fotos iniciales a base64
+        fotos.forEach((file) => {
+          if (file instanceof File) {
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+              this.fotosBase64.update((prev) => [...prev, e.target.result]);
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    });
+  }
 
   onFileSelected(event: any) {
     const files: FileList = event.target.files;

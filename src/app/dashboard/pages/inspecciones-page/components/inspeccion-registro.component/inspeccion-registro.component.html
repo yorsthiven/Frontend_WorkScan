@@ -224,7 +224,8 @@
           </div>
 
           <app-tabla-maestra titulo="LISTA DE ÍTEMS EVALUADOS" [columnas]="colsItems()" [datos]="itemsEvaluados()"
-            (onDelete)="eliminarItem($event)">
+            (onDelete)="eliminarItem($event)" [mostrarBotonAgregar]="false"
+            (onEdit)="abrirModalEditarItem($event)">
 
             <ng-template #plantillaCelda let-item let-columna="columna">
               @switch (columna.key) {
