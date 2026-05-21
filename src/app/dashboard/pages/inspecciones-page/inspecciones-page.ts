@@ -9,6 +9,9 @@ import { SintomatologiaComponent } from '../sintomatologia-component/sintomatolo
 import { InspeccionDetalle } from '../../../models/inspeccionDetalle.nodel';
 import { InspeccionInfoComponent } from './components/inspeccion-info.component/inspeccion-info.component';
 import { Router } from '@angular/router';
+import { ReporteService } from '../../../services/reportes/reporte.service';
+import Swal from 'sweetalert2';
+import { SpinnerGenericoComponent } from "../../../components/shared/genericos/spinner-generico.component/spinner-generico.component";
 
 @Component({
   selector: 'app-inspecciones-page',
@@ -19,15 +22,18 @@ import { Router } from '@angular/router';
     ItemsComponent,
     SintomatologiaComponent,
     InspeccionInfoComponent,
-  ],
+    SpinnerGenericoComponent
+],
   templateUrl: './inspecciones-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InspeccionesPage {
   private inspeccionService = inject(InspeccionService);
+  private reporteService = inject(ReporteService);
   // listaInspecciones = signal([{}]);
   listaInspecciones = signal<any[]>([]);
   inspecciones = signal<InspeccionDetalle[]>([]);
+  isLoading = signal(false);
 
   /**
    * En el constructor, cargamos las inspecciones sin filtro para mostrar todo inicialmente.
@@ -46,7 +52,7 @@ export class InspeccionesPage {
   filtrarInspecciones(termino: string) {
     this.inspeccionService.getInspeccion(termino).subscribe({
       next: (data: RespuestaGetInspecciones) => {
-        console.log(data);
+        // console.log(data);
         this.inspecciones.set(data.inspecciones);
       },
       error: (err) => {
@@ -80,5 +86,42 @@ export class InspeccionesPage {
   // Esta es la función que se ejecuta al darle click al botón "+"
   irARegistro() {
     this.router.navigate(['dashboard/inspecciones/registro']); // La ruta que definas en tu app.routes.ts
+  }
+
+  descargarReporte(inspeccion: any) {
+    // console.log('Seleccionado ID Inspección: ', inspeccion.idInspeccion);
+    this.isLoading.set(true);
+    this.reporteService.generarReporte(inspeccion.idInspeccion).subscribe({
+      next: (res: Blob) => {
+        this.isLoading.set(false);
+        // 1. Creamos una URL local y temporal apuntando al objeto binario del PDF
+        const url = window.URL.createObjectURL(res);
+
+        // 2. Creamos un elemento de anclaje (<a>) oculto en memoria
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+
+        // 3. Le asignamos un nombre dinámico al archivo descargado
+        a.download = `Reporte_Inspeccion_SST_${inspeccion.idInspeccion}.pdf`;
+
+        // 4. Inyectamos el elemento al DOM, simulamos el click y lo removemos de inmediato
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        // console.log('¡Reporte descargado con éxito!');
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        // console.error('erroorrr', err);
+        Swal.fire({
+          title: 'Error',
+          text: `${err.error?.mensaje || ''}`,
+          icon: 'error',
+        });
+      },
+    });
   }
 }

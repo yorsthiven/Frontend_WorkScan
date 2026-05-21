@@ -20,7 +20,7 @@ interface ItemSelect {
   selector: 'app-trabajadores-page',
   imports: [
     MaterialModules,
-    TrabajadorTarjetasComponent,
+    // TrabajadorTarjetasComponent,
     TrabajadorDetalleComponent,
     ListaGenericaComponent,
     SearchGenericoComponent,

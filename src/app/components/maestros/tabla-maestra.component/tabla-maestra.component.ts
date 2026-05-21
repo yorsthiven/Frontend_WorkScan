@@ -1,9 +1,10 @@
-import { Component, ContentChild, input, output, TemplateRef } from '@angular/core';
+import { Component, ContentChild, input, output, signal, TemplateRef } from '@angular/core';
 import { MaterialModules } from '../../../shared/material.providers';
+import { SpinnerGenericoComponent } from "../../shared/genericos/spinner-generico.component/spinner-generico.component";
 
 @Component({
   selector: 'app-tabla-maestra',
-  imports: [MaterialModules],
+  imports: [MaterialModules, SpinnerGenericoComponent],
   templateUrl: './tabla-maestra.component.html',
 })
 export class TablaMaestraComponent {
@@ -15,6 +16,8 @@ export class TablaMaestraComponent {
   mostrarBotonAgregar = input<boolean>(true);
   mostrarBotonEditar = input<boolean>(true);
   mostrarBotonEliminar = input<boolean>(true);
+  mostrarBotonDescarga = input<boolean>(false);
+  isLoading = signal(false);
 
   // Captura la plantilla que envías desde el HTML padre
   @ContentChild('plantillaCelda') plantillaCelda?: TemplateRef<any>;
@@ -23,6 +26,7 @@ export class TablaMaestraComponent {
   onEdit = output<any>();
   onDelete = output<any>();
   onAdd = output<void>();
+  onDownload = output<any>();
 
   // Helper para mostrar encabezados bonitos
   formatHeader(key: any): string {
