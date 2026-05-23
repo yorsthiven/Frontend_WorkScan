@@ -94,8 +94,17 @@ export class ConfiguracionComponent {
 
   // ===== MÉTODOS AUXILIARES =====
   private abrirModal(maestro: string, campos: string[], elemento?: any) {
+    // Determinar el ancho dinámicamente según la cantidad de campos
+    let width = '400px';
+    if (campos.length === 1) {
+      width = '450px';
+    } else if (campos.length >= 2) {
+      width = '650px';
+    }
+
     const dialogRef = this.dialog.open(MaestroFormComponent, {
-      width: '400px',
+      width: width,
+      maxWidth: '90vw',
       data: {
         titulo: elemento ? `Editar ${maestro}` : `Nuevo ${maestro}`,
         campos: campos,

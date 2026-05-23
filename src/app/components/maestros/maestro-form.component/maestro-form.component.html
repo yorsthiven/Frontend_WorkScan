@@ -1,21 +1,158 @@
-<h2 mat-dialog-title class="bg-primary text-slate-600 p-4 text-2xl text-center m-2 font-extrabold">{{ titulo }}</h2>
+<!-- Header del Modal -->
+<div class="maestro-form-header flex items-center justify-between p-6 border-b-2 border-blue-100 sticky top-0 z-20">
+  <div class="flex-1">
+    <h2 class="!font-black text-2xl uppercase tracking-tighter text-slate-800 !m-0 flex items-center gap-3">
+      @if (data.elemento) {
+        <mat-icon class="text-blue-500">edit_square</mat-icon>
+        {{ titulo }}
+      } @else {
+        <mat-icon class="text-green-500">add_circle_outline</mat-icon>
+        {{ titulo }}
+      }
+    </h2>
+    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2 ml-7">Parámetros del Sistema</p>
+  </div>
+  <button mat-icon-button (click)="cerrar()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all rounded-full">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 
-<mat-dialog-content class="pt-2">
-  <form [formGroup]="form" class="grid grid-cols-1 gap-4">
-
-    @for (campo of campos; track campo) {
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>{{ campo | titlecase }}</mat-label>
-      <input matInput [formControlName]="campo" [placeholder]="'Ingrese ' + campo">
-    </mat-form-field>
+<!-- Contenido del Modal -->
+<mat-dialog-content class="!m-0 !p-0 custom-scrollbar" style="max-height: 60vh;">
+  <form [formGroup]="form" class="px-6 py-8">
+    <!-- Si es un solo campo, ocupar todo el ancho -->
+    @if (campos.length === 1) {
+    <div class="space-y-6">
+      @for (campo of campos; track campo) {
+      <div class="maestro-form-field">
+        <label class="maestro-form-label">
+          @switch(campo) {
+            @case('nombre') {
+              <mat-icon class="!text-sm text-blue-500">label</mat-icon>
+            }
+            @case('material') {
+              <mat-icon class="!text-sm text-amber-500">category</mat-icon>
+            }
+            @case('alto') {
+              <mat-icon class="!text-sm text-purple-500">height</mat-icon>
+            }
+            @case('largo') {
+              <mat-icon class="!text-sm text-indigo-500">straighten</mat-icon>
+            }
+            @case('ancho') {
+              <mat-icon class="!text-sm text-rose-500">open_in_full</mat-icon>
+            }
+            @case('pulgada') {
+              <mat-icon class="!text-sm text-cyan-500">ruler</mat-icon>
+            }
+            @case('nombreJornada') {
+              <mat-icon class="!text-sm text-orange-500">schedule</mat-icon>
+            }
+            @case('nombreCargo') {
+              <mat-icon class="!text-sm text-red-500">work</mat-icon>
+            }
+            @case('nombreEmpresa') {
+              <mat-icon class="!text-sm text-indigo-600">business</mat-icon>
+            }
+            @default {
+              <mat-icon class="!text-sm text-slate-400">info</mat-icon>
+            }
+          }
+          {{ obtenerLabel(campo) }}
+        </label>
+        
+        <mat-form-field appearance="outline" class="w-full">
+          <input 
+            matInput 
+            [formControlName]="campo" 
+            [placeholder]="'Ingrese ' + obtenerLabel(campo).toLowerCase()"
+            [type]="esCampoNumerico(campo) ? 'number' : 'text'"
+            [step]="esCampoNumerico(campo) ? '0.01' : undefined"
+            class="!text-sm">
+          @if (form.get(campo)?.invalid && form.get(campo)?.touched) {
+            <mat-error class="maestro-form-error">Este campo es requerido</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      }
+    </div>
+    } @else {
+    <!-- Si hay múltiples campos, usar grid de 2 columnas -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      @for (campo of campos; track campo) {
+      <div class="maestro-form-field">
+        <label class="maestro-form-label">
+          @switch(campo) {
+            @case('nombre') {
+              <mat-icon class="!text-sm text-blue-500">label</mat-icon>
+            }
+            @case('material') {
+              <mat-icon class="!text-sm text-amber-500">category</mat-icon>
+            }
+            @case('alto') {
+              <mat-icon class="!text-sm text-purple-500">height</mat-icon>
+            }
+            @case('largo') {
+              <mat-icon class="!text-sm text-indigo-500">straighten</mat-icon>
+            }
+            @case('ancho') {
+              <mat-icon class="!text-sm text-rose-500">open_in_full</mat-icon>
+            }
+            @case('pulgada') {
+              <mat-icon class="!text-sm text-cyan-500">ruler</mat-icon>
+            }
+            @case('nombreJornada') {
+              <mat-icon class="!text-sm text-orange-500">schedule</mat-icon>
+            }
+            @case('nombreCargo') {
+              <mat-icon class="!text-sm text-red-500">work</mat-icon>
+            }
+            @case('nombreEmpresa') {
+              <mat-icon class="!text-sm text-indigo-600">business</mat-icon>
+            }
+            @default {
+              <mat-icon class="!text-sm text-slate-400">info</mat-icon>
+            }
+          }
+          {{ obtenerLabel(campo) }}
+        </label>
+        
+        <mat-form-field appearance="outline" class="w-full">
+          <input 
+            matInput 
+            [formControlName]="campo" 
+            [placeholder]="'Ingrese ' + obtenerLabel(campo).toLowerCase()"
+            [type]="esCampoNumerico(campo) ? 'number' : 'text'"
+            [step]="esCampoNumerico(campo) ? '0.01' : undefined"
+            class="!text-sm">
+          @if (form.get(campo)?.invalid && form.get(campo)?.touched) {
+            <mat-error class="maestro-form-error">Este campo es requerido</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      }
+    </div>
     }
-
   </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="p-4">
-  <button mat-button (click)="form.reset()">Limpiar</button>
-  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="guardar()">
-    {{ data.elemento ? 'Actualizar' : 'Guardar' }}
+<!-- Footer del Modal -->
+<mat-dialog-actions align="end" class="maestro-form-footer !p-6 sticky bottom-0 z-20 gap-3">
+  <button 
+    mat-stroked-button 
+    (click)="cerrar()" 
+    class="maestro-form-btn-cancel">
+    <mat-icon class="mr-2">close</mat-icon>
+    Cancelar
+  </button>
+
+  <button 
+    mat-flat-button 
+    color="primary" 
+    [disabled]="form.invalid" 
+    (click)="guardar()"
+    class="maestro-form-btn-save">
+    <mat-icon class="mr-2">{{ data.elemento ? 'check_circle' : 'save' }}</mat-icon>
+    <span>{{ data.elemento ? 'Actualizar' : 'Guardar' }}</span>
   </button>
 </mat-dialog-actions>

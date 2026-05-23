@@ -1,13 +1,17 @@
 import { ItemModel } from './../../../../../models/item.model';
 import { ChangeDetectionStrategy, Component, Input, inject, signal } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { MaterialModules } from '../../../../../shared/material.providers';
 import { debounceTime, distinctUntilChanged, of, switchMap, tap } from 'rxjs';
 import { ItemService } from '../../../../../services/item/item.service';
 import { InputBusquedaListaComponent } from '../input-busqueda-lista.component/input-busqueda-lista.component';
 import { PhotoUploaderComponent } from '../photo-uploader.component/photo-uploader.component';
 import { ItemRegistroDto } from '../../../../../models/registroInspeccion.model';
+import { MaestroFormComponent } from '../../../../../components/maestros/maestro-form.component/maestro-form.component';
+import { MaestroService } from '../../../../../services/maestro/maestro.service';
+import { ConfirmacionSuccessDialog } from '../../../../../components/maestros/maestro-form.component/confirmacion-success.dialog';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dialog-item.component',
@@ -24,6 +28,8 @@ export class DialogItemComponent {
   private _fb = inject(FormBuilder);
   private _dialogRef = inject(MatDialogRef<DialogItemComponent>);
   private _itemsService = inject(ItemService);
+  private _maestroService = inject(MaestroService);
+  private _dialog = inject(MatDialog);
   private _dialogData = inject(MAT_DIALOG_DATA, { optional: true }) as ItemRegistroDto | undefined;
 
   modoCreacion = signal<boolean>(false);
@@ -181,10 +187,58 @@ export class DialogItemComponent {
   }
 
   // ------MODAL DE CREACIÓN DE ÍTEM MAESTRO------
-  // Esta es la función que luego usaremos para abrir el otro modal
   abrirFormularioMaestro() {
-    console.log('Aquí llamaremos al modal de creación de ítems maestros');
-    // Por ahora lo dejamos vacío como pediste
+    const dialogRef = this._dialog.open(MaestroFormComponent, {
+      width: '650px',
+      maxWidth: '90vw',
+      disableClose: false,
+      data: {
+        titulo: 'Nuevo Ítem',
+        campos: ['nombre', 'material', 'alto', 'largo', 'ancho', 'pulgada'],
+        elemento: null,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado) {
+        // Agregar valores por defecto para las medidas si es nuevo
+        const nuevoItem = {
+          ...resultado,
+          alto: resultado.alto || 0,
+          largo: resultado.largo || 0,
+          ancho: resultado.ancho || 0,
+          pulgada: resultado.pulgada || 0,
+        };
+
+        this._maestroService.guardarMaestro('Item', nuevoItem, false).subscribe({
+          next: () => {
+            // Mostrar confirmación con el diálogo personalizado
+            this._dialog.open(ConfirmacionSuccessDialog, {
+              width: '400px',
+              disableClose: false,
+              data: {
+                itemInfo: {
+                  nombre: nuevoItem.nombre,
+                  material: nuevoItem.material,
+                  medidas: `${nuevoItem.alto}cm × ${nuevoItem.largo}cm × ${nuevoItem.ancho}cm (${nuevoItem.pulgada}")`,
+                },
+              },
+            });
+            // Recargar la lista de items
+            this.cargarItems('');
+          },
+          error: (err) => {
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo crear el ítem. Intenta nuevamente.',
+              icon: 'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#ef4444',
+            });
+          },
+        });
+      }
+    });
   }
 
   //------ SECCION DE HALLAZGOs------

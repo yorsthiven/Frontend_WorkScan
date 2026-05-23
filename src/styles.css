@@ -180,3 +180,145 @@ mat-dialog-content {
     padding: 1rem !important;
   }
 }
+
+/* ===== ESTILOS PERSONALIZADOS PARA MAESTRO-FORM ===== */
+
+/* Contenedor del diálogo maestro */
+.mat-mdc-dialog-container {
+  border-radius: 2rem !important;
+  background: white !important;
+}
+
+/* Header del maestro-form con gradiente */
+.maestro-form-header {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+  border-bottom: 2px solid #e0e7ff;
+}
+
+/* Campos del formulario con mejor espaciado */
+.maestro-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.maestro-form-field mat-form-field {
+  width: 100%;
+}
+
+.maestro-form-field mat-form-field .mdc-text-field--filled {
+  background-color: #f8fafc !important;
+}
+
+/* Input mejorado */
+.maestro-form-field input {
+  font-size: 0.95rem !important;
+  padding: 12px !important;
+}
+
+/* Labels con mejor estilo */
+.maestro-form-label {
+  font-weight: 800;
+  color: #334155;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.maestro-form-label mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Footer del maestro-form */
+.maestro-form-footer {
+  background: linear-gradient(135deg, #f1f5f9 0%, #f0f9ff 100%) !important;
+  border-top: 2px solid #e2e8f0;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* Botones del formulario */
+.maestro-form-btn-cancel {
+  border-radius: 0.75rem !important;
+  border: 2px solid #cbd5e1 !important;
+  color: #475569 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0 1.5rem !important;
+  height: 45px !important;
+  transition: all 0.3s ease !important;
+}
+
+.maestro-form-btn-cancel:hover {
+  border-color: #94a3b8 !important;
+  background-color: #f1f5f9 !important;
+}
+
+.maestro-form-btn-save {
+  border-radius: 0.75rem !important;
+  background-color: #3b82f6 !important;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0 2rem !important;
+  height: 45px !important;
+  transition: all 0.3s ease !important;
+}
+
+.maestro-form-btn-save:hover:not(:disabled) {
+  background-color: #2563eb !important;
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.maestro-form-btn-save:disabled {
+  background-color: #cbd5e1 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+/* Error message styling */
+.maestro-form-error {
+  color: #ef4444 !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* Responsive para móviles */
+@media (max-width: 640px) {
+  .maestro-form-header {
+    padding: 1rem !important;
+  }
+
+  .maestro-form-label {
+    font-size: 0.7rem;
+  }
+
+  .maestro-form-btn-cancel,
+  .maestro-form-btn-save {
+    padding: 0 1rem !important;
+    font-size: 0.65rem;
+    height: 40px !important;
+  }
+
+  .maestro-form-btn-cancel mat-icon,
+  .maestro-form-btn-save mat-icon {
+    font-size: 16px !important;
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .maestro-form-footer {
+    gap: 0.5rem;
+    padding: 1rem !important;
+  }
+}
