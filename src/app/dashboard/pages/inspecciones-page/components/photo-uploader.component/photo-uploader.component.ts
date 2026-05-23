@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  effect,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { MaterialModules } from '../../../../../shared/material.providers';
 
 @Component({
@@ -20,29 +12,25 @@ export class PhotoUploaderComponent {
   fotosBase64 = signal<string[]>([]);
   archivosReales = signal<File[]>([]);
   fotosIniciales = input<File[]>([]);
-  
+
   private fotosInicalesYaCargadas = signal(false);
 
-  constructor() {
-    // Cargar fotos iniciales solo una vez
-    effect(() => {
-      const fotos = this.fotosIniciales();
-      // Solo cargamos si no se han cargado aún y si hay fotos iniciales
-      if (fotos && fotos.length > 0 && !this.fotosInicalesYaCargadas()) {
-        this.fotosInicalesYaCargadas.set(true);
-        this.archivosReales.set([...fotos]);
-        // Convertir fotos iniciales a base64
-        fotos.forEach((file) => {
-          if (file instanceof File) {
-            const reader = new FileReader();
-            reader.onload = (e: any) => {
-              this.fotosBase64.update((prev) => [...prev, e.target.result]);
-            };
-            reader.readAsDataURL(file);
-          }
-        });
-      }
-    });
+  ngOnInit() {
+    // ESTO SOLO SE EJECUTA UNA VEZ AL INICIAR EL COMPONENTE
+    const fotos = this.fotosIniciales();
+    if (fotos && fotos.length > 0) {
+      this.archivosReales.set([...fotos]);
+
+      fotos.forEach((file) => {
+        if (file instanceof File) {
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            this.fotosBase64.update((prev) => [...prev, e.target.result]);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
   }
 
   onFileSelected(event: any) {
@@ -73,5 +61,4 @@ export class PhotoUploaderComponent {
     this.archivosReales.update((prev) => prev.filter((_, i) => i !== index));
     this.onChanged.emit(this.archivosReales());
   }
-
 }

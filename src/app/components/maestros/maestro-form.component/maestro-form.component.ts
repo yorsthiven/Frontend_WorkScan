@@ -3,11 +3,11 @@ import { MaterialModules } from '../../../shared/material.providers';
 import { FormsModules } from '../../../shared/shared-forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialog } from '@angular/material/dialog';
-import { MatFormField, MatLabel } from "@angular/material/input";
+import { MatFormField } from "@angular/material/input";
 
 @Component({
   selector: 'app-maestro-form',
-  imports: [MatDialogContent, MatFormField, MatLabel, MatDialogActions, MaterialModules, FormsModules],
+  imports: [MatDialogContent, MatFormField, MatDialogActions, MaterialModules, FormsModules],
   templateUrl: './maestro-form.component.html',
   styles: [`
     :host ::ng-deep {
@@ -119,7 +119,7 @@ export class MaestroFormComponent implements OnInit {
   form!: FormGroup;
   titulo: string;
   campos: string[]; // ['nombre', 'material'] o ['nombre', 'descripcion']
-  
+
   // Mapa de etiquetas para mostrar en español
   private labelMap: { [key: string]: string } = {
     'nombre': 'Nombre',
@@ -156,11 +156,11 @@ export class MaestroFormComponent implements OnInit {
       // Si es un campo numérico y es un nuevo elemento, inicializar en 0
       const isNumeric = this.camposNumericos.includes(campo);
       const defaultValue = isNumeric ? 0 : '';
-      
+
       group[campo] = [
-        this.data.elemento?.[campo] !== undefined && this.data.elemento?.[campo] !== null 
-          ? this.data.elemento[campo] 
-          : defaultValue, 
+        this.data.elemento?.[campo] !== undefined && this.data.elemento?.[campo] !== null
+          ? this.data.elemento[campo]
+          : defaultValue,
         Validators.required
       ];
     });
