@@ -8,6 +8,7 @@ import { TrabajadorService } from '../../../services/trabajador/trabajador.servi
 import { SpinnerGenericoComponent } from '../../shared/genericos/spinner-generico.component/spinner-generico.component';
 import { NotificacionService } from '../../../services/notificacion/notificacion.service';
 import { capitalizarFrase } from '../../../shared/formatear';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-trabajador-form',
@@ -100,13 +101,19 @@ export class TrabajadorForm {
           // NORMALIZACIÓN: Buscamos el mensaje donde sea que esté
           const mensajeExito = res.mensaje || res.result?.mensaje || 'Operación exitosa';
 
-          this.notificacion.show('success', 'Completado', mensajeExito);
+          Swal.fire('¡Guardado!', 'El trabajador se registró con éxito', 'success');
+          // this.notificacion.show('success', 'Completado', mensajeExito);
           this.isLoading.set(false);
           this.dialogRef.close(true); // Cerramos indicando éxito
         },
         error: (err) => {
           this.isLoading.set(false);
-          this.notificacion.show('error', 'Error', err.error?.mensaje || 'Error al procesar');
+          // this.notificacion.show('error', 'Error', err.error?.mensaje || 'Error al procesar');
+          Swal.fire({
+                    title: 'Error',
+                    text: `${err.error?.mensaje || ''}`,
+                    icon: 'error',
+                  });
         },
       });
 
